@@ -13,7 +13,6 @@ import java.util.concurrent.Executors;
  * Created by Sypark on 2017-07-21.
  */
 @Configuration
-@EnableScheduling
 public class AppConfig implements SchedulingConfigurer {
 
     @Override
