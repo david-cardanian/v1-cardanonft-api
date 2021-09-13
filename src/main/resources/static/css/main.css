@@ -1,0 +1,807 @@
+.contentsWrap {
+    width: 100%;
+    overflow: hidden;
+}
+
+.mainImg {
+    width: 100%;
+    min-width: 280px;
+    height: 100vh;
+    min-height: 970px;
+    background-image: url("/static/img/mainBg.png");
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    top: 0;
+    position: relative;
+    left: 0;
+    z-index: 0;
+}
+
+.mainBottom {
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    width: 100%;
+    min-width: 1320px;
+    height: 160px;
+    background-image: url("/static/img/mainBottom.png");
+    background-size: contain;
+    background-position: center bottom;
+    background-repeat: repeat-x;
+    z-index: 1;
+
+}
+
+.characterWrap {
+    font-size: 0;
+    position: absolute;
+    bottom: 130px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    z-index: 2;
+}
+.mainTitle {
+    width: 100%;
+    font-size: 100px;
+    text-align: center;
+    color: #ff8413;
+    font-family: 'Luckiest Guy', cursive;
+    font-weight: 800;
+    position: absolute;
+    z-index: 3;
+    top: 50px;
+    text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+    -webkit-text-stroke: 1px #fff;
+}
+.mainTitle2 {
+    width: 100%;
+    font-size: 100px;
+    text-align: center;
+    color: #FF2333;
+    font-family: 'Luckiest Guy', cursive;
+    font-weight: 800;
+    position: absolute;
+    display: none;
+    z-index: 3;
+    top: 50px;
+    text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+    -webkit-text-stroke: 1px #fff;
+}
+.countDown {
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    font-size: 60px;
+    -webkit-text-stroke: 1px #fff;
+    color: #3129cc;
+}
+.mainTitle > span {
+    font-size: 30px;
+    line-height: 40px;
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    -webkit-text-stroke: 0px #fff;
+    color: #fff;
+    font-family: "NanumSquareRound";
+}
+.mainTitle2 > span {
+    font-size: 30px;
+    line-height: 40px;
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    -webkit-text-stroke: 0px #fff;
+    color: #fff;
+    font-family: "NanumSquareRound";
+}
+.character {
+    width: 1280px;
+    height: 720px;
+    display: inline-block;
+    vertical-align: top;
+    background: url("/static/img/main_both.png") center no-repeat;
+    background-size: contain;
+}
+
+.contents {
+    max-width: 1320px;
+    min-width: 280px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.contentsTitle {
+    font-size: 26px;
+    line-height: 36px;
+    font-weight: 800;
+    text-align: center;
+    font-family: "NanumSquareRound";
+    color: #111;
+}
+
+
+.blackArea {
+    width: 100%;
+    height: 100px;
+}
+
+.contentsText {
+    font-size: 17px;
+    line-height: 24px;
+    font-weight: 500;
+    text-align: center;
+    margin-top: 10px;
+    font-family: "NanumSquareRound";
+    color: #111;
+}
+
+.collectionText {
+    font-size: 17px;
+    line-height: 24px;
+    font-weight: 800;
+    text-align: center;
+    margin-top: 10px;
+    font-family: "NanumSquareRound";
+    color: #111;
+}
+
+.contentsBox {
+    font-size: 0;
+    vertical-align: top;
+}
+
+.collection {
+    width: 224px;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 50px;
+    margin-right: 40px;
+    cursor: pointer;
+}
+
+.collection:nth-child(5n) {
+    margin-right: 0px;
+}
+
+.collectionImg {
+    width: 224px;
+    height: 298px;
+    overflow: hidden;
+    -webkit-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    display: inline-block;
+    position: relative;
+}
+
+.collectionImg > div.imgArea > img {
+    width: 100%;
+    height: inherit;
+    -webkit-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+
+.collectionImg > div.imgArea {
+    width: 100%;
+    height: inherit;
+    overflow: hidden;
+    background: url("/static/img/blank.png")#F2F3F5 center no-repeat;
+    background-size: cover;
+}
+
+.collectionImg:hover > div.imgArea > img {
+    -webkit-transform: scale(1.03);
+    -ms-transform: scale(1.03);
+    transform: scale(1.03);
+}
+
+.popupWrap {
+    width: 100%;
+    min-width: 280px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 400;
+    display: none;
+}
+
+.popupBg {
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 400;
+}
+
+.popup1 {
+    display: none;
+    width: 1000px;
+    padding: 40px;
+    background: #fff;
+    border-radius: 15px;
+    position: fixed;
+    font-size: 0;
+    z-index: 401;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.popupClose {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 10px;
+    right: 10px;
+    background: url("/static/img/iconClose.svg") center no-repeat;
+    background-size: 18px;
+}
+
+.popupLeft {
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+}
+
+.popupRight {
+    width: 410px;
+    display: inline-block;
+    vertical-align: top;
+    padding-left: 40px;
+}
+
+.soldOut {
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    display: none;
+    background: url("/static/img/soldOut.png")rgba(255, 255, 255, 0.7) center no-repeat;
+    background-size: 80%;
+}
+
+.popupImg {
+    width: 500px;
+    height: auto;
+    background-size: cover;
+    background: url("/static/img/blank.png")#F2F3F5 center no-repeat;
+    display: inline-block;
+}
+
+.popupImg > img {
+    width: 100%;
+    height: 100%;
+}
+
+.popup1 .popupTitle {
+    width: 100%;
+    font-size: 26px;
+    line-height: 36px;
+    font-weight: 800;
+    text-align: left;
+    font-family: "NanumSquareRound";
+    display: inline-block;
+}
+
+.popup1 .popupText {
+    font-size: 17px;
+    line-height: 27px;
+    font-weight: 500;
+    text-align: left;
+    margin-top: 20px;
+    font-family: "NanumSquareRound";
+    color: #111;
+    display: inline-block;
+}
+
+.popup1 .popupSubtitle {
+    width: 80px;
+    font-weight: 800;
+    font-size: 17px;
+    line-height: 34px;
+    text-align: left;
+    font-family: "NanumSquareRound";
+    color: #111;
+    display: inline-block;
+    vertical-align: top;
+}
+
+
+.blue {
+    font-size: 24px;
+    color: #3129cc;
+    font-weight: 800;
+    vertical-align: top;
+    line-height: 34px;
+}
+
+.buyNumber {
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    border-top: solid 1px #ddd;
+    padding: 21px 0;
+    margin-top: 20px;
+}
+
+.btnBuy {
+    background: -webkit-gradient(linear, left top, left bottom, from(#4932dc), to(#1d1a84));
+    background: -o-linear-gradient(top, #4932dc, #1d1a84);
+    background: linear-gradient(to bottom, #4932dc, #1d1a84);
+    width: 150px;
+    height: 60px;
+    border-radius: 30px;
+    font-size: 17px;
+    line-height: 60px;
+    font-weight: 800;
+    font-family: "NanumSquareRound";
+    color: #fff;
+    position: absolute;
+    right: 0;
+    bottom: 20px;
+}
+
+.quantity {
+    position: relative;
+    margin-top: 5px;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.quantity input {
+    width: 65px;
+    height: 42px;
+    line-height: 1.65;
+    float: left;
+    display: block;
+    padding: 0;
+    margin: 0;
+    padding-left: 20px;
+    border: 1px solid #ddd;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.quantity input:focus {
+    outline: 0;
+}
+
+.quantity-nav {
+    float: left;
+    position: relative;
+    height: 42px;
+}
+
+.quantity-button {
+    position: relative;
+    cursor: pointer;
+    border-left: 1px solid #ddd;
+    width: 20px;
+    text-align: center;
+    color: #ddd;
+    font-size: 13px;
+    font-family: "Trebuchet MS", Helvetica, sans-serif !important;
+    line-height: 1.7;
+    -webkit-transform: translateX(-100%);
+    -ms-transform: translateX(-100%);
+    transform: translateX(-100%);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.quantity-button.quantity-up {
+    position: absolute;
+    height: 50%;
+    top: 0;
+    border-bottom: 1px solid #ddd;
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 20px;
+}
+
+.quantity-button.quantity-down {
+    position: absolute;
+    bottom: -1px;
+    height: 50%;
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 20px;
+}
+
+.popup2 {
+    display: none;
+    width: 650px;
+    padding: 40px;
+    background: #fff;
+    border-radius: 15px;
+    position: fixed;
+    font-size: 0;
+    z-index: 401;
+    left: 50%;
+    top: 50%;
+    text-align: center;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.popup2 .popupSubtitle {
+    width: 100%;
+    font-weight: 800;
+    font-size: 17px;
+    line-height: 24px;
+    text-align: center;
+    font-family: "NanumSquareRound";
+    color: #111;
+    display: block;
+    margin-top: 20px;
+    vertical-align: top;
+}
+
+
+.popup2 .popupTitle {
+    width: 100%;
+    font-size: 26px;
+    line-height: 36px;
+    font-weight: 800;
+    text-align: center;
+    font-family: "NanumSquareRound";
+    display: block;
+}
+
+.popup2 .popupText {
+    font-size: 17px;
+    line-height: 27px;
+    font-weight: 500;
+    text-align: center;
+    margin-top: 20px;
+    font-family: "NanumSquareRound";
+    color: #111;
+    display: block;
+}
+
+.popupCode {
+    width: 100%;
+    text-align: center;
+    border: solid 1px #ddd;
+    border-radius: 5px;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.popupCode img {
+    width: 150px;
+}
+
+.popupBox {
+    width: 100%;
+    border: solid 1px #ddd;
+    border-radius: 5px;
+    font-size: 15px;
+    line-height: 20px;
+    text-align: center;
+    font-family: "NanumSquareRound";
+    color: #111;
+    padding: 10px 10px 10px 10px;
+    position: relative;
+}
+.popupBox>input:focus{
+    outline: none;
+}
+.popupBox>input{
+    width: 100%;
+    height: 100%;
+    border: none;
+    font-size: 15px;
+    line-height: 20px;
+    text-align: center;
+    font-family: "NanumSquareRound";
+    color: #111;
+}
+.btnCopy{
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 10px;
+}
+
+.popupBox.red {
+    background: #FF2333;
+    border: solid 1px #FF2333;
+    color: #fff;
+    padding: 10px;
+    line-height: 20px;
+}
+
+.popupBox.red a {
+    color: #fff;
+    font-weight: 800;
+    text-decoration: underline;
+}
+
+.row {
+    width: 100%;
+}
+
+@media all and (max-width:1319px) {
+
+    .mainTitle {
+        top: 0;
+    }
+    .mainTitle {
+        font-size: 70px;
+    }
+    .mainTitle2 {
+        top: 0;
+    }
+    .mainTitle2 {
+        font-size: 70px;
+    }
+    .mainImg {
+        height: 100vh;
+        min-height: auto;
+    }
+
+    .mainBottom {
+        height: 110px;
+    }
+
+
+    .characterWrap {
+        bottom: 100px;
+    }
+
+    .collection:nth-child(5n) {
+        margin-right: 40px;
+    }
+
+    .collection:nth-child(4n) {
+        margin-right: 0px;
+    }
+
+    .contents {
+        width: 1056px;
+        margin: 0 auto;
+    }
+
+    .blackArea {
+        height: 50px;
+    }
+
+    .popup1 {
+        width: 460px;
+        min-width: 252px;
+        max-height: 90vh;
+        overflow: scroll;
+        padding: 30px;
+    }
+
+    .popupLeft {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+
+    .popupRight {
+        width: 100%;
+        display: block;
+        padding-left: 0px;
+        margin-top: 20px;
+    }
+
+    .popupImg {
+        width: 400px;
+        height: auto;
+    }
+
+    .popup2 {
+        padding: 30px;
+    }
+}
+
+@media all and (max-width:1055px) {
+    .collection:nth-child(3n) {
+        margin-right: 0px;
+    }
+
+    .collection:nth-child(4n) {
+        margin-right: 40px;
+    }
+
+    .contents {
+        width: 792px;
+        margin: 0 auto;
+    }
+}
+
+@media all and (max-width:791px) {
+    .collection:nth-child(3n) {
+        margin-right: 40px;
+    }
+
+    .collection:nth-child(2n) {
+        margin-right: 0px;
+    }
+
+    .contents {
+        width: 528px;
+        margin: 0 auto;
+    }
+
+    .popup1 {
+        width: 360px;
+    }
+
+    .popupImg {
+        width: 300px;
+        height: auto;
+    }
+
+    .popup2 {
+        width: 90%;
+        min-width: 252px;
+        max-height: 90vh;
+        overflow: scroll;
+    }
+
+    .character {
+        height: 600px;
+    }
+
+    .mainImg {
+        height: 90vh;
+    }
+}
+
+@media all and (max-width:527px) {
+    .contents {
+        width: 360px;
+        margin: 0 auto;
+    }
+
+    .collection {
+        width: 150px;
+        margin-right: 0;
+        margin-top: 30px;
+    }
+    .mainTitle {
+        font-size: 50px;
+        text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .mainTitle > span {
+        font-size: 20px;
+        line-height: 35px;
+    }
+    .mainTitle2 {
+        font-size: 50px;
+        text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .mainTitle2 > span {
+        font-size: 20px;
+        line-height: 35px;
+    }
+    .collection:nth-child(2n) {
+        margin-left: 20px;
+    }
+
+    .collection:nth-child(3n) {
+        margin-right: 0;
+    }
+
+    .collection:nth-child(5n) {
+        margin-right: 0;
+    }
+
+    .collectionImg {
+        height: 200px;
+        width: 100%;
+    }
+
+    .popup1 {
+        width: 310px;
+    }
+
+    .popupImg {
+        width: 250px;
+        height: auto;
+    }
+
+    .popup1 .popupText {
+        font-size: 15px;
+    }
+
+    .popup1 .popupSubtitle {
+        font-size: 15px;
+        width: 70px;
+    }
+
+    .popup2 .popupText {
+        font-size: 15px;
+        line-height: 20px;
+    }
+
+    .contentsText {
+        font-size: 15px;
+        line-height: 25px;
+    }
+
+    .contentsTitle {
+        font-size: 22px;
+    }
+
+    .popup1 .popupTitle {
+        font-size: 22px;
+    }
+
+    .popup2 .popupTitle {
+        font-size: 22px;
+    }
+
+    .character {
+        height: 400px;
+    }
+
+    .btnBuy {
+        width: 100px;
+        height: 45px;
+        line-height: 45px;
+    }
+}
+
+@media all and (max-width:374px) {
+    .collectionImg {
+        height: 146px;
+    }
+
+    .popup1 {
+        width: 90%;
+    }
+
+    .popupImg {
+        width: 190px;
+        height: auto;
+
+    }
+
+    .character {
+        height: 300px;
+    }
+    .mainTitle {
+        font-size: 30px;
+    }
+
+    .collection {
+        width: 110px;
+        margin-right: 0;
+    }
+
+    .contents {
+        width: 270px;
+        margin: 0 auto;
+    }
+
+
+}
