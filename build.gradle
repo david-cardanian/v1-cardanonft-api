@@ -34,7 +34,11 @@ war.enabled = true
 war {
     archiveName 'ROOT.war'
 }
+jar.enabled = true
 
+jar {
+    archiveName 'cardanonft.jar'
+}
 repositories {
     mavenCentral()
 }
