@@ -20,16 +20,17 @@ public class CardanoNftEntity implements Serializable {
     @Column(name = "collection_id")
     private Integer collectionId;
 
+    @Column(name = "token_name")
+    private String tokenName;
+
     @Column(name = "nft_name")
     private String nftName;
 
-    @Column(name = "age")
-    private String age;
     @Column(name = "nft_name_kor")
     private String nftNameKor;
 
-    @Column(name = "token_name")
-    private String tokenName;
+    @Column(name = "age")
+    private String age;
 
     @Column(name = "description")
     private String description;
@@ -37,38 +38,34 @@ public class CardanoNftEntity implements Serializable {
     @Column(name = "meta_str")
     private String metaStr;
 
-    @Column(name = "nft_price")
-    private Integer nftPrice;
+    @Column(name = "ipfs")
+    private String ipfs;
 
-    @Column(name = "mint_count")
-    private Integer mintCount;
+    @Column(name = "img_url")
+    private String imgUrl;
+
 
     @Column(name = "gotcha_min_count")
     private Integer gotchaMinCount;
 
-    @Column(name = "target_quantity")
-    private Integer targetQuantity;
-
     @Column(name = "ratio")
     private Integer ratio;
 
-    @Column(name = "address")
-    private String address;
-    @Column(name = "policy_name")
-    private String policyName;
-    @Column(name = "slot")
-    private String slot;
-    @Column(name = "policy_id")
-    private String policyId;
-    @Column(name = "img_url")
-    private String imgUrl;
-    @Column(name = "ipfs")
-    private String ipfs;
+    @Column(name = "target_quantity")
+    private Integer targetQuantity;
+
+    @Column(name = "mint_count")
+    private Integer mintCount;
+
+    @Column(name = "ratio_adjust_yn")
+    private Integer ratioAdjustYn;
+
+    @Column(name = "multi_mint_yn")
+    private Integer multiMintYn;
+
     @Column(name = "is_enabled")
     private String isEnabled = "1";
-    @Column(name = "multi_mint_yn")
-    private String multiMintYn = "0";
-    @Column(name = "created_at" , insertable = true, updatable = false)
+
     private Date createdAt;
     @Column(name = "updated_at" , insertable = true, updatable = true)
     private Date updatedAt=new Date();
