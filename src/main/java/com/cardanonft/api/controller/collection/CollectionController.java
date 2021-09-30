@@ -1,7 +1,9 @@
 package com.cardanonft.api.controller.collection;
 
 import com.cardanonft.api.constants.RETURN_CODE;
+import com.cardanonft.api.entity.CardanoNftCollectionEntity;
 import com.cardanonft.api.entity.CardanoNftEntity;
+import com.cardanonft.api.repository.CardanoNftCollectionRepository;
 import com.cardanonft.api.repository.CardanoNftRepository;
 import com.cardanonft.api.request.CollectionSearchRequest;
 import com.cardanonft.api.response.CardanoNftDefaultResponse;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,6 +29,8 @@ public class CollectionController {
     private static Logger logger = LoggerFactory.getLogger(CollectionController.class);
     @Autowired
     CardanoNftRepository cardanoNftRepository;
+    @Autowired
+    CardanoNftCollectionRepository cardanoNftCollectionRepository;
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
@@ -43,7 +48,6 @@ public class CollectionController {
 
     @RequestMapping(value = "/remain/all", method = RequestMethod.POST)
     @ResponseBody
-    @CrossOrigin(origins = "*") // 컨트롤러에서 설정
     public CardanoNftDefaultResponse getNFTRemain() throws Exception {
         List<CardanoNftEntity> cardanoNftEntityList = cardanoNftRepository.findAllByIsEnabledOrderByCreatedAtDesc("1");
         Map<Integer, Integer> remainMaps = cardanoNftEntityList.stream()
@@ -52,7 +56,27 @@ public class CollectionController {
                         remainCount -> remainCount.getTargetQuantity() - remainCount.getMintCount()
                 ));
 
-//        Integer remain = cardanoNftEntity.getTargetQuantity() - cardanoNftEntity.getMintCount();
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, remainMaps);
+    }
+
+    @RequestMapping(value = "/remain/each/{nftId}", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse getNFTRemainEach(@PathVariable("nftId") int nftId) throws Exception {
+        CardanoNftEntity cardanoNftEntityList = cardanoNftRepository.findTopByNftIdAndIsEnabledOrderByCreatedAtDesc(nftId, "1");
+
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, cardanoNftEntityList.getTargetQuantity() - cardanoNftEntityList.getMintCount());
+    }
+
+    @RequestMapping(value = "/closed", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse checkClosed() throws Exception {
+        List<CardanoNftCollectionEntity> cardanoNftCollectionEntityList =
+                cardanoNftCollectionRepository.findAllByProjectIdOrderByCreatedAtDesc(1);
+        Map<Integer, String> remainMaps = cardanoNftCollectionEntityList.stream()
+                .collect(Collectors.toMap(
+                        CardanoNftCollectionEntity::getCollectionId,
+                        CardanoNftCollectionEntity::getCloseYn
+                ));
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, remainMaps);
     }
 }

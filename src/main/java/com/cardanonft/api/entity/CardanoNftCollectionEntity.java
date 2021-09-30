@@ -52,6 +52,9 @@ public class CardanoNftCollectionEntity implements Serializable {
     @Column(name = "gotcha_yn")
     private String gotchaYn = "0";
 
+    @Column(name = "close_yn")
+    private String closeYn = "0";
+
     @Column(name = "is_enabled")
     private String isEnabled = "1";
     @Column(name = "created_at" , insertable = true, updatable = false)
