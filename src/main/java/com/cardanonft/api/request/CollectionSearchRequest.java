@@ -15,4 +15,6 @@ public class CollectionSearchRequest {
     private int projectId;
     @ApiModelProperty(required = false,notes = "collectionId")
     private int collectionId;
+    @ApiModelProperty(required = false,notes = "startDate")
+    private String startDate;
 }

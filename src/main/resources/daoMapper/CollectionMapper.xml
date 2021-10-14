@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="collection">
+    <select id="getAuctionList" parameterType="String" resultType="CollectionSearchRequest">
+        SELECT a.auction_name, a.description, a.close_yn caCloseYn, a.start_date, a.end_date
+               ,b.lowest_bid_price, b.highst_bid_price, b.close_yn cadClosen
+               ,c.*
+          FROM cardano_auction AS a
+     LEFT JOIN cardano_auction_detail AS b
+            ON ( b.auction_id = a.auction_id AND b.project_id = a.project_id AND b.is_enabled = 1 )
+     LEFT JOIN cardano_nft AS c
+            ON (b.collection_id = c.collection_id AND b.is_enabled = 1)
+         WHERE a.project_id = #{projectId}
+           AND a.is_enabled = 1
+        <![CDATA[ AND a.start_date <= #{startDate} ]]>
+
+    </select>
+</mapper>

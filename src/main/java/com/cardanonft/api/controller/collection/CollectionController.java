@@ -1,12 +1,14 @@
 package com.cardanonft.api.controller.collection;
 
 import com.cardanonft.api.constants.RETURN_CODE;
+import com.cardanonft.api.dao.CollectionDao;
 import com.cardanonft.api.entity.CardanoNftCollectionEntity;
 import com.cardanonft.api.entity.CardanoNftEntity;
 import com.cardanonft.api.repository.CardanoNftCollectionRepository;
 import com.cardanonft.api.repository.CardanoNftRepository;
 import com.cardanonft.api.request.CollectionSearchRequest;
 import com.cardanonft.api.response.CardanoNftDefaultResponse;
+import com.cardanonft.api.vo.collection.CollectionVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,8 @@ public class CollectionController {
     CardanoNftRepository cardanoNftRepository;
     @Autowired
     CardanoNftCollectionRepository cardanoNftCollectionRepository;
+    @Autowired
+    CollectionDao collectionDao;
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
@@ -38,6 +42,16 @@ public class CollectionController {
             @RequestBody CollectionSearchRequest collectionSearchRequest
     ) throws Exception {
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, cardanoNftRepository.findAllByIsEnabledOrderByCreatedAtDesc("1"));
+    }
+
+    @RequestMapping(value = "/auctionList", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse getAuctionList(
+            @RequestBody CollectionSearchRequest collectionSearchRequest
+    ) throws Exception {
+
+        List<CollectionSearchRequest> auctionList = collectionDao.getAuctionList(collectionSearchRequest);
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, auctionList);
     }
 
     @RequestMapping(value = "/{nftId}", method = RequestMethod.POST)
