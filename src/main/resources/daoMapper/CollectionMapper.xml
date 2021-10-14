@@ -16,6 +16,5 @@
          WHERE a.project_id = #{projectId}
            AND a.is_enabled = 1
         <![CDATA[ AND a.start_date <= #{startDate} ]]>
-
     </select>
 </mapper>

@@ -37,7 +37,7 @@ public class DataBaseConfig {
     public SqlSessionFactory sqlSessionFactory(HikariDataSource dataSource) throws Exception{
 
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setTypeAliasesPackage("com.croiffle");
+        sqlSessionFactoryBean.setTypeAliasesPackage("com.cardanonft");
         sqlSessionFactoryBean.setDataSource(dataSource);
         sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:/daoMapper/*.xml"));
 

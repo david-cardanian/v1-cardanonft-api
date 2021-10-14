@@ -2,8 +2,10 @@ package com.cardanonft.api.controller.collection;
 
 import com.cardanonft.api.constants.RETURN_CODE;
 import com.cardanonft.api.dao.CollectionDao;
+import com.cardanonft.api.entity.CardanoAuctionEntity;
 import com.cardanonft.api.entity.CardanoNftCollectionEntity;
 import com.cardanonft.api.entity.CardanoNftEntity;
+import com.cardanonft.api.repository.CardanoAuctionRepository;
 import com.cardanonft.api.repository.CardanoNftCollectionRepository;
 import com.cardanonft.api.repository.CardanoNftRepository;
 import com.cardanonft.api.request.CollectionSearchRequest;
@@ -16,6 +18,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +35,8 @@ public class CollectionController {
     private static Logger logger = LoggerFactory.getLogger(CollectionController.class);
     @Autowired
     CardanoNftRepository cardanoNftRepository;
+    @Autowired
+    CardanoAuctionRepository cardanoAuctionRepository;
     @Autowired
     CardanoNftCollectionRepository cardanoNftCollectionRepository;
     @Autowired
@@ -49,6 +55,16 @@ public class CollectionController {
     public CardanoNftDefaultResponse getAuctionList(
             @RequestBody CollectionSearchRequest collectionSearchRequest
     ) throws Exception {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String today = formatter.format(new Date());
+
+        // 조회기준 날짜 추출
+        CardanoAuctionEntity cardanoActionDate = cardanoAuctionRepository.findTopByIsEnabledAndProjectIdOrderByStartDateDesc("1", collectionSearchRequest.getProjectId());
+
+        // 현재날짜와 비교 후 기준 날짜 입력
+        if(cardanoActionDate.getStartDate() != today && today.compareTo(cardanoActionDate.getStartDate()) == -1) {
+            collectionSearchRequest.setStartDate(cardanoActionDate.getStartDate());
+        } else collectionSearchRequest.setStartDate(today);
 
         List<CollectionSearchRequest> auctionList = collectionDao.getAuctionList(collectionSearchRequest);
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, auctionList);
