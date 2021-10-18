@@ -4,10 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="collection">
-    <select id="getAuctionList" parameterType="String" resultType="CollectionSearchRequest">
-        SELECT a.auction_name, a.description, a.close_yn caCloseYn, a.start_date, a.end_date
-               ,b.lowest_bid_price, b.highst_bid_price, b.close_yn cadClosen
-               ,c.*
+    <select id="getAuctionList" parameterType="CollectionVO" resultType="CollectionVO">
+        SELECT a.auction_id auctionId, a.auction_name auctionName, a.description, a.close_yn caCloseYn, a.start_date startDate, a.end_date endDate
+               ,b.lowest_bid_price lowestBidPrice, b.highst_bid_price highstBidPrice, b.close_yn cadCloseYn
+               ,c.nft_id nftId, c.collection_id collectionId,  c.nft_name nftName, c.meta_str metaStr, c.ipfs, c.img_url imgUrl
           FROM cardano_auction AS a
      LEFT JOIN cardano_auction_detail AS b
             ON ( b.auction_id = a.auction_id AND b.project_id = a.project_id AND b.is_enabled = 1 )

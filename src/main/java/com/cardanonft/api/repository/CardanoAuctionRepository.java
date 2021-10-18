@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
 
 public interface CardanoAuctionRepository extends JpaRepository<CardanoAuctionEntity, Integer>, JpaSpecificationExecutor<CardanoAuctionEntity> {
-    CardanoAuctionEntity findTopByIsEnabledAndProjectIdOrderByStartDateDesc(String isEnabled, int projectId);
+    CardanoAuctionEntity findTopByIsEnabledAndProjectIdOrderByStartDate(String isEnabled, int projectId);
 }

@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class CollectionSearchRequest {
     @ApiModelProperty(required = false,notes = "projectId")
-    private Integer projectId;
+    private int projectId;
     @ApiModelProperty(required = false,notes = "collectionId")
     private int collectionId;
     @ApiModelProperty(required = false,notes = "startDate")

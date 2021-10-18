@@ -1,7 +1,5 @@
 package com.cardanonft.api.dao;
 
-import com.cardanonft.api.entity.CardanoNftCollectionEntity;
-import com.cardanonft.api.request.CollectionSearchRequest;
 import com.cardanonft.api.vo.collection.CollectionVO;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,7 @@ public class CollectionDao {
 	SqlSession sqlSession;
 
 	// 옥션 타입 컬렉션 리스트 조회
-	public List<CollectionSearchRequest> getAuctionList(CollectionSearchRequest collectionSearchRequest) throws Exception {
-		return sqlSession.selectList("collection.getAuctionList", collectionSearchRequest);
+	public List<CollectionVO> getAuctionList(CollectionVO collectionVO) throws Exception {
+		return sqlSession.selectList("collection.getAuctionList", collectionVO);
 	}
 }

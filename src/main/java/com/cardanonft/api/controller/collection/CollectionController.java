@@ -55,18 +55,21 @@ public class CollectionController {
     public CardanoNftDefaultResponse getAuctionList(
             @RequestBody CollectionSearchRequest collectionSearchRequest
     ) throws Exception {
+        CollectionVO collectionVO = new CollectionVO();
+        collectionVO.setProjectId(collectionSearchRequest.getProjectId());
+
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String today = formatter.format(new Date());
 
         // 조회기준 날짜 추출
-        CardanoAuctionEntity cardanoActionDate = cardanoAuctionRepository.findTopByIsEnabledAndProjectIdOrderByStartDateDesc("1", collectionSearchRequest.getProjectId());
+        CardanoAuctionEntity cardanoActionDate = cardanoAuctionRepository.findTopByIsEnabledAndProjectIdOrderByStartDate("1", collectionSearchRequest.getProjectId());
 
         // 현재날짜와 비교 후 기준 날짜 입력
         if(cardanoActionDate.getStartDate() != today && today.compareTo(cardanoActionDate.getStartDate()) == -1) {
-            collectionSearchRequest.setStartDate(cardanoActionDate.getStartDate());
-        } else collectionSearchRequest.setStartDate(today);
+            collectionVO.setStartDate(cardanoActionDate.getStartDate());
+        } else collectionVO.setStartDate(today);
 
-        List<CollectionSearchRequest> auctionList = collectionDao.getAuctionList(collectionSearchRequest);
+        List<CollectionVO> auctionList = collectionDao.getAuctionList(collectionVO);
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, auctionList);
     }
 
