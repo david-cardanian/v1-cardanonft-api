@@ -21,6 +21,8 @@ public class CollectionVO {
     private int auctionDetailId;
     @ApiModelProperty(notes = "auctionName")
     private String auctionName;
+    @ApiModelProperty(notes = "subName")
+    private String subName;
     @ApiModelProperty(notes = "description")
     private String description;
     @ApiModelProperty(notes = "startDate")

@@ -5,9 +5,7 @@ import com.cardanonft.api.dao.CollectionDao;
 import com.cardanonft.api.entity.CardanoAuctionEntity;
 import com.cardanonft.api.entity.CardanoNftCollectionEntity;
 import com.cardanonft.api.entity.CardanoNftEntity;
-import com.cardanonft.api.repository.CardanoAuctionRepository;
-import com.cardanonft.api.repository.CardanoNftCollectionRepository;
-import com.cardanonft.api.repository.CardanoNftRepository;
+import com.cardanonft.api.repository.*;
 import com.cardanonft.api.request.CollectionSearchRequest;
 import com.cardanonft.api.response.CardanoNftDefaultResponse;
 import com.cardanonft.api.vo.collection.CollectionHistoryVO;
@@ -38,6 +36,10 @@ public class CollectionController {
     CardanoNftRepository cardanoNftRepository;
     @Autowired
     CardanoAuctionRepository cardanoAuctionRepository;
+    @Autowired
+    CardanoAuctionDetailRepository cardanoAuctionDetailRepository;
+    @Autowired
+    CardanoAuctionAddressRepository cardanoAuctionAddressRepository;
     @Autowired
     CardanoNftCollectionRepository cardanoNftCollectionRepository;
     @Autowired
@@ -78,6 +80,22 @@ public class CollectionController {
     @ResponseBody
     public CardanoNftDefaultResponse getProduct(@PathVariable("nftId") int nftId) throws Exception {
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, cardanoNftRepository.findTopByNftIdAndIsEnabledOrderByCreatedAtDesc(nftId, "1"));
+    }
+
+    @RequestMapping(value = "/auctionDetail", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse getAuctionDetail(
+            @RequestBody CollectionSearchRequest collectionSearchRequest
+    ) throws Exception {
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, cardanoAuctionDetailRepository.findTopByIsEnabledAndAuctionDetailId("1", collectionSearchRequest.getAuctionDetailId()));
+    }
+
+    @RequestMapping(value = "/auctionAddress", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse getAuctionAddress(
+            @RequestBody CollectionSearchRequest collectionSearchRequest
+    ) throws Exception {
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, cardanoAuctionAddressRepository.findTopByIsEnabledAndNftCollectionId("1", collectionSearchRequest.getCollectionId()));
     }
 
     @RequestMapping(value = "/auctionHistory", method = RequestMethod.POST)

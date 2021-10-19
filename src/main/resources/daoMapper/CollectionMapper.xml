@@ -5,7 +5,7 @@
 
 <mapper namespace="collection">
     <select id="getAuctionList" parameterType="CollectionVO" resultType="CollectionVO">
-        SELECT a.auction_id auctionId, a.auction_name auctionName, a.description, a.close_yn caCloseYn, a.start_date startDate, a.end_date endDate
+        SELECT a.auction_id auctionId, a.auction_name auctionName, a.sub_name subName, a.description, a.close_yn caCloseYn, a.start_date startDate, a.end_date endDate
                ,b.auction_detail_id auctionDetailId,b.lowest_bid_price lowestBidPrice, b.highst_bid_price highstBidPrice, b.close_yn cadCloseYn
                ,c.nft_id nftId, c.collection_id collectionId, c.nft_name nftName, c.nft_name_kor nftNameKor, c.meta_str metaStr, c.ipfs, c.img_url imgUrl
           FROM cardano_auction AS a
