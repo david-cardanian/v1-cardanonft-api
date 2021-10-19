@@ -17,6 +17,8 @@ public class CollectionVO {
     private int projectId;
     @ApiModelProperty(notes = "auctionId")
     private int auctionId;
+    @ApiModelProperty(notes = "auctionDetailId")
+    private int auctionDetailId;
     @ApiModelProperty(notes = "auctionName")
     private String auctionName;
     @ApiModelProperty(notes = "description")
@@ -39,11 +41,12 @@ public class CollectionVO {
     private int collectionId;
     @ApiModelProperty(notes = "nftName")
     private String nftName;
+    @ApiModelProperty(notes = "nftNameKor")
+    private String nftNameKor;
     @ApiModelProperty(notes = "metaStr")
     private String metaStr;
     @ApiModelProperty(notes = "ipfs")
     private String ipfs;
     @ApiModelProperty(notes = "imgUrl")
     private String imgUrl;
-
 }

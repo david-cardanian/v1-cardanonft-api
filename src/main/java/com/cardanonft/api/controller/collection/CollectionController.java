@@ -10,6 +10,7 @@ import com.cardanonft.api.repository.CardanoNftCollectionRepository;
 import com.cardanonft.api.repository.CardanoNftRepository;
 import com.cardanonft.api.request.CollectionSearchRequest;
 import com.cardanonft.api.response.CardanoNftDefaultResponse;
+import com.cardanonft.api.vo.collection.CollectionHistoryVO;
 import com.cardanonft.api.vo.collection.CollectionVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,6 +78,20 @@ public class CollectionController {
     @ResponseBody
     public CardanoNftDefaultResponse getProduct(@PathVariable("nftId") int nftId) throws Exception {
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, cardanoNftRepository.findTopByNftIdAndIsEnabledOrderByCreatedAtDesc(nftId, "1"));
+    }
+
+    @RequestMapping(value = "/auctionHistory", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse getAuctionHistory(
+            @RequestBody CollectionSearchRequest collectionSearchRequest
+    ) throws Exception {
+        CollectionHistoryVO collectionHistoryVO = new CollectionHistoryVO();
+        collectionHistoryVO.setAuctionId(collectionSearchRequest.getAuctionId());
+        collectionHistoryVO.setAuctionDetailId(collectionSearchRequest.getAuctionDetailId());
+        collectionHistoryVO.setCollectionId(collectionSearchRequest.getCollectionId());
+
+        List<CollectionHistoryVO> auctionList = collectionDao.getAuctionHistory(collectionHistoryVO);
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, auctionList);
     }
 
     @RequestMapping(value = "/remain/all", method = RequestMethod.POST)
