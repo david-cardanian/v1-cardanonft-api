@@ -18,10 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @CrossOrigin("*")
@@ -62,13 +59,16 @@ public class CollectionController {
         collectionVO.setProjectId(collectionSearchRequest.getProjectId());
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        TimeZone utc = TimeZone.getTimeZone("UTC");
+        formatter.setTimeZone(utc);
         String today = formatter.format(new Date());
+
 
         // 조회기준 날짜 추출
         CardanoAuctionEntity cardanoActionDate = cardanoAuctionRepository.findTopByIsEnabledAndProjectIdOrderByStartDate("1", collectionSearchRequest.getProjectId());
 
         // 현재날짜와 비교 후 기준 날짜 입력
-        if(cardanoActionDate.getStartDate() != today && today.compareTo(cardanoActionDate.getStartDate()) == -1) {
+        if(cardanoActionDate.getStartDate() != today && today.compareTo(cardanoActionDate.getStartDate()) < 0) {
             collectionVO.setStartDate(cardanoActionDate.getStartDate());
         } else collectionVO.setStartDate(today);
 
