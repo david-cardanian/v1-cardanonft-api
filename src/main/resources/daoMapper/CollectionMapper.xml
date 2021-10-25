@@ -21,7 +21,7 @@
     <select id="getAuctionHistory" parameterType="CollectionHistoryVO" resultType="CollectionHistoryVO">
        SELECT  auction_history_id auctionHistotyId, status, from_address fromAddress, amount, created_at createdAt
                 , CONCAT(SUBSTR(from_address, 1,16),'...',  RIGHT(from_address, 16)) AS viewAddress
-         FROM cardano_test.cardano_auction_history
+         FROM cardano_auction_history
         WHERE auction_id = #{auctionId}
           AND auction_detail_id = #{auctionDetailId}
           AND collection_id = #{collectionId}
