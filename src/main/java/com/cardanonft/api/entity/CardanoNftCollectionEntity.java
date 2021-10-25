@@ -25,9 +25,6 @@ public class CardanoNftCollectionEntity implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "address")
-    private String address;
-
     @Column(name = "img_url")
     private String imgUrl;
 
@@ -54,9 +51,6 @@ public class CardanoNftCollectionEntity implements Serializable {
 
     @Column(name = "close_yn")
     private String closeYn = "0";
-
-    @Column(name = "startDate")
-    private String startDate;
 
     @Column(name = "is_enabled")
     private String isEnabled = "1";

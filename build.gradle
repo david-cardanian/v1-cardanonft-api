@@ -30,6 +30,7 @@ sourceCompatibility = '1.8'
 //bootWar 비활성화시
 bootWar.enabled = false
 war.enabled = true
+bootJar.enabled = true
 
 war {
     archiveName 'ROOT.war'

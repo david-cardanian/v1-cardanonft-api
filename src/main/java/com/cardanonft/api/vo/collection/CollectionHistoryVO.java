@@ -5,11 +5,13 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.TypeAlias;
 
 @Data
 @ApiModel
 @Getter
 @Setter
+@TypeAlias("CollectionHistoryVO")
 public class CollectionHistoryVO {
     @ApiModelProperty(notes = "auctionHistotyId")
     private int auctionHistotyId;

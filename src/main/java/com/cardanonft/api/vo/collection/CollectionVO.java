@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.TypeAlias;
 
 import java.util.Date;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 @ApiModel
 @Getter
 @Setter
+@TypeAlias("CollectionVO")
 public class CollectionVO {
     @ApiModelProperty(notes = "projectId")
     private int projectId;
