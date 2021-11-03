@@ -53,4 +53,6 @@ public class CollectionVO {
     private String ipfs;
     @ApiModelProperty(notes = "imgUrl")
     private String imgUrl;
+    @ApiModelProperty(notes = "thumnailUrl")
+    private String thumnailUrl;
 }
