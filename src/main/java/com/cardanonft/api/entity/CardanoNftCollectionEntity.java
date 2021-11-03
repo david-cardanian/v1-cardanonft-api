@@ -25,9 +25,6 @@ public class CardanoNftCollectionEntity implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "address")
-    private String address;
-
     @Column(name = "img_url")
     private String imgUrl;
 

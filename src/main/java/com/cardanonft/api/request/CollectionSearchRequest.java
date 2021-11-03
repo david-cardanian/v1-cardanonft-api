@@ -15,4 +15,14 @@ public class CollectionSearchRequest {
     private int projectId;
     @ApiModelProperty(required = false,notes = "collectionId")
     private int collectionId;
+    @ApiModelProperty(required = false,notes = "nftId")
+    private int nftId;
+    @ApiModelProperty(required = false,notes = "auctionId")
+    private int auctionId;
+    @ApiModelProperty(required = false,notes = "auctionDetailId")
+    private int auctionDetailId;
+    @ApiModelProperty(required = false,notes = "createdAt")
+    private String createdAt;
 }
+
+

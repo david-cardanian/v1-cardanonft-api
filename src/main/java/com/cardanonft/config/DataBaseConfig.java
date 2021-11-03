@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
+import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -37,8 +38,9 @@ public class DataBaseConfig {
     public SqlSessionFactory sqlSessionFactory(HikariDataSource dataSource) throws Exception{
 
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setTypeAliasesPackage("com.croiffle");
+        sqlSessionFactoryBean.setTypeAliasesPackage("com.cardanonft");
         sqlSessionFactoryBean.setDataSource(dataSource);
+        sqlSessionFactoryBean.setVfs(SpringBootVFS.class);
         sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:/daoMapper/*.xml"));
 
         Interceptor[] interceptors = new Interceptor[1];

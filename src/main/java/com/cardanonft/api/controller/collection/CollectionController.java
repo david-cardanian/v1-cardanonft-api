@@ -1,12 +1,15 @@
 package com.cardanonft.api.controller.collection;
 
 import com.cardanonft.api.constants.RETURN_CODE;
+import com.cardanonft.api.dao.CollectionDao;
+import com.cardanonft.api.entity.CardanoAuctionEntity;
 import com.cardanonft.api.entity.CardanoNftCollectionEntity;
 import com.cardanonft.api.entity.CardanoNftEntity;
-import com.cardanonft.api.repository.CardanoNftCollectionRepository;
-import com.cardanonft.api.repository.CardanoNftRepository;
+import com.cardanonft.api.repository.*;
 import com.cardanonft.api.request.CollectionSearchRequest;
 import com.cardanonft.api.response.CardanoNftDefaultResponse;
+import com.cardanonft.api.vo.collection.CollectionHistoryVO;
+import com.cardanonft.api.vo.collection.CollectionVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @CrossOrigin("*")
@@ -30,7 +32,15 @@ public class CollectionController {
     @Autowired
     CardanoNftRepository cardanoNftRepository;
     @Autowired
+    CardanoAuctionRepository cardanoAuctionRepository;
+    @Autowired
+    CardanoAuctionDetailRepository cardanoAuctionDetailRepository;
+    @Autowired
+    CardanoAuctionAddressRepository cardanoAuctionAddressRepository;
+    @Autowired
     CardanoNftCollectionRepository cardanoNftCollectionRepository;
+    @Autowired
+    CollectionDao collectionDao;
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
@@ -40,10 +50,66 @@ public class CollectionController {
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, cardanoNftRepository.findAllByIsEnabledOrderByCreatedAtDesc("1"));
     }
 
+    @RequestMapping(value = "/auctionList", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse getAuctionList(
+            @RequestBody CollectionSearchRequest collectionSearchRequest
+    ) throws Exception {
+        CollectionVO collectionVO = new CollectionVO();
+        collectionVO.setProjectId(collectionSearchRequest.getProjectId());
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        TimeZone utc = TimeZone.getTimeZone("UTC");
+        formatter.setTimeZone(utc);
+        String today = formatter.format(new Date());
+
+
+        // 조회기준 날짜 추출
+        CardanoAuctionEntity cardanoActionDate = cardanoAuctionRepository.findTopByIsEnabledAndProjectIdOrderByStartDate("1", collectionSearchRequest.getProjectId());
+
+        // 현재날짜와 비교 후 기준 날짜 입력
+        if(cardanoActionDate.getStartDate() != today && today.compareTo(cardanoActionDate.getStartDate()) < 0) {
+            collectionVO.setStartDate(cardanoActionDate.getStartDate());
+        } else collectionVO.setStartDate(today);
+
+        List<CollectionVO> auctionList = collectionDao.getAuctionList(collectionVO);
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, auctionList);
+    }
+
     @RequestMapping(value = "/{nftId}", method = RequestMethod.POST)
     @ResponseBody
     public CardanoNftDefaultResponse getProduct(@PathVariable("nftId") int nftId) throws Exception {
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, cardanoNftRepository.findTopByNftIdAndIsEnabledOrderByCreatedAtDesc(nftId, "1"));
+    }
+
+    @RequestMapping(value = "/auctionDetail", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse getAuctionDetail(
+            @RequestBody CollectionSearchRequest collectionSearchRequest
+    ) throws Exception {
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, cardanoAuctionDetailRepository.findTopByIsEnabledAndAuctionDetailId("1", collectionSearchRequest.getAuctionDetailId()));
+    }
+
+    @RequestMapping(value = "/auctionAddress", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse getAuctionAddress(
+            @RequestBody CollectionSearchRequest collectionSearchRequest
+    ) throws Exception {
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, cardanoAuctionAddressRepository.findTopByIsEnabledAndNftCollectionId("1", collectionSearchRequest.getCollectionId()));
+    }
+
+    @RequestMapping(value = "/auctionHistory", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse getAuctionHistory(
+            @RequestBody CollectionSearchRequest collectionSearchRequest
+    ) throws Exception {
+        CollectionHistoryVO collectionHistoryVO = new CollectionHistoryVO();
+        collectionHistoryVO.setAuctionId(collectionSearchRequest.getAuctionId());
+        collectionHistoryVO.setAuctionDetailId(collectionSearchRequest.getAuctionDetailId());
+        collectionHistoryVO.setCollectionId(collectionSearchRequest.getCollectionId());
+
+        List<CollectionHistoryVO> auctionList = collectionDao.getAuctionHistory(collectionHistoryVO);
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, auctionList);
     }
 
     @RequestMapping(value = "/remain/all", method = RequestMethod.POST)

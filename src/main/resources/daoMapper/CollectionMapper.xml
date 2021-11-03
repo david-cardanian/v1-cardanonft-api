@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="collection">
+    <select id="getAuctionList" parameterType="CollectionVO" resultType="CollectionVO">
+        SELECT a.auction_id auctionId, a.auction_name auctionName, a.sub_name subName, a.description, a.close_yn caCloseYn, a.start_date startDate, a.end_date endDate
+               ,b.auction_detail_id auctionDetailId,b.lowest_bid_price lowestBidPrice, b.highst_bid_price highstBidPrice, b.close_yn cadCloseYn
+               ,c.nft_id nftId, c.collection_id collectionId, c.nft_name nftName, c.nft_name_kor nftNameKor, c.meta_str metaStr, c.ipfs, c.img_url imgUrl
+          FROM cardano_auction AS a
+     LEFT JOIN cardano_auction_detail AS b
+            ON ( b.auction_id = a.auction_id AND b.project_id = a.project_id AND b.is_enabled = 1 )
+     LEFT JOIN cardano_nft AS c
+            ON (b.collection_id = c.collection_id AND b.is_enabled = 1)
+         WHERE a.project_id = #{projectId}
+           AND a.is_enabled = 1
+        <![CDATA[ AND a.start_date <= #{startDate} ]]>
+    </select>
+
+    <select id="getAuctionHistory" parameterType="CollectionHistoryVO" resultType="CollectionHistoryVO">
+       SELECT  auction_history_id auctionHistotyId, status, from_address fromAddress, amount, created_at createdAt
+                , CONCAT(SUBSTR(from_address, 1,16),'...',  RIGHT(from_address, 16)) AS viewAddress
+         FROM cardano_auction_history
+        WHERE auction_id = #{auctionId}
+          AND auction_detail_id = #{auctionDetailId}
+          AND collection_id = #{collectionId}
+          AND is_enabled = 1
+     ORDER BY amount DESC;
+    </select>
+</mapper>
