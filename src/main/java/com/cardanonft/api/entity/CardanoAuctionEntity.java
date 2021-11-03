@@ -14,12 +14,17 @@ public class CardanoAuctionEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "auction_id")
+    private Integer auctionId;
 
     @Column(name = "project_id")
     private Integer projectId;
 
     @Column(name = "start_date")
     private String startDate;
+
+    @Column(name = "end_date")
+    private String endDate;
 
     @Column(name = "is_enabled")
     private String isEnabled = "1";
