@@ -81,6 +81,10 @@ public class CollectionController {
                     collectionVO.setStartDate(today);
                     break;
                 }
+                if(today.compareTo(data.getEndDate()) > 0){
+                    collectionVO.setStartDate(today);
+                    break;
+                }
             }
         }
 
