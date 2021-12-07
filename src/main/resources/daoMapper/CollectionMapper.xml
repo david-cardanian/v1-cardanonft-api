@@ -4,7 +4,41 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="collection">
-    <select id="getAuctionList" parameterType="CollectionVO" resultType="CollectionVO">
+    <select id="getListSearch" parameterType="CollectionListVO" resultType="CollectionListVO">
+        SELECT a.nft_id nftId, a.collection_id collectionId, a.token_name tokenName, a.nft_name nftName, a.nft_name_kor nftNameKor,
+               a.description, a.meta_str metaStr, a.ipfs, a.img_url imgUrl, a.thumnail_url thumnailUrl, a.gotcha_min_count gotchaMinCount,
+               a.ratio, a.target_quantity targetQuantity, a.mint_count mintCount, a.ratio_adjust_yn ratioAdjustYn, a.multi_mint_yn multiMintYn,
+               a.unique_yn uniqueYn, a.param1, a.param2, a.param3, a.param4, a.param5, a.priority,
+               b.collection_name collectionName, b.project_id projectId, b.description descriptionC
+          FROM cardano_nft As a
+     LEFT JOIN cardano_nft_collection AS b ON (a.collection_id = b.collection_id)
+         WHERE a.collection_id = #{collectionId}
+           AND a.is_enabled = 1
+        <if test="priority != null and priority != 0">
+            <![CDATA[
+            AND a.priority > #{priority}
+            ]]>
+        </if>
+        <if test="param4 != null and param4 != ''">
+            <![CDATA[
+            AND a.param4 = #{param4}
+            ]]>
+        </if>
+        <if test="param5 != null and param5 != ''">
+            <![CDATA[
+            AND a.param5 = #{param5}
+            ]]>
+        </if>
+        <if test="keyword != null and keyword != ''">
+            <![CDATA[
+            AND a.param1 like CONCAT(#{keyword},'%')
+            ]]>
+        </if>
+        ORDER BY a.priority
+        LIMIT 50;
+    </select>
+
+    <select id="getAuctionList" parameterType="AuctionCollectionVO" resultType="AuctionCollectionVO">
         SELECT a.auction_id auctionId, a.auction_name auctionName, a.sub_name subName, a.description, a.close_yn caCloseYn, a.start_date startDate, a.end_date endDate
                ,b.auction_detail_id auctionDetailId,b.lowest_bid_price lowestBidPrice, b.highst_bid_price highstBidPrice, b.close_yn cadCloseYn
                ,c.nft_id nftId, c.collection_id collectionId, c.nft_name nftName, c.nft_name_kor nftNameKor, c.meta_str metaStr, c.ipfs, c.img_url imgUrl, c.thumnail_url thumnailUrl
@@ -27,5 +61,14 @@
           AND collection_id = #{collectionId}
           AND is_enabled = 1
      ORDER BY amount DESC;
+    </select>
+
+    <select id="getRandomAddress" parameterType="CollectionAddressVO" resultType="CollectionAddressVO">
+        SELECT address_id addressId
+          FROM cardano_address
+        <![CDATA[
+         WHERE address_name like CONCAT(#{addrName},'%')
+        ]]>
+      ORDER BY rand() limit 1
     </select>
 </mapper>

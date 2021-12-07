@@ -8,8 +8,10 @@ import com.cardanonft.api.entity.CardanoNftEntity;
 import com.cardanonft.api.repository.*;
 import com.cardanonft.api.request.CollectionSearchRequest;
 import com.cardanonft.api.response.CardanoNftDefaultResponse;
+import com.cardanonft.api.vo.collection.CollectionAddressVO;
 import com.cardanonft.api.vo.collection.CollectionHistoryVO;
-import com.cardanonft.api.vo.collection.CollectionVO;
+import com.cardanonft.api.vo.collection.AuctionCollectionVO;
+import com.cardanonft.api.vo.collection.CollectionListVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,13 +52,53 @@ public class CollectionController {
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, cardanoNftRepository.findAllByIsEnabledOrderByCreatedAtDesc("1"));
     }
 
+    // 단건 컬렉션 정보 조회
+    @RequestMapping(value = "/collectionInfo", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse getCollectionInfo(
+            @RequestBody CollectionSearchRequest collectionSearchRequest
+    ) throws Exception {
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, cardanoNftCollectionRepository.findAllByCollectionIdOrderByCreatedAtDesc(collectionSearchRequest.getCollectionId()));
+    }
+
+    // 랜덤 주소 조회
+    @RequestMapping(value = "/randomAddress", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse getRandomAddress(
+            @RequestBody CollectionSearchRequest collectionSearchRequest
+    ) throws Exception {
+        CollectionAddressVO collectionAddressVO = new CollectionAddressVO();
+        collectionAddressVO.setAddrName(collectionSearchRequest.getAddrName());
+
+        List<CollectionListVO> auctionList = collectionDao.getRandomAddress(collectionAddressVO);
+
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, auctionList);
+    }
+
+    @RequestMapping(value = "/listSearch", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse getListSearch(
+            @RequestBody CollectionSearchRequest collectionSearchRequest
+    ) throws Exception {
+        CollectionListVO collectionListVO = new CollectionListVO();
+        collectionListVO.setCollectionId(collectionSearchRequest.getCollectionId());
+        collectionListVO.setParam4(collectionSearchRequest.getParam4());
+        collectionListVO.setParam5(collectionSearchRequest.getParam5());
+        collectionListVO.setKeyword(collectionSearchRequest.getKeyword());
+        collectionListVO.setPriority(collectionSearchRequest.getPriority());
+
+        List<CollectionListVO> auctionList = collectionDao.getListSearch(collectionListVO);
+
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, auctionList);
+    }
+
     @RequestMapping(value = "/auctionList", method = RequestMethod.POST)
     @ResponseBody
     public CardanoNftDefaultResponse getAuctionList(
             @RequestBody CollectionSearchRequest collectionSearchRequest
     ) throws Exception {
-        CollectionVO collectionVO = new CollectionVO();
-        collectionVO.setProjectId(collectionSearchRequest.getProjectId());
+        AuctionCollectionVO auctionCollectionVO = new AuctionCollectionVO();
+        auctionCollectionVO.setProjectId(collectionSearchRequest.getProjectId());
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         TimeZone utc = TimeZone.getTimeZone("UTC");
@@ -73,23 +115,23 @@ public class CollectionController {
 
             // 하나도 시작 안했을 경우
             if(data.getStartDate() != today && today.compareTo(data.getStartDate()) < 0) {
-                collectionVO.setStartDate(data.getStartDate());
+                auctionCollectionVO.setStartDate(data.getStartDate());
                 break;
             } else {
                 // 진행중인건 있으면 현재 날짜로 셋팅
                 if(today.compareTo(data.getStartDate()) > 0 && today.compareTo(data.getEndDate()) < 0){
-                    collectionVO.setStartDate(today);
+                    auctionCollectionVO.setStartDate(today);
                     break;
                 }
                 if(today.compareTo(data.getEndDate()) > 0){
-                    collectionVO.setStartDate(today);
+                    auctionCollectionVO.setStartDate(today);
                     break;
                 }
             }
         }
 
 
-        List<CollectionVO> auctionList = collectionDao.getAuctionList(collectionVO);
+        List<AuctionCollectionVO> auctionList = collectionDao.getAuctionList(auctionCollectionVO);
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, auctionList);
     }
 

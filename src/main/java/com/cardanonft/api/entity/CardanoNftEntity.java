@@ -44,7 +44,6 @@ public class CardanoNftEntity implements Serializable {
     @Column(name = "img_url")
     private String imgUrl;
 
-
     @Column(name = "gotcha_min_count")
     private Integer gotchaMinCount;
 

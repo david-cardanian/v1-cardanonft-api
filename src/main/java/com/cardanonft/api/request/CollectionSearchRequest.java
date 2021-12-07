@@ -21,6 +21,16 @@ public class CollectionSearchRequest {
     private int auctionId;
     @ApiModelProperty(required = false,notes = "auctionDetailId")
     private int auctionDetailId;
+    @ApiModelProperty(required = false,notes = "priority")
+    private int priority;
+    @ApiModelProperty(required = false,notes = "param4")
+    private String param4;
+    @ApiModelProperty(required = false,notes = "param5")
+    private String param5;
+    @ApiModelProperty(required = false,notes = "keyword")
+    private String keyword;
+    @ApiModelProperty(required = false,notes = "addrName")
+    private String addrName;
     @ApiModelProperty(required = false,notes = "createdAt")
     private String createdAt;
 }

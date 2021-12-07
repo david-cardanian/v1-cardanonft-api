@@ -13,8 +13,8 @@ import java.util.Date;
 @ApiModel
 @Getter
 @Setter
-@TypeAlias("CollectionVO")
-public class CollectionVO {
+@TypeAlias("AuctionCollectionVO")
+public class AuctionCollectionVO {
     @ApiModelProperty(notes = "projectId")
     private int projectId;
     @ApiModelProperty(notes = "auctionId")
