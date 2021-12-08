@@ -31,7 +31,7 @@
         </if>
         <if test="keyword != null and keyword != ''">
             <![CDATA[
-            AND a.param1 like CONCAT(#{keyword},'%')
+            AND a.param1 = #{keyword}
             ]]>
         </if>
         ORDER BY a.priority
