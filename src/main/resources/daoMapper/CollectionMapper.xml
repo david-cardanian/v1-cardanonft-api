@@ -67,7 +67,7 @@
         SELECT address_id addressId
           FROM cardano_address
         <![CDATA[
-         WHERE address_name like CONCAT(#{addrName},'%')
+         WHERE nft_collection_id = '44' and is_enabled = '1'
         ]]>
       ORDER BY rand() limit 1
     </select>
