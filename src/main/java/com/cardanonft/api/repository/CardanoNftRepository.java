@@ -9,6 +9,7 @@ import java.util.List;
 public interface CardanoNftRepository extends JpaRepository<CardanoNftEntity, Integer>, JpaSpecificationExecutor<CardanoNftEntity> {
     List<CardanoNftEntity> findAllByIsEnabledOrderByCreatedAtDesc(String isEnabled);
     CardanoNftEntity findTopByNftIdAndIsEnabledOrderByCreatedAtDesc(int nftId, String isEnabled);
+    CardanoNftEntity findTopByParam1AndParam2AndParam3AndIsEnabledOrderByCreatedAtDesc(String param1,String param2,String param3, String isEnabled);
 //    CardanoNftEntity findTopByCollectionIdAndIsEnabledOrderByCreatedAtDesc(int collectionId, String isEnabled);
 //    CardanoNftEntity findTopByNftIdOrderByCreatedAtDesc(int nftId);
 //    List<CardanoNftEntity> findAllByCollectionIdAndIsEnabledOrderByCreatedAtDesc(int collectionId,String isEnabled);

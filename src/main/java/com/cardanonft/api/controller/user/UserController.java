@@ -1,0 +1,66 @@
+package com.cardanonft.api.controller.user;
+
+import com.cardanonft.api.constants.RETURN_CODE;
+import com.cardanonft.api.dao.MapDao;
+import com.cardanonft.api.exception.CustomBadCredentialException;
+import com.cardanonft.api.exception.CustomBadRequestException;
+import com.cardanonft.api.repository.MapParcelRepository;
+import com.cardanonft.api.request.*;
+import com.cardanonft.api.response.CardanoNftDefaultResponse;
+import com.cardanonft.api.service.AuthService;
+import com.cardanonft.api.service.MapService;
+import com.mysql.cj.core.util.StringUtils;
+import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
+@CrossOrigin("*")
+@Controller
+@RequestMapping(value = "/user")
+public class UserController {
+    @Autowired
+    AuthService authService;
+
+    private static Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    @RequestMapping(value ="/modify", method = RequestMethod.POST)
+    @ApiOperation(httpMethod = "POST", value = "회원 정보 수정")
+    @ResponseBody
+    public CardanoNftDefaultResponse userModify(
+            @RequestHeader("token") String token,
+            @RequestBody UserModifyRequest userModifyRequest) {
+        if(StringUtils.isNullOrEmpty(userModifyRequest.getId())
+        ){
+            throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
+        }
+        authService.userModify(userModifyRequest);
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
+    }
+    @RequestMapping( value = "/modifyPassword", method = RequestMethod.POST)
+    @ApiOperation(httpMethod = "POST", value = "회원 비밀번호 수정")
+    @ResponseBody
+    public CardanoNftDefaultResponse userPasswordModify(
+            @RequestHeader("token") String token,
+            @RequestBody PasswordModifyRequest passwordModifyRequest) throws Exception {
+        if(StringUtils.isNullOrEmpty(passwordModifyRequest.getId())
+                || StringUtils.isNullOrEmpty(passwordModifyRequest.getOldPassword())
+                || StringUtils.isNullOrEmpty(passwordModifyRequest.getNewPassword())
+        ){
+            throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
+        }
+        boolean comparePassword = authService.comparePassword(passwordModifyRequest.getId(), passwordModifyRequest.getOldPassword());
+        if(!comparePassword){
+            throw new CustomBadCredentialException(RETURN_CODE.WRONG_OLD_PASSWORD);
+        }
+        authService.resetPassword(passwordModifyRequest.getId(),passwordModifyRequest.getNewPassword());
+
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
+    }
+}

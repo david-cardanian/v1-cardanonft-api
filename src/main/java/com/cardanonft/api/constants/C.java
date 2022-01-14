@@ -11,33 +11,23 @@ public class C {
 	 * 접속 클라이언트 별 API_KEY = 고정 값
 	 */
 	public static class API_KEY {
-		public static final String V3_STAFF = "STAFF-D649A8DFC4AA7AFF3D71B37912EA8";
-		public static final String V3_OWNER = "OWNER-8B1748859C1E4FC5798D1AEDF1818";
-		public static final String V3_WEB = "WEB-DF9FE481874A9DBADA415A7ACFCC1";
-		public static final String V3_SUPER = "SUPER-DA2C86B3F14632A145DCEAF215E9D";
+		public static final String PC_CLIENT = "PC-D649A8DFC4AA7AFF3D71B37912EA8";
+		public static final String WEB_CLIENT = "WEB-8B1748859C1E4FC5798D1AEDF1818";
 
 		public static String getAuthorityName(String key) {
-			if (V3_STAFF.equals(key)) {
-				return "ROLE_USER";
-			} else if (V3_OWNER.equals(key)) {
-				return "ROLE_USER";
-			} else if (V3_WEB.equals(key)) {
-				return "ROLE_ADMIN";
-			} else if (V3_SUPER.equals(key)) {
-				return "ROLE_SUPER";
+			if (PC_CLIENT.equals(key)) {
+				return "ROLE_PC";
+			} else if (WEB_CLIENT.equals(key)) {
+				return "ROLE_WEB";
 			}
 			return null;
 		}
 
 		public static String getClientName(String key) {
-			if (V3_STAFF.equals(key)) {
-				return "V3_STAFF";
-			} else if (V3_OWNER.equals(key)) {
+			if (PC_CLIENT.equals(key)) {
+				return "PC_CLIENT";
+			} else if (WEB_CLIENT.equals(key)) {
 				return "V3_OWNER";
-			} else if (V3_WEB.equals(key)) {
-				return "V3_WEB";
-			} else if (V3_SUPER.equals(key)) {
-				return "V3_WEB";
 			}
 			return null;
 		}

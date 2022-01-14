@@ -23,7 +23,6 @@ public class AuthToken {
 	String issued_ip;
 	String issued_client;
 	String issued_platform;
-
 	int is_logined;
 	Date logined_at;
 	String uuid;

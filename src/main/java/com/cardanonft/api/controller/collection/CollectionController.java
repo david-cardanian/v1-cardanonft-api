@@ -27,9 +27,6 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping(value = "/collection")
 public class CollectionController {
-    @Value("${db.secret.key}")
-
-
     private static Logger logger = LoggerFactory.getLogger(CollectionController.class);
     @Autowired
     CardanoNftRepository cardanoNftRepository;
@@ -104,7 +101,6 @@ public class CollectionController {
         TimeZone utc = TimeZone.getTimeZone("UTC");
         formatter.setTimeZone(utc);
         String today = formatter.format(new Date());
-
 
         // 조회기준 날짜 추출
         List<CardanoAuctionEntity> cardanoActionDate = cardanoAuctionRepository.findAllByIsEnabledAndProjectIdOrderByStartDate("1", collectionSearchRequest.getProjectId());

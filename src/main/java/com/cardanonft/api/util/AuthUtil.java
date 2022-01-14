@@ -1,6 +1,7 @@
 package com.cardanonft.api.util;
 
 import com.cardanonft.api.uuid.GenerateShortUUID;
+import com.cardanonft.api.vo.auth.AuthToken;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.KeyGenerator;
@@ -45,14 +46,14 @@ public class AuthUtil {
 		return sb.toString();
 	}
 
-//	public AuthToken generateNAccessToken() {
-//		AuthToken nToken = new AuthToken();
-//		nToken.setToken(generateKeyCandidate());
-//		nToken.setSecret(generateSecretCandidate());
-//		nToken.setRefresh_token(generateKeyCandidate());
-//
-//		return nToken;
-//	}
+	public AuthToken generateNAccessToken() {
+		AuthToken nToken = new AuthToken();
+		nToken.setToken(generateKeyCandidate());
+		nToken.setSecret(generateSecretCandidate());
+		nToken.setRefresh_token(generateKeyCandidate());
+
+		return nToken;
+	}
 
 	public int getAccessControlRuleId(int ruleServer) {
         Random random = new Random();

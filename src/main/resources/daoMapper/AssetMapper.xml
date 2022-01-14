@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="asset">
+    <select id="getVillageList" parameterType="VillageListRequest" resultType="VillageListResponse">
+        SELECT asset_id assetId
+        , ca.continent_id continentId
+        , ca.village_id villageId
+        , village_number villageNumber
+        , token_name tokenName
+        , description
+        , cn.img_url  imgUrl
+        , village_type villageType
+        ,cac.user_id userId
+        FROM cardano_asset ca
+        left outer join cardano_nft cn on ca.village_number = cn.param1
+        left outer join cardano_account cac on ca.stake_address = cac.stake_address
+        left outer join village_type vt on vt.village_type_id = cn.village_type_id
+        where cac.user_id = #{userId}
+          and ca.village_number is not null
+        <if test="continentId != null and continentId != ''">
+            <![CDATA[
+            AND ca.continent_id = #{continentId}
+            ]]>
+        </if>
+        <if test="villageId != null and villageId != ''">
+            <![CDATA[
+            AND ca.village_id = #{villageId}
+            ]]>
+        </if>
+        <if test="isDeployed != null and isDeployed = 1">
+            <![CDATA[
+            and exists (select village_nft_id from map_parcel where village_nft_id = cn.nft_id )
+            ]]>
+        </if>
+        <if test="isDeployed != null and isDeployed = 0">
+            <![CDATA[
+            and not exists (select village_nft_id from map_parcel where village_nft_id = cn.nft_id )
+            ]]>
+        </if>
+    </select>
+    <select id="getMapList" parameterType="MapListRequest" resultType="MapListResponse">
+        SELECT asset_id assetId
+        , continent_id continentId
+        , village_id villageId
+        , token_name tokenName
+        , description
+        , img_url  imgUrl
+        , parcel_x parcelX
+        , parcel_y parcelY
+        ,cac.user_id userId
+        FROM cardano_asset ca
+        left outer join cardano_nft cn on ca.parcel_x = cn.param4 and ca.parcel_y = cn.param5
+        left outer join cardano_account cac on ca.stake_address = cac.stake_address
+        where cac.user_id = #{userId}
+        and ca.parcel_x is not null and ca.parcel_y is not null
+        <if test="continentId != null and continentId != ''">
+            <![CDATA[
+            AND ca.continent_id = #{continentId}
+            ]]>
+        </if>
+        <if test="villageId != null and villageId != ''">
+            <![CDATA[
+            AND ca.village_id = #{villageId}
+            ]]>
+        </if>
+    </select>
+</mapper>

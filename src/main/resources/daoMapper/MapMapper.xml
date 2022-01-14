@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="map">
+    <select id="get3DParcelList" parameterType="MapSearchRequest" resultType="MapSearchResponse">
+        select
+        mp.map_parcel_id mapParcelId
+        ,mp.continent_id continentId
+        ,mp.village_id villageId
+        ,mp.user_id userId
+        ,vt.village_type villageType
+        ,mp.user_img_url userImgUrl
+        ,mp.parcel_x_3d parcelX
+        ,mp.parcel_y_3d parcelY
+        from map_parcel mp
+        left outer join cardano_nft cn on  mp.village_nft_id = cn.nft_id
+        left outer join village_type vt on  cn.village_type_id = vt.village_type_id
+        where 1=1
+        <if test="continentId != null and continentId != ''">
+            <![CDATA[
+            AND mp.continent_id = #{continentId}
+            ]]>
+        </if>
+        <if test="villageId != null and villageId != ''">
+            <![CDATA[
+            AND mp.village_id = #{villageId}
+            ]]>
+        </if>
+    </select>
+</mapper>

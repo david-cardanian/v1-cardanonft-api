@@ -62,6 +62,22 @@ public class CardanoNftEntity implements Serializable {
     @Column(name = "multi_mint_yn")
     private Integer multiMintYn;
 
+    @Column(name = "param1")
+    private String param1;
+    @Column(name = "param2")
+    private String param2;
+    @Column(name = "param3")
+    private String param3;
+    @Column(name = "param4")
+    private String param4;
+    @Column(name = "param5")
+    private String param5;
+    @Column(name = "param6")
+    private String param6;
+    @Column(name = "param7")
+    private String param7;
+    @Column(name = "village_type_id")
+    private String villageTypeId;
     @Column(name = "is_enabled")
     private String isEnabled = "1";
 

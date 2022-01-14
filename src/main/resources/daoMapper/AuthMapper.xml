@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="auth">
+
+
+    <insert id="keyset">
+        SET @key = #{value};
+    </insert>
+
+    <!-- 사용자 User Id 조회 쿼리 -->
+    <select id="getUserIdByAccount" parameterType="string" resultType="int">
+        SELECT user_id
+        FROM user
+        WHERE (email = HEX(AES_ENCRYPT(#{value}, SHA2(@key, 512)))
+            OR phone = HEX(AES_ENCRYPT(#{value}, SHA2(@key, 512))))
+          AND is_enabled = 1
+        LIMIT 1
+    </select>
+
+    <!-- 비밀번호 체크 쿼리 -->
+    <select id="getCountPasswordEqual" parameterType="countPasswordEqualParams" resultType="int">
+        SELECT COUNT(1)
+        FROM user
+        WHERE is_enabled = 1
+          AND username = #{username}
+          AND password = #{password}
+        LIMIT 1
+    </select>
+
+    <!-- 로그인 한 사용자의 모듈 별 접속 권한 -->
+    <select id="getAuthorities" parameterType="string" resultType="authority2">
+        SELECT
+            username,
+            authority
+        FROM authorities
+        WHERE username = #{value}
+    </select>
+
+
+    <!--사용자의 암호화 암호값 -->
+    <select id="getPassword" parameterType="string" resultType="Users">
+        SELECT user_id         AS user_id,
+               email         AS email,
+               password         AS password,
+               fail_count       AS failCount,
+               is_locked        AS isLocked,
+               fail_expired_at  AS failExpiredAt,
+               is_enabled          AS isEnabled
+        FROM user
+        WHERE user_id = #{value}
+          AND is_enabled = 1
+        LIMIT 1;
+    </select>
+
+    <update id="updatePasswordFailCountAndIsLocked" parameterType="Users">
+        UPDATE user
+        SET fail_count = #{failCount},
+            is_locked = #{isLocked},
+            fail_expired_at = #{failExpiredAt}
+        WHERE username = #{username};
+    </update>
+
+    <update id="resetPasswordFailCountAndIsLocked" parameterType="String">
+        UPDATE user
+        SET fail_count = 0,
+            is_locked = 0
+        WHERE username = #{username};
+    </update>
+
+    <!-- 엑세스 컨트롤 규칙 정의 조회 -->
+    <select id="getAccessControlRules" parameterType="accessControlRulesParams" resultType="accessControlRule">
+        SELECT
+            access_control_rule_id,
+            rule_type,
+            rule_pattern,
+            rule_server,
+            redirect_path,
+            is_enabled,
+            weight,
+            user_id,
+            store_id,
+            created_at,
+            updated_at
+        FROM access_control_rules
+        WHERE store_id = #{store_id}
+          AND user_id = #{user_id}
+          AND is_enabled = 1
+        ORDER BY weight DESC
+    </select>
+
+    <!-- 최근 로그인 앱 로그 가져오기 -->
+    <select id="getLastestAppLog" parameterType="int" resultType="appLog">
+        SELECT *
+        FROM app_logs
+        WHERE user_id = #{value}
+          AND (os_type = 'iOS' OR os_type = 'ANDROID')
+        ORDER BY created_at DESC
+        LIMIT 1
+    </select>
+
+    <!-- 사용자 특이 로그인 시, 관련 매장 조회 -->
+    <select id="getStores" parameterType="int" resultType="int">
+        SELECT s.store_id
+        FROM user_roles ur
+                 LEFT OUTER JOIN store s
+                                 ON ur.store_id = s.store_id
+        WHERE ur.user_id = #{value}
+          AND s.is_enabled = 1
+          AND ur.is_enabled = 1
+          AND ur.role_id IN (2, 10, 18, 34)
+        ORDER BY ur.created_at DESC
+    </select>
+
+    <!-- 사용자 특이 로그인 시, 관련 매장 관리자 조회 -->
+    <select id="getManagerUsers" parameterType="int" resultType="user">
+        SELECT u.*
+        FROM user_roles ur
+                 LEFT OUTER JOIN user u
+                                 ON u.user_id = ur.user_id
+        WHERE ur.store_id = #{value}
+          AND ur.is_enabled = 1
+          AND (ur.role_id = 3 OR ur.role_id = 5)
+          AND u.is_enabled = 1
+        ORDER BY created_at DESC
+    </select>
+
+
+    <!-- 앱 로그 삽입 -->
+    <insert id="insertAppLog" parameterType="appLog" useGeneratedKeys="true" keyProperty="app_logs_id">
+        INSERT INTO app_logs
+        (log_type, store_id, user_id,
+         os_type, os_version, device_name, uuid,
+         browser_info, app_version,
+         category, log_level, contents)
+        VALUES
+        (#{log_type}, #{store_id}, #{user_id},
+         #{os_type}, #{os_version}, #{device_name}, #{uuid},
+         #{browser_info}, #{app_version},
+         #{category}, #{log_level}, #{contents})
+    </insert>
+
+    <insert id="insertActionLog" parameterType="actionLog" useGeneratedKeys="true" keyProperty="log_id">
+        INSERT INTO action_log (hostname, auth_key, access_token, app_version, issued_ip, issued_client, issued_platform, user_id, http_method, http_query, req_header, req_payload, res_payload)
+        VALUES (#{hostname}, #{auth_key}, #{access_token}, #{app_version}, #{issued_ip}, #{issued_client},
+                #{issued_platform}, #{user_id}, #{http_method}, #{http_query}, #{req_header},
+                #{req_payload}, #{res_payload})
+    </insert>
+
+    <!-- 인증 토큰 삽입  -->
+    <insert id="insertAuthToken" parameterType="authToken">
+        INSERT INTO auth_token
+        (token, user_id, expired_at, refresh_token,
+         issued_ip, issued_client, issued_platform,
+         secret, uuid)
+        VALUES
+        (#{token}, #{user_id}, #{expired_at}, #{refresh_token},
+         #{issued_ip}, #{issued_client}, #{issued_platform},
+         #{secret}, #{uuid})
+    </insert>
+
+    <!-- 인증 토큰 업데이트  -->
+    <insert id="updateAuthToken" parameterType="authToken">
+        UPDATE auth_token
+        SET
+            user_id    = #{user_id},
+            is_logined = #{is_logined},
+            logined_at = #{logined_at}
+        WHERE token = #{token}
+        LIMIT 1
+    </insert>
+
+    <!-- 인증 토큰 연장을 위한 기존 토큰 비활성화 -->
+    <update id="disableAuthToken" parameterType="authToken">
+        UPDATE auth_token
+        SET
+            is_enabled = FALSE
+        WHERE
+            refresh_token = #{refresh_token} OR
+            token = #{token}
+        LIMIT 1
+    </update>
+
+    <!-- 인증 토큰 조회 -->
+    <select id="getAuthToken" parameterType="String" resultType="authToken">
+        SELECT *
+        FROM auth_token
+        WHERE token = #{token} AND is_enabled
+        LIMIT 1
+    </select>
+
+    <!-- 인증 시 메일/푸시 발송을 위한 메세지큐 삽입 -->
+    <insert id="insertMessageQueue" parameterType="messageQueue" useGeneratedKeys="true" keyProperty="message_queue_id">
+        INSERT INTO message_queue
+        (message_type, title_text, content_text, data_map, send_status, receivers)
+        VALUES
+        (#{message_type}, #{title_text}, #{content_text}, #{data_map}, #{send_status}, #{receivers})
+    </insert>
+
+    <insert id="insertSendPush" parameterType="messageQueue">
+        INSERT INTO message_queue (message_type, title_text, content_text, created_at, updated_at, send_status, receivers, data_map)
+        VALUES ('PUSH', #{title_text}, #{content_text}, now(), now(), #{send_status}, #{receivers}, #{data_map})
+    </insert>
+
+    <select id="getUserName" parameterType="long" resultType="String">
+        SELECT ifnull(CAST(AES_DECRYPT(UNHEX(username), SHA2('oomouke0917', 512)) AS CHAR), '-') username
+        FROM user
+        WHERE user_id = #{value}
+          AND is_enabled = 1
+    </select>
+
+    <select id="getStoreAllOwnerUserId" parameterType="long" resultType="user">
+        SELECT u.*
+        FROM user_roles ur
+                 LEFT OUTER JOIN user u ON ur.user_id = u.user_id
+        WHERE store_id = #{value}
+          AND role_id IN (4, 6, 8, 10, 16, 18, 32, 34)
+          AND ur.is_enabled = 1
+    </select>
+
+    <select id="getNonFreeCnt" parameterType="map" resultType="int">
+        SELECT count(ur.store_id) as cnt
+        FROM user_roles ur
+        LEFT JOIN service_stores ss ON ur.store_id = ss.store_id AND ss.is_enabled AND is_billing
+        WHERE ur.user_id = #{user_id}
+        AND ur.role_id IN (4,6,8,10,16,18,32,34,64,66)
+        AND ur.is_enabled
+        AND ss.service_store_id IS NOT NULL
+        <if test="isService == 0">
+            <![CDATA[
+			AND date_format(ss.service_end_date, '%Y%m%d') < date_format(now(), '%Y%m%d')
+			]]>
+        </if>
+    </select>
+
+    <select id="getUserIdByGoogleIdToken" parameterType="string" resultType="hashmap">
+        SELECT user_id, google_uid
+        FROM user
+        WHERE email = HEX(AES_ENCRYPT(#{value}, SHA2(@key, 512)))
+          AND is_enabled = 1
+        LIMIT 1
+    </select>
+
+    <update id="updateGoogleUid" parameterType="map">
+        UPDATE `user`
+        SET google_uid = #{google_uid}
+        WHERE user_id = #{user_id}
+          AND is_enabled;
+    </update>
+
+    <select id="getTaxAccountantInviteCode" parameterType="string" resultType="map">
+        SELECT *
+        FROM invite_tax_accountant
+        WHERE is_enabled
+          AND invite_code = #{value}
+        LIMIT 1
+    </select>
+
+    <update id="updateAuthTokenIsEnabled" parameterType="authToken">
+        UPDATE auth_token
+        SET is_enabled = 0
+        WHERE user_id = #{user_id}
+          AND issued_client = #{issued_client}
+          AND is_enabled = 1;
+    </update>
+
+    <select id="getToken" parameterType="map" resultType="map">
+        SELECT access_token, refresh_token,
+               if(expired_at > now(), 0, 1) as expired_at
+        FROM integration_keys
+        WHERE is_enabled
+          AND api_key = #{api_key}
+          AND api_secret = #{api_secret}
+    </select>
+
+    <insert id="insertRSAEncryptionKey" parameterType="RSAEncryptionKey">
+        INSERT INTO rsa_encryption_keys(token, private_key, public_key)
+            VALUE (#{token}, #{privateKey}, #{publicKey});
+    </insert>
+
+</mapper>

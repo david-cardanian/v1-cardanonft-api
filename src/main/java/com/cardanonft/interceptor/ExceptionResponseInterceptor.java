@@ -1,7 +1,9 @@
 package com.cardanonft.interceptor;
 
 import com.cardanonft.api.constants.RETURN_CODE;
+import com.cardanonft.api.exception.CustomBadCredentialException;
 import com.cardanonft.api.exception.CustomBadRequestException;
+import com.cardanonft.api.exception.CustomWrongPasswordException;
 import com.cardanonft.api.response.EntityDefaultResponse;
 import com.cardanonft.validate.constraints.AvailableDigits;
 import com.cardanonft.validate.constraints.Emoji;
@@ -45,7 +47,17 @@ public class ExceptionResponseInterceptor extends ResponseEntityExceptionHandler
         logger.info(e.getMessage());
         return new ResponseEntity<DefaultResponse>(new DefaultResponse(e), HttpStatus.OK);
     }
+    @ExceptionHandler({CustomBadCredentialException.class})
+    public ResponseEntity<DefaultResponse> handleAccessDeniedException(CustomBadCredentialException e, WebRequest request) {
+        logger.info(e.getMessage());
+        return new ResponseEntity<DefaultResponse>(new DefaultResponse(e), HttpStatus.FORBIDDEN);
+    }
 
+    @ExceptionHandler({CustomWrongPasswordException.class})
+    public ResponseEntity<DefaultResponse> handleAccessDeniedException(CustomWrongPasswordException e, WebRequest request) {
+        logger.info(e.getMessage());
+        return new ResponseEntity<DefaultResponse>(new DefaultResponse(e), HttpStatus.OK);
+    }
     @ExceptionHandler({ResourceNotFoundException.class})
     public ResponseEntity<DefaultResponse> handleAccessDeniedException(ResourceNotFoundException e, WebRequest request) {
         return new ResponseEntity<DefaultResponse>(new DefaultResponse(RETURN_CODE.NO_DATA), HttpStatus.OK);

@@ -30,7 +30,8 @@ public class CardanoTransactionEntity implements Serializable {
 
     @Column(name = "transaction_json")
     private String transactionJson;
-
+    @Column(name = "token_json")
+    private String tokenJson;
     @Column(name = "included_at")
     private String includedAt;
     @Column(name = "exec_yn")
