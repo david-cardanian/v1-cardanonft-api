@@ -4,6 +4,7 @@ import com.cardanonft.api.constants.RETURN_CODE;
 import com.cardanonft.api.entity.PasswordAuthCodeEntity;
 import com.cardanonft.api.exception.CustomBadCredentialException;
 import com.cardanonft.api.exception.CustomBadRequestException;
+import com.cardanonft.api.repository.UserRepository;
 import com.cardanonft.api.request.SignUpRequest;
 import com.cardanonft.api.request.auth.FindAccountVO;
 import com.cardanonft.api.request.auth.LoginVO;
@@ -31,6 +32,8 @@ public class AuthController {
     AuthService authService;
     @Autowired
     AccountUtil accountUtil;
+    @Autowired
+    UserRepository userRepository;
 
     private static Logger logger = LoggerFactory.getLogger(AuthController.class);
 
@@ -110,11 +113,18 @@ public class AuthController {
             }
             return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
         }
-        boolean result = authService.sendAuthCode( findAccountVO.getId());
-        if(!result){
-            logger.info("비밀번호 인증코드 발송시 오류 발생");
-            throw new CustomBadRequestException(RETURN_CODE.ERROR);
+        boolean isUserExisted =
+                userRepository.existsUserEntityByUserIdAndIsEnabled(findAccountVO.getId(), "1");
+        if(!isUserExisted){
+            boolean result = authService.sendAuthCode( findAccountVO.getId());
+            if(!result){
+                logger.info("비밀번호 인증코드 발송시 오류 발생");
+                throw new CustomBadRequestException(RETURN_CODE.ERROR);
+            }
+        }else{
+            throw new CustomBadRequestException(RETURN_CODE.ID_DUPLICATION);
         }
+
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
     }
 

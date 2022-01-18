@@ -8,10 +8,7 @@ import com.cardanonft.api.entity.CardanoAuctionEntity;
 import com.cardanonft.api.entity.CardanoNftCollectionEntity;
 import com.cardanonft.api.entity.CardanoNftEntity;
 import com.cardanonft.api.repository.*;
-import com.cardanonft.api.request.AssetDeployRequest;
-import com.cardanonft.api.request.CollectionSearchRequest;
-import com.cardanonft.api.request.MapSearchRequest;
-import com.cardanonft.api.request.UserImageUploadRequest;
+import com.cardanonft.api.request.*;
 import com.cardanonft.api.response.CardanoNftDefaultResponse;
 import com.cardanonft.api.service.FileUploadService;
 import com.cardanonft.api.service.MapService;
@@ -76,14 +73,29 @@ public class MapController {
             @RequestHeader("token") String token,
             @RequestParam("file") List<MultipartFile> files,
             @RequestParam("userId") String userId,
+            @RequestParam("villageDirection") String villageDirection,
             @RequestParam("mapParcelId") Integer mapParcelId
     ) throws Exception {
         UserImageUploadRequest userImageUploadRequest = new UserImageUploadRequest();
         userImageUploadRequest.setFiles(files);
         userImageUploadRequest.setUserId(userId);
         userImageUploadRequest.setMapParcelId(mapParcelId);
+        userImageUploadRequest.setVillageDirection(villageDirection);
         String url = mapService.uploadImage(userImageUploadRequest);
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS,url);
+    }
+    @RequestMapping(value = "/parcel/info", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse getParcelInfo(
+            @RequestBody MapParcelSearchRequest mapParcelSearchRequest
+    ) throws Exception {
+        if(StringUtils.isNullOrEmpty(mapParcelSearchRequest.getContinentId())){
+            mapParcelSearchRequest.setContinentId("Byron");
+        }
+        if(StringUtils.isNullOrEmpty(mapParcelSearchRequest.getVillageId())){
+            mapParcelSearchRequest.setVillageId("Charles");
+        }
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, mapDao.getParcelInfo(mapParcelSearchRequest));
     }
 
 }

@@ -13,6 +13,8 @@ import lombok.Setter;
 public class AuthAdaRequest {
     @ApiModelProperty(required = true,notes = "userId")
     private String userId;
+    @ApiModelProperty(required = false,notes = "authType default : 1")
+    private String authType;
 }
 
 

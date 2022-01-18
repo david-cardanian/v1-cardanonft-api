@@ -11,7 +11,7 @@ import java.util.Locale;
 
 @Configuration
 public class MessagesConfig {
-    private String localeStr="ko_KR";
+    private String localeStr="en_US";
     private Locale locale;
     private String[] httpMethods;
 

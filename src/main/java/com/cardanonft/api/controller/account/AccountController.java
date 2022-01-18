@@ -2,6 +2,7 @@ package com.cardanonft.api.controller.account;
 
 import com.cardanonft.api.constants.RETURN_CODE;
 import com.cardanonft.api.dao.AssetDao;
+import com.cardanonft.api.dao.CollectionDao;
 import com.cardanonft.api.entity.CardanoAssetEntity;
 import com.cardanonft.api.entity.CardanoNftEntity;
 import com.cardanonft.api.entity.MapParcelEntity;
@@ -14,6 +15,7 @@ import com.cardanonft.api.request.MapListRequest;
 import com.cardanonft.api.request.VillageListRequest;
 import com.cardanonft.api.request.auth.AuthAdaRequest;
 import com.cardanonft.api.response.CardanoNftDefaultResponse;
+import com.cardanonft.api.response.auth.AuthAdaResponse;
 import com.mysql.cj.core.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +44,8 @@ public class AccountController {
     MapParcelRepository mapParcelRepository;
     @Autowired
     UserRolesRepository userRolesRepository;
+    @Autowired
+    CollectionDao collectionDao;
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
@@ -60,6 +64,11 @@ public class AccountController {
     ) throws Exception {
         UserRolesEntity userRolesEntity = userRolesRepository.findTopByUserIdAndIsEnabled(authAdaRequest.getUserId(),"1");
         BigDecimal bigDecimal = new BigDecimal(String.valueOf(userRolesEntity.getUserRoleId())).add(new BigDecimal("2000000")).divide(new BigDecimal("1000000")).setScale(6);
+        if(StringUtils.isNullOrEmpty(authAdaRequest.getAuthType())){
+            authAdaRequest.setAuthType("1");
+        }
+        AuthAdaResponse authAdaResponse = collectionDao.getRandomAuthAddress(authAdaRequest);
+        authAdaResponse.setAuthAda(bigDecimal.toString());
         // TO-DO 토큰으로 user 확인
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, bigDecimal);
     }

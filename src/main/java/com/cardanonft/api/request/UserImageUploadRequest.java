@@ -21,6 +21,11 @@ public class UserImageUploadRequest {
     private String userId;
     @ApiModelProperty(required = false,notes = "mapParcelId")
     private Integer mapParcelId;
+    /*
+    1 : east, 2 : west, 3 : south, 4 : north
+*/
+    @ApiModelProperty(required = false,notes = "village_direction")
+    private String villageDirection;
 }
 
 

@@ -19,6 +19,11 @@ public class AssetDeployRequest {
     private Integer assetId;
     @ApiModelProperty(required = false,notes = "villageNumber")
     private String villageNumber;
+    /*
+    1 : east, 2 : west, 3 : south, 4 : north
+*/
+    @ApiModelProperty(required = false,notes = "village_direction")
+    private String villageDirection;
 }
 
 

@@ -61,6 +61,7 @@ public class MapService {
         }
         // map에 nft 배치
         mapParcelEntity.setVillageNftId(cardanoNftEntity.getNftId());
+        mapParcelEntity.setVillageDirection(assetDeployRequest.getVillageDirection());
         mapParcelRepository.save(mapParcelEntity);
     }
     /// 맵에 빌리지 올리기
@@ -79,6 +80,7 @@ public class MapService {
         }
         // map에 image 배치
         mapParcelEntity.setUserImgUrl(imgURL);
+        mapParcelEntity.setVillageDirection(userImageUploadRequest.getVillageDirection());
         mapParcelRepository.save(mapParcelEntity);
         return imgURL;
     }

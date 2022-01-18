@@ -6,13 +6,11 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-
 @Data
 @ApiModel
 @Getter
 @Setter
-public class MapSearchResponse {
+public class MapParcelSearchResponse {
     @ApiModelProperty(required = false,notes = "mapParcelId")
     private Integer mapParcelId;
     @ApiModelProperty(required = false,notes = "continent_id")
@@ -23,19 +21,18 @@ public class MapSearchResponse {
     private String userId;
     @ApiModelProperty(required = false,notes = "villageType")
     private String villageType;
+    @ApiModelProperty(required = false,notes = "villageTypeUrl")
+    private String villageTypeUrl;
+    @ApiModelProperty(required = false,notes = "nftImgUrl")
+    private String nftImgUrl;
     @ApiModelProperty(required = false,notes = "userImgUrl")
     private String userImgUrl;
     @ApiModelProperty(required = false,notes = "parcelX")
     private Integer parcelX;
     @ApiModelProperty(required = false,notes = "parcelY")
     private Integer parcelY;
-    /*
-        1 : east, 2 : west, 3 : south, 4 : north
-    */
-    @ApiModelProperty(required = false,notes = "village_direction")
-    private String villageDirection;
-    @ApiModelProperty(required = false,notes = "nftImgUrl")
-    private String nftImgUrl;
+    @ApiModelProperty(required = false,notes = "landType 1 : land 2 : water 3 : unavailable land ")
+    private Integer landType;
 }
 
 

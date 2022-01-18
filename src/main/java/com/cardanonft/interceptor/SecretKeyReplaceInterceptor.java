@@ -40,7 +40,7 @@ public class SecretKeyReplaceInterceptor implements Interceptor {
         MetaObject metaStatementHandler = MetaObject.forObject(statementHandler, DEFAULT_OBJECT_FACTORY, DEFAULT_OBJECT_WRAPPER_FACTORY, DEFAULT_REFLECTOR_FACTORY);
         String originalSql = (String) metaStatementHandler.getValue("delegate.boundSql.sql");
 
-        originalSql = originalSql.replace("@key", String.format("'%s'", SecretsManagerConfig.getDbSecretKey())).replace("@lang", dbLang);
+//        originalSql = originalSql.replace("@key", String.format("'%s'", SecretsManagerConfig.getDbSecretKey())).replace("@lang", dbLang);
 
         metaStatementHandler.setValue("delegate.boundSql.sql", originalSql);
 

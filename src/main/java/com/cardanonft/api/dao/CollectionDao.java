@@ -1,5 +1,7 @@
 package com.cardanonft.api.dao;
 
+import com.cardanonft.api.request.auth.AuthAdaRequest;
+import com.cardanonft.api.response.auth.AuthAdaResponse;
 import com.cardanonft.api.vo.collection.CollectionAddressVO;
 import com.cardanonft.api.vo.collection.CollectionHistoryVO;
 import com.cardanonft.api.vo.collection.AuctionCollectionVO;
@@ -34,5 +36,9 @@ public class CollectionDao {
 	// 랜덤 주소 발행
 	public List<CollectionListVO> getRandomAddress(CollectionAddressVO collectionAddressVO) throws Exception {
 		return sqlSession.selectList("collection.getRandomAddress", collectionAddressVO);
+	}
+	// 랜덤 주소 발행
+	public AuthAdaResponse getRandomAuthAddress(AuthAdaRequest authAdaRequest) throws Exception {
+		return sqlSession.selectOne("collection.getRandomAuthAddress", authAdaRequest);
 	}
 }
