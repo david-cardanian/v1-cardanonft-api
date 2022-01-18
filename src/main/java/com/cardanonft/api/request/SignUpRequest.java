@@ -19,4 +19,7 @@ public class SignUpRequest {
 
     @ApiModelProperty(notes = "이메일")
     private String email;
+
+    @ApiModelProperty(notes = "닉네임")
+    private String nickname;
 }

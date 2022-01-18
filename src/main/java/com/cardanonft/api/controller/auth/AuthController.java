@@ -2,6 +2,7 @@ package com.cardanonft.api.controller.auth;
 
 import com.cardanonft.api.constants.RETURN_CODE;
 import com.cardanonft.api.entity.PasswordAuthCodeEntity;
+import com.cardanonft.api.entity.UserEntity;
 import com.cardanonft.api.exception.CustomBadCredentialException;
 import com.cardanonft.api.exception.CustomBadRequestException;
 import com.cardanonft.api.repository.UserRepository;
@@ -158,6 +159,20 @@ public class AuthController {
             }
         }else{
             throw new CustomBadRequestException(RETURN_CODE.ERROR);
+        }
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
+    }
+
+    @RequestMapping(value={"/nicknameCheck"}, method = RequestMethod.POST)
+    @ApiOperation(httpMethod = "POST", value = "닉네임 확인", response = LoginVOResponse.class)
+    @ResponseBody
+    public CardanoNftDefaultResponse nicknameCheck(@RequestBody SignUpRequest signUpRequest) throws Exception{
+        if(StringUtils.isNullOrEmpty(signUpRequest.getNickname())){
+            throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
+        }
+        boolean isNicknameExisted = authService.nicknameCheck(signUpRequest.getNickname());
+        if(isNicknameExisted) {
+            throw new CustomBadRequestException(RETURN_CODE.ID_DUPLICATION);
         }
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
     }

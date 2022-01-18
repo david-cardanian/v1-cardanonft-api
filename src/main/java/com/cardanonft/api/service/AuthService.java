@@ -210,8 +210,8 @@ public class AuthService {
         return userRepository.findTopByEmailAndIsEnabled(email, "1");
     }
 
-    public UserEntity nicknameCheck(String nickName) {
-        return userRepository.findTopByUserNameAndIsEnabled(nickName, "1");
+    public boolean nicknameCheck(String nickName) {
+        return userRepository.existsUserEntityByNickNameAndIsEnabled(nickName, "1");
     }
 
 
