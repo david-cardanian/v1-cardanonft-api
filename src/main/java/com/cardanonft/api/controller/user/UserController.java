@@ -56,18 +56,17 @@ public class UserController {
     @ApiOperation(httpMethod = "POST", value = "회원 비밀번호 수정")
     @ResponseBody
     public CardanoNftDefaultResponse userPasswordModify(
-            @RequestHeader("token") String token,
             @RequestBody PasswordModifyRequest passwordModifyRequest) throws Exception {
         if(StringUtils.isNullOrEmpty(passwordModifyRequest.getId())
-                || StringUtils.isNullOrEmpty(passwordModifyRequest.getOldPassword())
+//                || StringUtils.isNullOrEmpty(passwordModifyRequest.getOldPassword())
                 || StringUtils.isNullOrEmpty(passwordModifyRequest.getNewPassword())
         ){
             throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
         }
-        boolean comparePassword = authService.comparePassword(passwordModifyRequest.getId(), passwordModifyRequest.getOldPassword());
-        if(!comparePassword){
-            throw new CustomBadCredentialException(RETURN_CODE.WRONG_OLD_PASSWORD);
-        }
+//        boolean comparePassword = authService.comparePassword(passwordModifyRequest.getId(), passwordModifyRequest.getOldPassword());
+//        if(!comparePassword){
+//            throw new CustomBadCredentialException(RETURN_CODE.WRONG_OLD_PASSWORD);
+//        }
         authService.resetPassword(passwordModifyRequest.getId(),passwordModifyRequest.getNewPassword());
 
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
