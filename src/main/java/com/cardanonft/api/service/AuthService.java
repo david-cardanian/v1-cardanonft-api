@@ -14,6 +14,7 @@ import com.cardanonft.api.repository.UserRolesRepository;
 import com.cardanonft.api.request.SignUpRequest;
 import com.cardanonft.api.request.UserModifyRequest;
 import com.cardanonft.api.request.auth.*;
+import com.cardanonft.api.response.auth.UserProfileVOResponse;
 import com.cardanonft.api.util.AccountUtil;
 import com.cardanonft.api.util.AuthUtil;
 import com.cardanonft.api.vo.account.Users;
@@ -249,6 +250,9 @@ public class AuthService {
         if(!StringUtils.isEmpty(userModifyRequest.getTwitter())){
             userEntity.setTwitter(userModifyRequest.getTwitter());
         }
+        if(!StringUtils.isEmpty(userModifyRequest.getFacebook())){
+            userEntity.setFacebook(userModifyRequest.getFacebook());
+        }
         if(!StringUtils.isEmpty(userModifyRequest.getDiscord())){
             userEntity.setDiscord(userModifyRequest.getDiscord());
         }
@@ -394,5 +398,22 @@ public class AuthService {
 
     public UserRolesEntity findUserRole(String userId) {
         return userRolesRepository.findTopByUserIdAndIsEnabled(userId, "1");
+    }
+
+    public UserProfileVOResponse findUserProfile(String token) throws Exception {
+        AuthToken authToken = authDao.getAuthToken(token);
+        if(authToken == null) {
+            throw new CustomBadCredentialException(RETURN_CODE.WRONG_CODE);
+        }
+
+        UserEntity userEntity = userRepository.findTopByUserIdAndIsEnabled(authToken.getUser_id(), "1");
+
+        return UserProfileVOResponse.builder()
+                .nickname(userEntity.getNickName())
+                .twitter(userEntity.getTwitter())
+                .facebook(userEntity.getFacebook())
+                .discord(userEntity.getDiscord())
+                .build();
+
     }
 }

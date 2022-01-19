@@ -17,6 +17,8 @@ public class UserModifyRequest {
     private String nickName;
     @ApiModelProperty(notes = "twitter")
     private String twitter;
+    @ApiModelProperty(notes = "facebook")
+    private String facebook;
     @ApiModelProperty(notes = "discord")
     private String discord;
 }

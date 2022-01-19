@@ -7,6 +7,7 @@ import com.cardanonft.api.exception.CustomBadRequestException;
 import com.cardanonft.api.repository.MapParcelRepository;
 import com.cardanonft.api.request.*;
 import com.cardanonft.api.response.CardanoNftDefaultResponse;
+import com.cardanonft.api.response.auth.UserProfileVOResponse;
 import com.cardanonft.api.service.AuthService;
 import com.cardanonft.api.service.MapService;
 import com.mysql.cj.core.util.StringUtils;
@@ -29,6 +30,14 @@ public class UserController {
     AuthService authService;
 
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    @RequestMapping(value ="/profile", method = RequestMethod.GET)
+    @ApiOperation(httpMethod = "GET", value = "회원 정보 수정")
+    @ResponseBody
+    public CardanoNftDefaultResponse userProfile (@RequestHeader("token") String token) throws Exception {
+        UserProfileVOResponse userProfileVOResponse = authService.findUserProfile(token);
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, userProfileVOResponse);
+    }
 
     @RequestMapping(value ="/modify", method = RequestMethod.POST)
     @ApiOperation(httpMethod = "POST", value = "회원 정보 수정")

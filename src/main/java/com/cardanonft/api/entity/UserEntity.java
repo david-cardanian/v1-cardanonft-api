@@ -42,6 +42,9 @@ public class UserEntity {
     @Column(name = "twitter")
     private String twitter;
     @Basic
+    @Column(name = "facebook")
+    private String facebook;
+    @Basic
     @Column(name = "discord")
     private String discord;
     @Basic
@@ -74,11 +77,11 @@ public class UserEntity {
     private Date createdAt;
     @Column(name = "updated_at", insertable = false, updatable = true)
     private Date updatedAt;
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
-
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-    }
+//    @ElementCollection(fetch = FetchType.EAGER)
+//    @Builder.Default
+//    private List<String> roles = new ArrayList<>();
+//
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return this.roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+//    }
 }
