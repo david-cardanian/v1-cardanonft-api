@@ -163,12 +163,20 @@ public class AuthController {
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
     }
 
-    @RequestMapping(value={"/nicknameCheck"}, method = RequestMethod.POST)
+    @RequestMapping(value={"/nicknameCheck", "/nicknameCheck/{modify}"}, method = RequestMethod.POST)
     @ApiOperation(httpMethod = "POST", value = "닉네임 확인", response = LoginVOResponse.class)
     @ResponseBody
-    public CardanoNftDefaultResponse nicknameCheck(@RequestBody SignUpRequest signUpRequest) throws Exception{
+    public CardanoNftDefaultResponse nicknameCheck(@PathVariable(value = "modify", required = false) String modify,
+                                                   @RequestBody SignUpRequest signUpRequest) throws Exception{
         if(StringUtils.isNullOrEmpty(signUpRequest.getNickname())){
             throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
+        }
+        if(modify != null && modify.equals("modify")) {
+            UserEntity userEntity = userRepository.findTopByNickNameAndIsEnabled(signUpRequest.getNickname(), "1");
+            if(userEntity != null && !(signUpRequest.getId().equals(userEntity.getUserId()))){
+                throw new CustomBadRequestException(RETURN_CODE.ID_DUPLICATION);
+            }
+            return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
         }
         boolean isNicknameExisted = authService.nicknameCheck(signUpRequest.getNickname());
         if(isNicknameExisted) {

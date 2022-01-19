@@ -17,7 +17,7 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
     UserEntity findTopByEmailAndIsEnabled( String email, String isEnabled );
 //    UserEntity findTopByEmail( String email);
 //    UserEntity findTopByEmailAndIsEnabledAndSocialType(String email, String isEnabled, String socialType);
-    UserEntity findTopByUserNameAndIsEnabled( String nickName, String isEnabled );
+    UserEntity findTopByNickNameAndIsEnabled( String nickName, String isEnabled );
     boolean existsUserEntityByNickNameAndIsEnabled(String nickName, String isEnabled );
 //    boolean existsUserEntityByUserIdAndMobileAndIsEnabled(String userId, String mobile, String isEnabled);
     boolean existsUserEntityByUserIdAndIsEnabled(String userId, String isEnabled);
