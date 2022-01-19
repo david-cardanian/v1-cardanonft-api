@@ -221,6 +221,8 @@ public class AuthService {
             userEntity.setUserId(signUpRequest.getId());
             userEntity.setPassword(accountUtil.encodePassword(signUpRequest.getPassword()));
             userEntity.setEmail(signUpRequest.getEmail());
+            userEntity.setUserName(signUpRequest.getNickname());
+            userEntity.setNickName(signUpRequest.getNickname());
             userEntity.setTermsPrivacy("1");
             userEntity.setTermsUser("1");
             userRepository.save(userEntity);
