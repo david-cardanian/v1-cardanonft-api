@@ -61,6 +61,8 @@ public class MapParcelEntity implements Serializable {
     @Column(name = "pixcel_y_3d")
     private Integer pixcelY3d;
 
+    @Column(name = "moon_onoff")
+    private String moonOnoff = "1";
     @Column(name = "is_enabled")
     private String isEnabled = "1";
 

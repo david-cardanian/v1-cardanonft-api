@@ -29,4 +29,11 @@ public interface MapParcelRepository extends JpaRepository<MapParcelEntity, Stri
             + " WHERE map_parcel_id = :mapParcelId", nativeQuery = true)
     void undeployUser( @Param("mapParcelId")int mapParcelId
     ) throws Exception;
+    @Transactional
+    @Modifying
+    @Query(value=" UPDATE map_parcel "
+            + " SET moon_onoff = :moonOnoff"
+            + " WHERE map_parcel_id = :mapParcelId", nativeQuery = true)
+    void moonOnoff( @Param("mapParcelId")int mapParcelId,@Param("moonOnoff")String moonOnoff
+    ) throws Exception;
 }

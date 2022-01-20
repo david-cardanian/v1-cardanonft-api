@@ -97,5 +97,14 @@ public class MapController {
         }
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, mapDao.getParcelInfo(mapParcelSearchRequest));
     }
+    @RequestMapping(value = "/parcel/moon/toggle", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse toggleMoon(
+            @RequestHeader("token") String token,
+            @RequestBody MoonToggleRequest toggleRequest
+    ) throws Exception {
+        mapParcelRepository.moonOnoff(toggleRequest.getMapParcelId(),toggleRequest.getMoonOnoff());
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
+    }
 
 }
