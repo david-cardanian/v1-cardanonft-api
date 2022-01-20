@@ -64,6 +64,19 @@ public class MapService {
         mapParcelEntity.setVillageDirection(assetDeployRequest.getVillageDirection());
         mapParcelRepository.save(mapParcelEntity);
     }
+    /// 맵에 빌리지 해제
+    public void undeployAsset(AssetDeployRequest assetDeployRequest) throws Exception {
+        // map parcel user search
+        MapParcelEntity mapParcelEntity = mapParcelRepository.findTopByMapParcelIdAndUserIdAndIsEnabled(assetDeployRequest.getMapParcelId(), assetDeployRequest.getUserId(), "1");
+        if(mapParcelEntity == null){
+            // userId에 매핑되어있는 Map이 존재하지 않을 경우
+            throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
+        }
+        // map에 nft 배치해제
+        mapParcelEntity.setVillageNftId(0);
+        mapParcelEntity.setVillageDirection("3");
+        mapParcelRepository.save(mapParcelEntity);
+    }
     /// 맵에 빌리지 올리기
     public String uploadImage(UserImageUploadRequest userImageUploadRequest) throws Exception {
         // map parcel user search

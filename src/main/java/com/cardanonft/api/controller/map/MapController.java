@@ -67,6 +67,15 @@ public class MapController {
         mapService.deployAsset(assetDeployRequest);
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
     }
+    @RequestMapping(value = "/asset/undeploy", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse undeployAsset(
+            @RequestHeader("token") String token,
+            @RequestBody AssetDeployRequest assetDeployRequest
+    ) throws Exception {
+        mapService.undeployAsset(assetDeployRequest);
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
+    }
     @RequestMapping(value = "/image/upload/", method = RequestMethod.POST)
     @ResponseBody
     public CardanoNftDefaultResponse uploadImage(

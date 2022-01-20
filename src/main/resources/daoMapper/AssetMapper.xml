@@ -52,7 +52,7 @@
         , parcel_y parcelY
         ,cac.user_id userId
         FROM cardano_asset ca
-        left outer join cardano_nft cn on ca.parcel_x = cn.param4 and ca.parcel_y = cn.param5
+        left outer join cardano_nft cn on ca.parcel_x = cn.param6 and ca.parcel_y = cn.param7
         left outer join cardano_account cac on ca.stake_address = cac.stake_address
         where cac.user_id = #{userId}
         and ca.parcel_x is not null and ca.parcel_y is not null
