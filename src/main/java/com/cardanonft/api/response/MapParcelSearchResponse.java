@@ -19,6 +19,14 @@ public class MapParcelSearchResponse {
     private String villageId;
     @ApiModelProperty(required = false,notes = "user_id")
     private String userId;
+    @ApiModelProperty(required = false,notes = "nick_name")
+    private String nickName;
+    @ApiModelProperty(required = false,notes = "twitter")
+    private String twitter;
+    @ApiModelProperty(required = false,notes = "facebook")
+    private String facebook;
+    @ApiModelProperty(required = false,notes = "discord")
+    private String discord;
     @ApiModelProperty(required = false,notes = "villageType")
     private String villageType;
     @ApiModelProperty(required = false,notes = "villageTypeUrl")
