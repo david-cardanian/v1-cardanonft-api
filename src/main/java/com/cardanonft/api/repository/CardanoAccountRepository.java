@@ -17,7 +17,7 @@ public interface CardanoAccountRepository extends JpaRepository<CardanoAccountEn
     @Modifying
     @Query(value=" UPDATE cardano_account "
             + " SET is_enabled = '0'"
-            + " WHERE user_id = :userId", nativeQuery = true)
-    void updateAccoutDisabled( @Param("userId")String userId
+            + " WHERE stake_address = :stakeAddress", nativeQuery = true)
+    void updateAccoutDisabled( @Param("stake_address")String stakeAddress
     ) throws Exception;
 }

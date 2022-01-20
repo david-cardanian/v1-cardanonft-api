@@ -105,7 +105,7 @@ public class AccountController {
             cardanoAssetRepository.updateAssetDisabled(cardanoAssetEntity.getAssetId());
         }
         // account disabled
-        cardanoAccountRepository.updateAccoutDisabled(accountDeleteRequest.getUserId());
+        cardanoAccountRepository.updateAccoutDisabled(accountDeleteRequest.getStakeAddress());
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
     }
 }
