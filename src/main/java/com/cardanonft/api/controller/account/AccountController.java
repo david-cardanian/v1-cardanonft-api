@@ -56,6 +56,8 @@ public class AccountController {
         // TO-DO 토큰으로 user 확인
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, cardanoAccountRepository.findAllByUserIdAndIsEnabledOrderByCreatedAt(accountListRequest.getUserId(),"1"));
     }
+
+    // add wallet modal data
     @RequestMapping(value = "/auth/ada", method = RequestMethod.POST)
     @ResponseBody
     public CardanoNftDefaultResponse getAuthAda(
@@ -70,7 +72,7 @@ public class AccountController {
         AuthAdaResponse authAdaResponse = collectionDao.getRandomAuthAddress(authAdaRequest);
         authAdaResponse.setAuthAda(bigDecimal.toString());
         // TO-DO 토큰으로 user 확인
-        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, bigDecimal);
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, authAdaResponse);
     }
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
@@ -82,7 +84,7 @@ public class AccountController {
         if(!isRight){
             throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
         }
-        // map carcel mapping data reset
+//         map carcel mapping data reset
         List<CardanoAssetEntity> cardanoAssetEntityList = cardanoAssetRepository.findAllByStakeAddressAndIsEnabled(accountDeleteRequest.getStakeAddress(),"1");
         for(CardanoAssetEntity cardanoAssetEntity : cardanoAssetEntityList){
             if(cardanoAssetEntity.getVillageNumber() != null &&  cardanoAssetEntity.getVillageNumber() != 0){
