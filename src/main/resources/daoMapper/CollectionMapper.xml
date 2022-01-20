@@ -72,7 +72,7 @@
       ORDER BY rand() limit 1
     </select>
     <select id="getRandomAuthAddress" parameterType="AuthAdaRequest" resultType="AuthAdaResponse">
-        SELECT address_id addressId
+        SELECT address_id address
         FROM cardano_address
         <![CDATA[
         WHERE auth_type = #{authType} and is_enabled = '1'
