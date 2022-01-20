@@ -14,10 +14,13 @@
         ,mp.user_img_url userImgUrl
         ,mp.parcel_x_3d parcelX
         ,mp.parcel_y_3d parcelY
+        ,cn.description description
         ,cn.img_url nftImgUrl
         ,vt.img_url villageTypeUrl
+        ,IF(mp.user_img_url is not null,mp.user_img_url,IF(cn.img_url is not null,cn.img_url,cn2.img_url)) popupImgUrl
         from map_parcel mp
         left outer join cardano_nft cn on  mp.village_nft_id = cn.nft_id
+        left outer join cardano_nft cn2 on  mp.land_nft_id = cn2.nft_id
         left outer join village_type vt on  cn.village_type_id = vt.village_type_id
         where 1=1
         <if test="continentId != null and continentId != ''">
@@ -41,10 +44,13 @@
         ,mp.parcel_x_3d parcelX
         ,mp.parcel_y_3d parcelY
         ,mp.land_type landType
+        ,cn.description description
         ,cn.img_url nftImgUrl
         ,vt.img_url villageTypeUrl
+        ,IF(mp.user_img_url is not null,mp.user_img_url,IF(cn.img_url is not null,cn.img_url,cn2.img_url)) popupImgUrl
         from map_parcel mp
         left outer join cardano_nft cn on  mp.village_nft_id = cn.nft_id
+        left outer join cardano_nft cn2 on  mp.land_nft_id = cn2.nft_id
         left outer join village_type vt on  cn.village_type_id = vt.village_type_id
         where 1=1
         <if test="parcelX != null and parcelX != 0">

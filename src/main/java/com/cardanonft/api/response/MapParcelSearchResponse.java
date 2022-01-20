@@ -25,6 +25,8 @@ public class MapParcelSearchResponse {
     private String villageTypeUrl;
     @ApiModelProperty(required = false,notes = "nftImgUrl")
     private String nftImgUrl;
+    @ApiModelProperty(required = false,notes = "description")
+    private String description;
     @ApiModelProperty(required = false,notes = "userImgUrl")
     private String userImgUrl;
     @ApiModelProperty(required = false,notes = "parcelX")
@@ -33,6 +35,8 @@ public class MapParcelSearchResponse {
     private Integer parcelY;
     @ApiModelProperty(required = false,notes = "landType 1 : land 2 : water 3 : unavailable land ")
     private Integer landType;
+    @ApiModelProperty(required = false,notes = "popupImgUrl")
+    private String popupImgUrl;
 }
 
 
