@@ -25,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -76,7 +77,7 @@ public class MapController {
         mapService.undeployAsset(assetDeployRequest);
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
     }
-    @RequestMapping(value = "/image/upload/", method = RequestMethod.POST)
+    @RequestMapping(value = "/image/upload", method = RequestMethod.POST)
     @ResponseBody
     public CardanoNftDefaultResponse uploadImage(
             @RequestHeader("token") String token,

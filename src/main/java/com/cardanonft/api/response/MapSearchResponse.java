@@ -46,6 +46,8 @@ public class MapSearchResponse {
     private String villageDirection;
     @ApiModelProperty(required = false,notes = "popupImgUrl")
     private String popupImgUrl;
+    @ApiModelProperty(required = false,notes = "moonOnoff")
+    private String moonOnoff;
 }
 
 

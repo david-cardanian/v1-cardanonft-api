@@ -18,6 +18,7 @@
         ,mp.user_img_url userImgUrl
         ,mp.parcel_x_3d parcelX
         ,mp.parcel_y_3d parcelY
+        ,mp.moon_onoff moonOnoff
         ,cn.description description
         ,cn.img_url nftImgUrl
         ,vt.img_url villageTypeUrl
