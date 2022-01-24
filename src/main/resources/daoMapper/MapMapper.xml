@@ -39,6 +39,11 @@
             AND mp.village_id = #{villageId}
             ]]>
         </if>
+        <if test="landType != null and landType != ''">
+            <![CDATA[
+            AND mp.land_type = #{landType}
+            ]]>
+        </if>
     </select><select id="getParcelInfo" parameterType="MapParcelSearchRequest" resultType="MapParcelSearchResponse">
         select
         mp.map_parcel_id mapParcelId

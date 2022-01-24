@@ -7,7 +7,7 @@ public class CommonConstants {
     public static final String API_URL_CARDANO_EXPLORER_TEST = "https://explorer.cardano-testnet.iohkdev.io";
     public static final String API_KEY_BLOCKFROST = "mainnetP0VuBYzk5XqQRs2LZvrxQCYT50AUWbZy";
     public static final String API_KEY_BLOCKFROST_TEST = "testnetssp6BXO9Jkm40JYrRlDTYgdkrAyGfdx6";
-    public static final String EXCEL_FILE_TMP = System.getProperty("user.home") + "/tmp/";
+    public static final String EXCEL_FILE_TMP = System.getProperty("java.io.tmpdir");
     public static final String CARDANO_KEYS_DIR = System.getProperty("user.home") + "/s3-cardano-keys/keys";
     public static final String CARDANO_POLICY_DIR = System.getProperty("user.home") + "/s3-cardano-keys/policy";
     public static final String CARDANO_KEYS_DIR_TEST = System.getProperty("user.home") + "/cardano/keys";
