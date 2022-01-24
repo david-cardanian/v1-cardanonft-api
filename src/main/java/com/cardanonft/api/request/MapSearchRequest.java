@@ -15,6 +15,8 @@ public class MapSearchRequest {
     private String continentId;
     @ApiModelProperty(required = false,notes = "village_id")
     private String villageId;
+    @ApiModelProperty(required = false,notes = "landType")
+    private String landType;
 }
 
 
