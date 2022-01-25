@@ -2,6 +2,7 @@ package com.cardanonft.api.controller.user;
 
 import com.cardanonft.api.constants.RETURN_CODE;
 import com.cardanonft.api.dao.MapDao;
+import com.cardanonft.api.entity.PasswordAuthCodeEntity;
 import com.cardanonft.api.exception.CustomBadCredentialException;
 import com.cardanonft.api.exception.CustomBadRequestException;
 import com.cardanonft.api.repository.MapParcelRepository;
@@ -65,6 +66,29 @@ public class UserController {
         // 토큰으로 user 확인
         authService.verifyTokenWithId(token,passwordModifyRequest.getId());
         if(StringUtils.isNullOrEmpty(passwordModifyRequest.getId())
+//                || StringUtils.isNullOrEmpty(passwordModifyRequest.getOldPassword())
+                || StringUtils.isNullOrEmpty(passwordModifyRequest.getNewPassword())
+        ){
+            throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
+        }
+//        boolean comparePassword = authService.comparePassword(passwordModifyRequest.getId(), passwordModifyRequest.getOldPassword());
+//        if(!comparePassword){
+//            throw new CustomBadCredentialException(RETURN_CODE.WRONG_OLD_PASSWORD);
+//        }
+        authService.resetPassword(passwordModifyRequest.getId(),passwordModifyRequest.getNewPassword());
+
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
+    }
+    @RequestMapping( value = "/modifyLostPassword", method = RequestMethod.POST)
+    @ApiOperation(httpMethod = "POST", value = "회원 비밀번호 분실/수정")
+    @ResponseBody
+    public CardanoNftDefaultResponse userPasswordModifyLost(
+            @RequestHeader("authCode") String authCode,
+            @RequestBody PasswordModifyRequest passwordModifyRequest) throws Exception {
+        // user 확인
+        PasswordAuthCodeEntity passwordAuthCodeEntity = authService.findAuthCode(passwordModifyRequest.getId(),authCode);
+
+        if(passwordAuthCodeEntity == null || StringUtils.isNullOrEmpty(passwordModifyRequest.getId())
 //                || StringUtils.isNullOrEmpty(passwordModifyRequest.getOldPassword())
                 || StringUtils.isNullOrEmpty(passwordModifyRequest.getNewPassword())
         ){

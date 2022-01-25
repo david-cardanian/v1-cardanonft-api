@@ -338,6 +338,10 @@ public class AuthService {
         PasswordAuthCodeEntity passwordAuthCodeEntity = passwordAuthCodeRepository.findTopByUserIdAndIsEnabledOrderByCreatedAtDesc(userId,"1");
         return passwordAuthCodeEntity;
     }
+    public PasswordAuthCodeEntity findAuthCode(String userId, String authCode) throws Exception {
+        PasswordAuthCodeEntity passwordAuthCodeEntity = passwordAuthCodeRepository.findTopByUserIdAndAuthCodeOrderByCreatedAtDesc(userId,authCode);
+        return passwordAuthCodeEntity;
+    }
 
     public void disableAuthCode(PasswordAuthCodeEntity passwordAuthCodeEntity) throws Exception {
         passwordAuthCodeEntity.setIsEnabled("0");
