@@ -35,6 +35,8 @@ public class UserController {
     @ApiOperation(httpMethod = "GET", value = "회원 정보 수정")
     @ResponseBody
     public CardanoNftDefaultResponse userProfile (@RequestHeader("token") String token) throws Exception {
+        // 토큰으로 user 확인
+        authService.verifyToken(token);
         UserProfileVOResponse userProfileVOResponse = authService.findUserProfile(token);
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, userProfileVOResponse);
     }
@@ -44,7 +46,9 @@ public class UserController {
     @ResponseBody
     public CardanoNftDefaultResponse userModify(
             @RequestHeader("token") String token,
-            @RequestBody UserModifyRequest userModifyRequest) {
+            @RequestBody UserModifyRequest userModifyRequest)  throws Exception {
+        // 토큰으로 user 확인
+        authService.verifyTokenWithId(token,userModifyRequest.getId());
         if(StringUtils.isNullOrEmpty(userModifyRequest.getId())
         ){
             throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
@@ -56,7 +60,10 @@ public class UserController {
     @ApiOperation(httpMethod = "POST", value = "회원 비밀번호 수정")
     @ResponseBody
     public CardanoNftDefaultResponse userPasswordModify(
+            @RequestHeader("token") String token,
             @RequestBody PasswordModifyRequest passwordModifyRequest) throws Exception {
+        // 토큰으로 user 확인
+        authService.verifyTokenWithId(token,passwordModifyRequest.getId());
         if(StringUtils.isNullOrEmpty(passwordModifyRequest.getId())
 //                || StringUtils.isNullOrEmpty(passwordModifyRequest.getOldPassword())
                 || StringUtils.isNullOrEmpty(passwordModifyRequest.getNewPassword())

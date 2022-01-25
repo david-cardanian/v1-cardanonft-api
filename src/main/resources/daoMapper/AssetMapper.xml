@@ -20,26 +20,28 @@
         left outer join village_type vt on vt.village_type_id = cn.village_type_id
         where cac.user_id = #{userId}
           and ca.village_number is not null
-        <if test="continentId != null and continentId != ''">
+        <if test='continentId != null and continentId != ""'>
             <![CDATA[
             AND ca.continent_id = #{continentId}
             ]]>
         </if>
-        <if test="villageId != null and villageId != ''">
+        <if test='villageId != null and villageId != ""'>
             <![CDATA[
             AND ca.village_id = #{villageId}
             ]]>
         </if>
-        <if test="isDeployed != null and isDeployed = 1">
-            <![CDATA[
-            and exists (select village_nft_id from map_parcel where village_nft_id = cn.nft_id )
-            ]]>
-        </if>
-        <if test="isDeployed != null and isDeployed = 0">
-            <![CDATA[
-            and not exists (select village_nft_id from map_parcel where village_nft_id = cn.nft_id )
-            ]]>
-        </if>
+        <choose>
+            <when test='isDeployed == null or isDeployed == ""'>
+                and 1 = 1
+            </when>
+            <when test='isDeployed != null and isDeployed == "1"'>
+                and exists (select village_nft_id from map_parcel where village_nft_id = cn.nft_id )
+            </when>
+            <when test='isDeployed != null and isDeployed == "0"'>
+                and not exists (select village_nft_id from map_parcel where village_nft_id = cn.nft_id )
+            </when>
+        </choose>
+
     </select>
     <select id="getMapList" parameterType="MapListRequest" resultType="MapListResponse">
         SELECT asset_id assetId

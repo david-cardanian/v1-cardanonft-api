@@ -27,7 +27,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import retrofit2.Response;
 
 import java.sql.Timestamp;
 import java.util.*;
@@ -415,5 +414,23 @@ public class AuthService {
                 .discord(userEntity.getDiscord())
                 .build();
 
+    }
+    public boolean verifyTokenWithId (String token, String userId) throws Exception {
+        AuthToken authToken = authDao.getAuthToken(token);
+        if(authToken == null) {
+            throw new CustomBadCredentialException(RETURN_CODE.INVALID_AUTHORITY);
+        }
+        UserEntity userEntity = userRepository.findTopByUserIdAndIsEnabled(authToken.getUser_id(), "1");
+        if(userEntity == null || StringUtils.isEmpty(userEntity.getUserId()) || !userEntity.getUserId().equals(userId)){
+            throw new CustomBadCredentialException(RETURN_CODE.INVALID_AUTHORITY);
+        }
+        return true;
+    }
+    public boolean verifyToken (String token) throws Exception {
+        AuthToken authToken = authDao.getAuthToken(token);
+        if(authToken == null) {
+            throw new CustomBadCredentialException(RETURN_CODE.INVALID_AUTHORITY);
+        }
+        return true;
     }
 }

@@ -8,6 +8,7 @@ import com.cardanonft.api.request.MapListRequest;
 import com.cardanonft.api.request.MapSearchRequest;
 import com.cardanonft.api.request.VillageListRequest;
 import com.cardanonft.api.response.CardanoNftDefaultResponse;
+import com.cardanonft.api.service.AuthService;
 import com.mysql.cj.core.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,8 @@ public class AssetController {
     MapParcelRepository mapParcelRepository;
     @Autowired
     AssetDao assetDao;
+    @Autowired
+    AuthService authService;
 
     @RequestMapping(value = "/village/list", method = RequestMethod.POST)
     @ResponseBody
@@ -34,6 +37,8 @@ public class AssetController {
             @RequestHeader("token") String token,
             @RequestBody VillageListRequest villageListRequest
     ) throws Exception {
+        // 토큰으로 user 확인
+        authService.verifyTokenWithId(token,villageListRequest.getUserId());
         if(StringUtils.isNullOrEmpty(villageListRequest.getContinentId())){
             villageListRequest.setContinentId("Byron");
         }
@@ -49,6 +54,8 @@ public class AssetController {
             @RequestHeader("token") String token,
             @RequestBody MapListRequest mapListRequest
     ) throws Exception {
+        // 토큰으로 user 확인
+        authService.verifyTokenWithId(token,mapListRequest.getUserId());
         if(StringUtils.isNullOrEmpty(mapListRequest.getContinentId())){
             mapListRequest.setContinentId("Byron");
         }

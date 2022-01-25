@@ -10,6 +10,7 @@ import com.cardanonft.api.entity.CardanoNftEntity;
 import com.cardanonft.api.repository.*;
 import com.cardanonft.api.request.*;
 import com.cardanonft.api.response.CardanoNftDefaultResponse;
+import com.cardanonft.api.service.AuthService;
 import com.cardanonft.api.service.FileUploadService;
 import com.cardanonft.api.service.MapService;
 import com.cardanonft.api.vo.collection.AuctionCollectionVO;
@@ -44,6 +45,8 @@ public class MapController {
     MapDao mapDao;
     @Autowired
     MapService mapService;
+    @Autowired
+    AuthService authService;
 
     @RequestMapping(value = "/3d/list", method = RequestMethod.POST)
     @ResponseBody
@@ -65,6 +68,8 @@ public class MapController {
             @RequestHeader("token") String token,
             @RequestBody AssetDeployRequest assetDeployRequest
     ) throws Exception {
+        // 토큰으로 user 확인
+        authService.verifyTokenWithId(token,assetDeployRequest.getUserId());
         mapService.deployAsset(assetDeployRequest);
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
     }
@@ -72,9 +77,11 @@ public class MapController {
     @ResponseBody
     public CardanoNftDefaultResponse undeployAsset(
             @RequestHeader("token") String token,
-            @RequestBody AssetDeployRequest assetDeployRequest
+            @RequestBody AssetUnDeployRequest assetUnDeployRequest
     ) throws Exception {
-        mapService.undeployAsset(assetDeployRequest);
+        // 토큰으로 user 확인
+        authService.verifyTokenWithId(token,assetUnDeployRequest.getUserId());
+        mapService.undeployAsset(assetUnDeployRequest);
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
     }
     @RequestMapping(value = "/image/upload", method = RequestMethod.POST)
@@ -86,6 +93,8 @@ public class MapController {
             @RequestParam("villageDirection") String villageDirection,
             @RequestParam("mapParcelId") Integer mapParcelId
     ) throws Exception {
+        // 토큰으로 user 확인
+        authService.verifyTokenWithId(token,userId);
         UserImageUploadRequest userImageUploadRequest = new UserImageUploadRequest();
         userImageUploadRequest.setFiles(files);
         userImageUploadRequest.setUserId(userId);
@@ -113,6 +122,8 @@ public class MapController {
             @RequestHeader("token") String token,
             @RequestBody MoonToggleRequest toggleRequest
     ) throws Exception {
+        // 토큰으로 user 확인
+        authService.verifyToken(token);
         mapParcelRepository.moonOnoff(toggleRequest.getMapParcelId(),toggleRequest.getMoonOnoff());
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
     }

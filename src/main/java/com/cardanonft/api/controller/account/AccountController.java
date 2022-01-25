@@ -16,6 +16,7 @@ import com.cardanonft.api.request.VillageListRequest;
 import com.cardanonft.api.request.auth.AuthAdaRequest;
 import com.cardanonft.api.response.CardanoNftDefaultResponse;
 import com.cardanonft.api.response.auth.AuthAdaResponse;
+import com.cardanonft.api.service.AuthService;
 import com.mysql.cj.core.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +47,8 @@ public class AccountController {
     UserRolesRepository userRolesRepository;
     @Autowired
     CollectionDao collectionDao;
+    @Autowired
+    AuthService authService;
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
@@ -53,7 +56,8 @@ public class AccountController {
             @RequestHeader("token") String token,
             @RequestBody AccountListRequest accountListRequest
     ) throws Exception {
-        // TO-DO 토큰으로 user 확인
+        // 토큰으로 user 확인
+        authService.verifyTokenWithId(token,accountListRequest.getUserId());
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, cardanoAccountRepository.findAllByUserIdAndIsEnabledOrderByCreatedAt(accountListRequest.getUserId(),"1"));
     }
 
@@ -64,6 +68,8 @@ public class AccountController {
             @RequestHeader("token") String token,
             @RequestBody AuthAdaRequest authAdaRequest
     ) throws Exception {
+        // 토큰으로 user 확인
+        authService.verifyTokenWithId(token,authAdaRequest.getUserId());
         UserRolesEntity userRolesEntity = userRolesRepository.findTopByUserIdAndIsEnabled(authAdaRequest.getUserId(),"1");
         BigDecimal bigDecimal = new BigDecimal(String.valueOf(userRolesEntity.getUserRoleId())).add(new BigDecimal("2000000")).divide(new BigDecimal("1000000")).setScale(6);
         if(StringUtils.isNullOrEmpty(authAdaRequest.getAuthType())){
@@ -80,6 +86,8 @@ public class AccountController {
             @RequestHeader("token") String token,
             @RequestBody AccountDeleteRequest accountDeleteRequest
     ) throws Exception {
+        // 토큰으로 user 확인
+        authService.verifyTokenWithId(token,accountDeleteRequest.getUserId());
         boolean isRight = cardanoAccountRepository.existsCardanoAccountEntityByUserIdAndStakeAddressAndIsEnabled(accountDeleteRequest.getUserId(),accountDeleteRequest.getStakeAddress(),"1");
         if(!isRight){
             throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);

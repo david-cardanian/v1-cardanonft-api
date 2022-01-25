@@ -10,6 +10,7 @@ import com.cardanonft.api.exception.CustomBadRequestException;
 import com.cardanonft.api.exception.CustomWrongPasswordException;
 import com.cardanonft.api.repository.*;
 import com.cardanonft.api.request.AssetDeployRequest;
+import com.cardanonft.api.request.AssetUnDeployRequest;
 import com.cardanonft.api.request.UserImageUploadRequest;
 import com.cardanonft.api.request.auth.LoginVO;
 import com.cardanonft.api.util.AccountUtil;
@@ -65,9 +66,9 @@ public class MapService {
         mapParcelRepository.save(mapParcelEntity);
     }
     /// 맵에 빌리지 해제
-    public void undeployAsset(AssetDeployRequest assetDeployRequest) throws Exception {
+    public void undeployAsset(AssetUnDeployRequest assetUnDeployRequest) throws Exception {
         // map parcel user search
-        MapParcelEntity mapParcelEntity = mapParcelRepository.findTopByMapParcelIdAndUserIdAndIsEnabled(assetDeployRequest.getMapParcelId(), assetDeployRequest.getUserId(), "1");
+        MapParcelEntity mapParcelEntity = mapParcelRepository.findTopByMapParcelIdAndUserIdAndIsEnabled(assetUnDeployRequest.getMapParcelId(), assetUnDeployRequest.getUserId(), "1");
         if(mapParcelEntity == null){
             // userId에 매핑되어있는 Map이 존재하지 않을 경우
             throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);

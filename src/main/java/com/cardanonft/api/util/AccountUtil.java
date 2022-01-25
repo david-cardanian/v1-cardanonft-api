@@ -57,7 +57,4 @@ public class AccountUtil {
 
 		return account;
 	}
-	public static void main(String arg[]){
-		System.out.println(new BCryptPasswordEncoder().encode("test12345"));
-	}
 }
