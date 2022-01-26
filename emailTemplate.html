@@ -7,114 +7,43 @@
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Noto+Sans:wght@400;700&display=swap");
 
-        .emainlWrap {
-            margin: 0;
-            list-style: none;
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            text-decoration: none;
-            font-style: normal;
-            white-space: normal;
-            word-break: keep-all;
-            vertical-align: top;
-            text-align: center;
-            letter-spacing: -0.025em;
-            padding: 20px 0;
-            width: 100%;
-            max-width: 100%;
+        .emainlWrap { margin: 0;list-style: none;-webkit-box-sizing: border-box;box-sizing: border-box;text-decoration: none;font-style: normal;white-space: normal;word-break: keep-all;vertical-align: top;text-align: center;letter-spacing: -0.025em;padding: 20px 0;width: 100%;max-width: 100%;
         }
 
-        .emainlWrap .contentsWrap {
-            background: #fff;
-            -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-            height: fit-content;
-            border: solid 10px #81B49E;
-            padding: 20px 40px;
-            position: relative;
-            display: inline-block;
+        .emainlWrap .contentsWrap {background: #fff;-webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);height: fit-content;border: solid 10px #81B49E;padding: 20px 40px;position: relative;display: inline-block;
         }
 
-        .emainlWrap .logo {
-            width: 40%;
+        .emainlWrap .logo {width: 40%;
         }
 
-        .emainlWrap .logo a {
-            display: inline-block;
-            width: 100%;
-            height: fit-content;
+        .emainlWrap .logo a {display: inline-block;width: 100%;height: fit-content;
         }
 
-        .emainlWrap .logo a img {
-            max-width: 100%;
-            min-width: 200px;
+        .emainlWrap .logo a img {max-width: 100%;min-width: 200px;
         }
 
-        .emainlWrap .codeWrap {
-            width: 100%;
-            text-align: center;
-            margin-top: 30px;
-            display: inline-block;
+        .emainlWrap .codeWrap {width: 100%;text-align: center;margin-top: 30px;display: inline-block;
         }
 
-        .emainlWrap .codeImg {
-            max-width: 60%;
-            width: 100%;
-            display: inline-block;
+        .emainlWrap .codeImg {max-width: 60%;width: 100%;display: inline-block;
         }
 
-        .emainlWrap .codeImg img {
-            width: 100%;
+        .emainlWrap .codeImg img {width: 100%;
         }
 
-        .emainlWrap .codeBox {
-            background: #E0EFE8;
-            width: 100%;
-            display: inline-block;
-            padding: 20px 0;
-            border-radius: 15px;
-            margin-top: 10px;
+        .emainlWrap .codeBox {background: #E0EFE8;width: 100%;display: inline-block;padding: 20px 0;border-radius: 15px;margin-top: 10px;
         }
 
-        .emainlWrap .boxTitle {
-            font-size: 20px;
-            color: #81B49E;
-            font-weight: 700;
-            font-family: "Montserrat", sans-serif;
-            margin-bottom: 10px;
-            padding: 0 20px;
+        .emainlWrap .boxTitle {font-size: 20px;color: #81B49E;font-weight: 700;font-family: "Montserrat", sans-serif;margin-bottom: 10px;padding: 0 20px;
         }
 
-        .emainlWrap .code {
-            font-size: 30px;
-            color: #222;
-            font-weight: 700;
-            font-family: "Montserrat", sans-serif;
-            padding: 0 20px;
+        .emainlWrap .code {font-size: 30px;color: #222;font-weight: 700;font-family: "Montserrat", sans-serif;padding: 0 20px;
         }
 
-        .emainlWrap .codeText {
-            font-size: 16px;
-            color: #999;
-            font-family: "Noto Sans", sans-serif;
-            margin-top: 20px;
-            margin-bottom: 100px;
-            width: 100%;
-            word-break: keep-all;
+        .emainlWrap .codeText {font-size: 16px;color: #999;font-family: "Noto Sans", sans-serif;margin-top: 20px;margin-bottom: 100px;width: 100%;word-break: keep-all;
         }
 
-        .emainlWrap .copyWrap {
-            width: 100%;
-            font-size: 14px;
-            color: #fff;
-            font-family: "Noto Sans", sans-serif;
-            background: #81B49E;
-            margin-bottom: -10px;
-            text-align: center;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            padding: 20px 0;
+        .emainlWrap .copyWrap {width: 100%;font-size: 14px;color: #fff;font-family: "Noto Sans", sans-serif;background: #81B49E;margin-bottom: -10px;text-align: center;position: absolute;bottom: 0;left: 0;padding: 20px 0;
 
         }
 
@@ -124,22 +53,7 @@
 
 <body>
     <div class="emainlWrap">
-        <div class="contentsWrap">
-            <div class="logo"><a href="https://cardanovillage.io/" target="_blank"><img src="https://api.cardanovillage.io/img/logo.png" alt="cardano village" name="cardano village"></a></div>
-            <div class="codeWrap">
-                <div class="codeImg">
-                    <img src="https://api.cardanovillage.io/img/emailImg.jpg" alt="Authentication Code">
-                </div>
-                <br>
-                <div class="codeBox">
-                    <div class="boxTitle">Authentication Code</div>
-                    <div class="code">EMailAuthCode</div>
-                </div>
-                <div class="codeText">Please enter the number above on the Cardano Village website.</div>
-            </div>
-            <div class="copyWrap">
-                Copyright ⓒ 2021 Cardanian.kr All rights reserved.
-            </div>
+        <div class="contentsWrap"><div class="logo"><a href="https://cardanovillage.io/" target="_blank"><img src="https://api.cardanovillage.io/img/logo.png" alt="cardano village" name="cardano village"></a></div><div class="codeWrap">    <div class="codeImg">        <img src="https://api.cardanovillage.io/img/emailImg.jpg" alt="Authentication Code">    </div>    <br>    <div class="codeBox">        <div class="boxTitle">Authentication Code</div>        <div class="code">EMailAuthCode</div>    </div>    <div class="codeText">Please enter the number above on the Cardano Village website.</div></div><div class="copyWrap">    Copyright ⓒ 2021 Cardanian.kr All rights reserved.</div>
         </div>
     </div>
 
