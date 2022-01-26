@@ -156,10 +156,10 @@ public class MailService {
                     "<body>\n" +
                     "    <div class=\"emainlWrap\">\n" +
                     "        <div class=\"contentsWrap\">\n" +
-                    "            <div class=\"logo\"><a href=\"https://cardanovillage.io/\" target=\"_blank\"><img src=\"https://api.cardanovillage.io/img/logo.png\" alt=\"cardano village\" name=\"cardano village\"></a></div>\n" +
+                    "            <div class=\"logo\"><a href=\"https://cardanovillage.io/\" target=\"_blank\"><img src=\"https://village-image.s3.ap-northeast-2.amazonaws.com/email/emailLogo.png\" alt=\"cardano village\" name=\"cardano village\"></a></div>\n" +
                     "            <div class=\"codeWrap\">\n" +
                     "                <div class=\"codeImg\">\n" +
-                    "                    <img src=\"https://api.cardanovillage.io/img/emailImg.jpg\" alt=\"Authentication Code\">\n" +
+                    "                    <img src=\"https://village-image.s3.ap-northeast-2.amazonaws.com/email/emailImg.jpg\" alt=\"Authentication Code\">\n" +
                     "                </div>\n" +
                     "                <br>\n" +
                     "                <div class=\"codeBox\">\n" +
