@@ -65,7 +65,7 @@ public class CollectionController {
             @RequestBody CollectionSearchRequest collectionSearchRequest
     ) throws Exception {
         CollectionAddressVO collectionAddressVO = new CollectionAddressVO();
-        collectionAddressVO.setAddrName(collectionSearchRequest.getAddrName());
+        collectionAddressVO.setCollectionId(collectionSearchRequest.getCollectionId());
 
         List<CollectionListVO> auctionList = collectionDao.getRandomAddress(collectionAddressVO);
 
