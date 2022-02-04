@@ -29,4 +29,6 @@ public class VillageListResponse {
     private String villageType;
     @ApiModelProperty(required = false,notes = "user_id")
     private String userId;
+    @ApiModelProperty(required = false,notes = "isDeployed")
+    private String isDeployed;
 }
