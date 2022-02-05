@@ -22,7 +22,9 @@
         ,cn.description description
         ,cn.img_url nftImgUrl
         ,vt.img_url villageTypeUrl
-        ,IF(mp.user_img_url is not null,mp.user_img_url,IF(cn.img_url is not null,cn.img_url,cn2.img_url)) popupImgUrl
+        <![CDATA[
+        ,IF(mp.user_img_url is not null and mp.user_img_url <> '',mp.user_img_url,IF(cn.img_url is not null,cn.img_url,cn2.img_url)) popupImgUrl
+        ]]>
         from map_parcel mp
         left outer join cardano_nft cn on  mp.village_nft_id = cn.nft_id
         left outer join cardano_nft cn2 on  mp.land_nft_id = cn2.nft_id
@@ -62,7 +64,9 @@
         ,cn.description description
         ,cn.img_url nftImgUrl
         ,vt.img_url villageTypeUrl
-        ,IF(mp.user_img_url is not null,mp.user_img_url,IF(cn.img_url is not null,cn.img_url,cn2.img_url)) popupImgUrl
+        <![CDATA[
+        ,IF(mp.user_img_url is not null and mp.user_img_url <> '',mp.user_img_url,IF(cn.img_url is not null,cn.img_url,cn2.img_url)) popupImgUrl
+        ]]>
         from map_parcel mp
         left outer join cardano_nft cn on  mp.village_nft_id = cn.nft_id
         left outer join cardano_nft cn2 on  mp.land_nft_id = cn2.nft_id
