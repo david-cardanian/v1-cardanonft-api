@@ -51,7 +51,7 @@
         , village_id villageId
         , token_name tokenName
         , description
-        , img_url  imgUrl
+        , cn.img_url  imgUrl
         , parcel_x parcelX
         , parcel_y parcelY
         ,cac.user_id userId
