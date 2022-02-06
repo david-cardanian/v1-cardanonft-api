@@ -17,10 +17,11 @@
         , exists (select village_nft_id from map_parcel where village_nft_id = cn.nft_id) isDeployed
         FROM cardano_asset ca
         left outer join cardano_nft cn on ca.village_number = cn.param1
-        left outer join cardano_account cac on ca.stake_address = cac.stake_address
+        left outer join cardano_account cac on ca.stake_address = cac.stake_address and cac.is_enabled = '1'
         left outer join village_type vt on vt.village_type_id = cn.village_type_id
         where cac.user_id = #{userId}
           and ca.village_number is not null
+          and ca.is_enabled = '1'
         <if test='continentId != null and continentId != ""'>
             <![CDATA[
             AND ca.continent_id = #{continentId}
@@ -56,8 +57,9 @@
         ,cac.user_id userId
         FROM cardano_asset ca
         left outer join cardano_nft cn on ca.parcel_x = cn.param6 and ca.parcel_y = cn.param7
-        left outer join cardano_account cac on ca.stake_address = cac.stake_address
+        left outer join cardano_account cac on ca.stake_address = cac.stake_address and cac.is_enabled = '1'
         where cac.user_id = #{userId}
+        and ca.is_enabled = '1'
         and ca.parcel_x is not null and ca.parcel_y is not null
         <if test="continentId != null and continentId != ''">
             <![CDATA[

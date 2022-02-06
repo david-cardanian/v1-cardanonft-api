@@ -126,38 +126,37 @@ public class AuthService {
 //                }
             // 비밀번호를 잘못 입력하였을 경우
             if (!confirmPassword) {
-                if (loginVO.getOs_type().equals("WEB")) {
+
                     throw new CustomBadCredentialException(RETURN_CODE.WRONG_ACCOUNT);
-                }
-
-                Timestamp currTs = new Timestamp(new Date().getTime());
-
-                // 계정 잠금이 되지 않았으며, 가장 최근에 오입력한 시간 보다 2시간 이후에 들어온 요청이면 기존 failCount 초기화
-                if (users.getFailExpiredAt() != null) {
-                    if (users.getIsLocked() == 0 && users.getFailExpiredAt().compareTo(currTs) <= 0) {
-                        users.setFailCount(0);
-                    }
-                }
-
-                if (users.getFailCount() < 5 && users.getIsLocked() == 0) {
-                    users.setFailCount(users.getFailCount() + 1);
-
-                    // 비밀번호 오류 회수 초기화 시점 적용 --> 가장 최근 오입력한 시점으로부터 2시간 이후엔 초기화
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTimeInMillis(currTs.getTime());
-                    cal.add(Calendar.HOUR_OF_DAY, C.DEFAULT_VALUES.PASSWORD_FAIL_COUNT_INIT_HOUR);
-
-                    users.setFailExpiredAt(new Timestamp(cal.getTimeInMillis()));
-
-                    if (users.getFailCount() >= 5 && users.getIsLocked() == 0) {
-                        users.setIsLocked((byte) 1);
-                    }
-
-                    // authDao.updatePasswordFailCountAndIsLocked(users);
-                }
-
-                throw new CustomWrongPasswordException(RETURN_CODE.WRONG_ACCOUNT, users.getFailCount(),
-                        users.getIsLocked(), users.getFailExpiredAt());
+//
+//                Timestamp currTs = new Timestamp(new Date().getTime());
+//
+//                // 계정 잠금이 되지 않았으며, 가장 최근에 오입력한 시간 보다 2시간 이후에 들어온 요청이면 기존 failCount 초기화
+//                if (users.getFailExpiredAt() != null) {
+//                    if (users.getIsLocked() == 0 && users.getFailExpiredAt().compareTo(currTs) <= 0) {
+//                        users.setFailCount(0);
+//                    }
+//                }
+//
+//                if (users.getFailCount() < 5 && users.getIsLocked() == 0) {
+//                    users.setFailCount(users.getFailCount() + 1);
+//
+//                    // 비밀번호 오류 회수 초기화 시점 적용 --> 가장 최근 오입력한 시점으로부터 2시간 이후엔 초기화
+//                    Calendar cal = Calendar.getInstance();
+//                    cal.setTimeInMillis(currTs.getTime());
+//                    cal.add(Calendar.HOUR_OF_DAY, C.DEFAULT_VALUES.PASSWORD_FAIL_COUNT_INIT_HOUR);
+//
+//                    users.setFailExpiredAt(new Timestamp(cal.getTimeInMillis()));
+//
+//                    if (users.getFailCount() >= 5 && users.getIsLocked() == 0) {
+//                        users.setIsLocked((byte) 1);
+//                    }
+//
+//                    // authDao.updatePasswordFailCountAndIsLocked(users);
+//                }
+//
+//                throw new CustomWrongPasswordException(RETURN_CODE.WRONG_ACCOUNT, users.getFailCount(),
+//                        users.getIsLocked(), users.getFailExpiredAt());
             }
         }
 
