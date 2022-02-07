@@ -57,7 +57,7 @@ public class AuthController {
             @RequestBody LoginVO loginVO) throws Exception{
         logger.debug("login api start");
         try {
-            logger.debug(loginVO.getId());
+            logger.info(loginVO.getId());
             // 2. 토큰을 발급한다.
             String ip = getIpAddress(request);
             AuthToken token = authService.issueNAccessToken(
@@ -68,7 +68,7 @@ public class AuthController {
                     uuid);
             authService.login(token, loginVO);
             token.setReferer(request.getHeader("referer"));
-            logger.debug("login api end");
+            logger.info("login api end");
             return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, token);
         }catch (CustomBadRequestException e) {
             throw e;

@@ -159,7 +159,6 @@ public class AuthService {
 //                        users.getIsLocked(), users.getFailExpiredAt());
             }
         }
-
         if (users.getFailCount() > 0) {
             authDao.resetPasswordFailCountAndIsLocked(String.valueOf(userId));
         }
