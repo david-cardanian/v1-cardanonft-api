@@ -187,6 +187,13 @@ public class CollectionController {
 
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, cardanoNftEntityList.getTargetQuantity() - cardanoNftEntityList.getMintCount());
     }
+    @RequestMapping(value = "/remain/{nftCollectionId}", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse getNFTCollectionRemain(@PathVariable("nftCollectionId") int nftCollectionId) throws Exception {
+        CardanoNftCollectionEntity cardanoNftCollectionEntity = cardanoNftCollectionRepository.findTopByCollectionIdOrderByCreatedAtDesc(nftCollectionId);
+
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, cardanoNftCollectionEntity.getTargetQuantity() - cardanoNftCollectionEntity.getMintCount());
+    }
 
     @RequestMapping(value = "/closed", method = RequestMethod.POST)
     @ResponseBody

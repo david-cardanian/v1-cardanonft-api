@@ -13,6 +13,7 @@ import java.util.List;
 public interface CardanoAccountRepository extends JpaRepository<CardanoAccountEntity, Integer>, JpaSpecificationExecutor<CardanoAccountEntity> {
     List<CardanoAccountEntity> findAllByUserIdAndIsEnabledOrderByCreatedAt(String userId, String isEnabled);
     boolean existsCardanoAccountEntityByUserIdAndStakeAddressAndIsEnabled(String userId, String stakeAddress,String isEnabled);
+    CardanoAccountEntity findToByUserIdAndStakeAddressAndIsEnabled(String userId, String stakeAddress,String isEnabled);
     @Transactional
     @Modifying
     @Query(value=" UPDATE cardano_account "

@@ -105,7 +105,7 @@ public class AuthService {
 
     /// 로그인 검증 프로세스
     public void login(AuthToken token, LoginVO loginVO) throws Exception {
-        String userId = token.getUser_id();
+        String userId = token.getUser_id().trim();
         //// 비밀번호를 검증한다.
         Users users = authDao.getPassword(String.valueOf(userId));
         if (users == null) {
@@ -116,7 +116,7 @@ public class AuthService {
             throw new CustomWrongPasswordException(RETURN_CODE.ACCOUNT_IS_LOCKED);
         } else {
             boolean confirmPassword = false;
-            confirmPassword = accountUtil.confirmPasswordEcoded(loginVO.getPassword(), users.getPassword());
+            confirmPassword = accountUtil.confirmPasswordEcoded(loginVO.getPassword().trim(), users.getPassword());
 //                if (loginVO.getOs_type().equals("iOS") || loginVO.getOs_type().equals("ANDROID") ){
 //                    //confirmPassword = accountUtil.confirmPasswordEcoded(loginVO.getPassword(), users.getPassword());
 //                    confirmPassword = accountUtil.confirmPassword(loginVO.getPassword(), users.getPassword());
@@ -216,8 +216,8 @@ public class AuthService {
     public void signUp(SignUpRequest signUpRequest) throws Exception{
         try {
             UserEntity userEntity = new UserEntity();
-            userEntity.setUserId(signUpRequest.getId());
-            userEntity.setPassword(accountUtil.encodePassword(signUpRequest.getPassword()));
+            userEntity.setUserId(signUpRequest.getId().trim());
+            userEntity.setPassword(accountUtil.encodePassword(signUpRequest.getPassword().trim()));
             userEntity.setEmail(signUpRequest.getEmail());
             userEntity.setUserName(signUpRequest.getNickname());
             userEntity.setNickName(signUpRequest.getNickname());
@@ -226,7 +226,7 @@ public class AuthService {
             userRepository.save(userEntity);
 
             UserRolesEntity userRolesEntity = new UserRolesEntity();
-            userRolesEntity.setUserId(signUpRequest.getId());
+            userRolesEntity.setUserId(signUpRequest.getId().trim());
             userRolesEntity.setRoleId(UserRole.USER);
             userRolesRepository.save(userRolesEntity);
 

@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface CardanoNftCollectionRepository extends JpaRepository<CardanoNftCollectionEntity, Integer>, JpaSpecificationExecutor<CardanoNftCollectionEntity> {
     List<CardanoNftCollectionEntity> findAllByCollectionIdOrderByCreatedAtDesc(int collectionId);
+    CardanoNftCollectionEntity findTopByCollectionIdOrderByCreatedAtDesc(int collectionId);
     List<CardanoNftCollectionEntity> findAllByProjectIdOrderByCreatedAtDesc(int projectId);
 }

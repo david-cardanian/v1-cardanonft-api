@@ -61,7 +61,7 @@ public class AuthController {
             // 2. 토큰을 발급한다.
             String ip = getIpAddress(request);
             AuthToken token = authService.issueNAccessToken(
-                    loginVO.getId(),
+                    loginVO.getId().trim(),
                     apiKey,
                     ip,
                     loginVO.getOs_type(),
