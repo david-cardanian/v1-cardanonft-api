@@ -35,6 +35,8 @@ public class MapParcelEntity implements Serializable {
     private Integer villageNftId;
     @Column(name = "user_img_url")
     private String userImgUrl;
+    @Column(name = "user_img_url_thumb")
+    private String userImgUrlThumb;
     @Column(name = "village_direction")
     private String villageDirection;
     @Column(name = "parcel_x_2d")

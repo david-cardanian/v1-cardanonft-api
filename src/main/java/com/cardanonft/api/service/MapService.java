@@ -25,6 +25,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -89,14 +93,14 @@ public class MapService {
         String imgURL = null;
         for(MultipartFile file : userImageUploadRequest.getFiles()) {
             if (com.amazonaws.util.StringUtils.isNullOrEmpty(file.getOriginalFilename())) continue;
-            imgURL = fileUploadService.uploadImageFile(file, AWS_INFO.FOLDER_NAME_USER_IMAGE, true);
+            imgURL = fileUploadService.uploadImageFileWithThumb(file, AWS_INFO.FOLDER_NAME_USER_IMAGE, true);
             break;
         }
         // map에 image 배치
         mapParcelEntity.setUserImgUrl(imgURL);
+        mapParcelEntity.setUserImgUrlThumb(imgURL+"_thumb");
         mapParcelEntity.setVillageDirection(userImageUploadRequest.getVillageDirection());
         mapParcelRepository.save(mapParcelEntity);
         return imgURL;
     }
-
 }

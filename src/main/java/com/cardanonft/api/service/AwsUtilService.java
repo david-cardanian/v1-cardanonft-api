@@ -72,6 +72,44 @@ public class AwsUtilService {
         }
         return key;
     }
+    public String uploadFileByKey(String butcketName, String key, File file, boolean publicYn) throws Exception {
+        try {
+            PutObjectRequest request = new PutObjectRequest(butcketName, key, file);
+
+            if(publicYn){
+                //  aking the object Public
+                request.setCannedAcl(CannedAccessControlList.PublicRead);
+                // acl list
+                AccessControlList acl = new AccessControlList();
+                acl.grantPermission(GroupGrantee.AuthenticatedUsers, Permission.FullControl);
+                acl.grantPermission(GroupGrantee.AllUsers, Permission.Read);
+                request.setAccessControlList(acl);
+            }else {
+                //  aking the object Public
+                request.setCannedAcl(CannedAccessControlList.Private);
+                // acl list
+                AccessControlList acl = new AccessControlList();
+                acl.grantPermission(GroupGrantee.AuthenticatedUsers, Permission.FullControl);
+                request.setAccessControlList(acl);
+            }
+            // upload
+            amazonS3.putObject(request);
+        } catch (AmazonServiceException ase) {
+            logger.error("Caught an AmazonServiceException, which means your request made it "
+                    + "to Amazon S3, but was rejected with an error response for some reason.");
+            logger.error("Error Message:    " + ase.getMessage());
+            logger.error("HTTP Status Code: " + ase.getStatusCode());
+            logger.error("AWS Error Code:   " + ase.getErrorCode());
+            logger.error("Error Type:       " + ase.getErrorType());
+            logger.error("Request ID:       " + ase.getRequestId());
+        } catch (AmazonClientException ace) {
+            logger.error("Caught an AmazonClientException, which means the client encountered "
+                    + "a serious internal problem while trying to communicate with S3, "
+                    + "such as not being able to access the network.");
+            logger.error("Error Message: " + ace.getMessage());
+        }
+        return key;
+    }
     public String generateKeyByDate( String imgUse, String file_name) throws Exception {
         SimpleDateFormat dateFormatter1 = new SimpleDateFormat("yyyy");
         SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM");

@@ -58,19 +58,18 @@ public class CollectionController {
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, cardanoNftCollectionRepository.findAllByCollectionIdOrderByCreatedAtDesc(collectionSearchRequest.getCollectionId()));
     }
 
-    // 랜덤 주소 조회
-    @RequestMapping(value = "/randomAddress", method = RequestMethod.POST)
-    @ResponseBody
-    public CardanoNftDefaultResponse getRandomAddress(
-            @RequestBody CollectionSearchRequest collectionSearchRequest
-    ) throws Exception {
-        CollectionAddressVO collectionAddressVO = new CollectionAddressVO();
-        collectionAddressVO.setCollectionId(collectionSearchRequest.getCollectionId());
-
-        List<CollectionListVO> auctionList = collectionDao.getRandomAddress(collectionAddressVO);
-
-        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, auctionList);
-    }
+//    // 랜덤 주소 조회
+//    @RequestMapping(value = "/randomAddress", method = RequestMethod.POST)
+//    @ResponseBody
+//    public CardanoNftDefaultResponse getRandomAddress(
+//            @RequestBody CollectionSearchRequest collectionSearchRequest
+//    ) throws Exception {
+//        CollectionAddressVO collectionAddressVO = new CollectionAddressVO();
+//        collectionAddressVO.setCollectionId(collectionSearchRequest.getCollectionId());
+//        List<CollectionListVO> auctionList = collectionDao.getRandomAddress(collectionAddressVO);
+//
+//        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, auctionList);
+//    }
 
     @RequestMapping(value = "/listSearch", method = RequestMethod.POST)
     @ResponseBody
