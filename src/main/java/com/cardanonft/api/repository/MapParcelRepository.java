@@ -25,7 +25,7 @@ public interface MapParcelRepository extends JpaRepository<MapParcelEntity, Stri
     @Transactional
     @Modifying
     @Query(value=" UPDATE map_parcel "
-            + " SET user_id = '', user_img_url = ''"
+            + " SET user_id = '', user_img_url = '', user_img_url_thumb = ''"
             + " WHERE map_parcel_id = :mapParcelId", nativeQuery = true)
     void undeployUser( @Param("mapParcelId")int mapParcelId
     ) throws Exception;

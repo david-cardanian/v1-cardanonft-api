@@ -22,6 +22,7 @@
         ,cn.description description
         ,cn.img_url nftImgUrl
         ,vt.img_url villageTypeUrl
+        ,mp.village_direction villageDirection
         <![CDATA[
         ,IF(mp.user_img_url is not null and mp.user_img_url <> '',mp.user_img_url,IF(cn.img_url is not null,cn.img_url,cn2.img_url)) popupImgUrl
         ]]>
