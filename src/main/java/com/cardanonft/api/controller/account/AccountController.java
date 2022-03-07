@@ -80,6 +80,19 @@ public class AccountController {
         // TO-DO 토큰으로 user 확인
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, authAdaResponse);
     }
+    // getTokenClaimAddress
+    @RequestMapping(value = "/token/claim/address", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse getTokenClaimAddress(
+            @RequestHeader("token") String token,
+            @RequestBody AuthAdaRequest authAdaRequest
+    ) throws Exception {
+        // 토큰으로 user 확인
+        authService.verifyTokenWithId(token,authAdaRequest.getUserId());
+        authAdaRequest.setAuthType("2");
+        AuthAdaResponse authAdaResponse = collectionDao.getRandomAuthAddress(authAdaRequest);
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, authAdaResponse);
+    }
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public CardanoNftDefaultResponse getMapList(
