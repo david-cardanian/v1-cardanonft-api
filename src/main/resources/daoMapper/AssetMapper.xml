@@ -47,17 +47,19 @@
     </select>
     <select id="getMapList" parameterType="MapListRequest" resultType="MapListResponse">
         SELECT asset_id assetId
-        , continent_id continentId
-        , village_id villageId
+        , ca.continent_id continentId
+        , ca.village_id villageId
         , token_name tokenName
         , description
         , cn.img_url  imgUrl
         , parcel_x parcelX
         , parcel_y parcelY
         ,cac.user_id userId
+        ,mp.map_parcel_id mapParcelId
         FROM cardano_asset ca
-        left outer join cardano_nft cn on ca.parcel_x = cn.param6 and ca.parcel_y = cn.param7
+        left outer join cardano_nft cn on ca.parcel_x = cn.param6 and ca.parcel_y = cn.param7 and ca.continent_id = cn.param2 and ca.village_id = cn.param3
         left outer join cardano_account cac on ca.stake_address = cac.stake_address and cac.is_enabled = '1'
+        left outer join map_parcel mp on ca.parcel_x = mp.parcel_x_3d and ca.parcel_y = mp.parcel_y_3d and ca.continent_id = mp.continent_id and ca.village_id = mp.village_id
         where cac.user_id = #{userId}
         and ca.is_enabled = '1'
         and ca.parcel_x is not null and ca.parcel_y is not null

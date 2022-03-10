@@ -21,6 +21,8 @@ public class MapListResponse {
     private Integer parcelX;
     @ApiModelProperty(required = false,notes = "parcelY")
     private Integer parcelY;
+    @ApiModelProperty(required = false,notes = "mapParcelId")
+    private Integer mapParcelId;
     @ApiModelProperty(required = false,notes = "token_name")
     private String tokenName;
     @ApiModelProperty(required = false,notes = "description")
