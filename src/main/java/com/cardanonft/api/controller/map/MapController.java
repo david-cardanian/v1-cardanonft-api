@@ -103,6 +103,23 @@ public class MapController {
         String url = mapService.uploadImage(userImageUploadRequest);
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS,url);
     }
+    @RequestMapping(value = "/image/all-images", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse setAllImages(
+            @RequestHeader("token") String token,
+            @RequestParam("file") List<MultipartFile> files,
+            @RequestParam("userId") String userId,
+            @RequestParam("villageDirection") String villageDirection
+    ) throws Exception {
+        // 토큰으로 user 확인
+        authService.verifyTokenWithId(token,userId);
+        UserImageUploadRequest userImageUploadRequest = new UserImageUploadRequest();
+        userImageUploadRequest.setFiles(files);
+        userImageUploadRequest.setUserId(userId);
+        userImageUploadRequest.setVillageDirection(villageDirection);
+        String url = mapService.setAllImages(userImageUploadRequest);
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS,url);
+    }
     @RequestMapping(value = "/parcel/info", method = RequestMethod.POST)
     @ResponseBody
     public CardanoNftDefaultResponse getParcelInfo(

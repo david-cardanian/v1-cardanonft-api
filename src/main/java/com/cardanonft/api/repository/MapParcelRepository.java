@@ -14,6 +14,7 @@ import java.util.List;
 public interface MapParcelRepository extends JpaRepository<MapParcelEntity, String>, JpaSpecificationExecutor<MapParcelEntity> {
     MapParcelEntity findTopByMapParcelIdAndUserIdAndIsEnabled(int mapParcelId, String userId, String isEnabled);
     List<MapParcelEntity> findAllByUserIdAndVillageNftIdAndIsEnabled(String userId,int villageNftId, String isEnabled);
+    List<MapParcelEntity> findAllByUserIdAndIsEnabled(String userId, String isEnabled);
     List<MapParcelEntity> findAllByUserIdAndParcelX3dAndParcelY3dAndIsEnabled(String userId,int parcelX3d,int parcelY3d, String isEnabled);
     @Transactional
     @Modifying

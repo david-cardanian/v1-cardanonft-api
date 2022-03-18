@@ -103,4 +103,30 @@ public class MapService {
         mapParcelRepository.save(mapParcelEntity);
         return imgURL;
     }
+
+    public String setAllImages(UserImageUploadRequest userImageUploadRequest) throws Exception {
+        // map parcels들을 전부 찾아옴.
+        List<MapParcelEntity> mapParcelEntityList = mapParcelRepository.findAllByUserIdAndIsEnabled(userImageUploadRequest.getUserId(), "1");
+        if(mapParcelEntityList == null){
+            // userId에 매핑되어있는 Map이 존재하지 않을 경우
+            throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
+        }
+        String imgURL = null;
+        for(MultipartFile file : userImageUploadRequest.getFiles()) {
+            if (com.amazonaws.util.StringUtils.isNullOrEmpty(file.getOriginalFilename())) continue;
+            imgURL = fileUploadService.uploadImageFileWithThumb(file, AWS_INFO.FOLDER_NAME_USER_IMAGE, true);
+            break;
+        }
+        List<MapParcelEntity> imgUpMapParcelList = new ArrayList<>();
+        // map에 image 배치
+        for ( MapParcelEntity eachMapParcel : mapParcelEntityList ) {
+            eachMapParcel.setUserImgUrl(imgURL);
+            eachMapParcel.setUserImgUrlThumb(imgURL+"_thumb");
+            eachMapParcel.setVillageDirection(userImageUploadRequest.getVillageDirection());
+            imgUpMapParcelList.add(eachMapParcel);
+        }
+
+        mapParcelRepository.saveAll(imgUpMapParcelList);
+        return imgURL;
+    }
 }
