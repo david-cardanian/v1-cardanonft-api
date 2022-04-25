@@ -31,6 +31,8 @@ public class CollectionSearchRequest {
     private String keyword;
     @ApiModelProperty(required = false,notes = "addrName")
     private String addrName;
+    @ApiModelProperty(required = false,notes = "stakeAddress")
+    private String stakeAddress;
     @ApiModelProperty(required = false,notes = "createdAt")
     private String createdAt;
 }

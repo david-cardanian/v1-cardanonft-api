@@ -21,4 +21,6 @@ public class CollectionAddressVO {
     private String descriptionC;
     @ApiModelProperty(notes = "collectionId")
     private Integer collectionId;
+    @ApiModelProperty(notes = "luck")
+    private String luck;
 }

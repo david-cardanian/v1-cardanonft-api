@@ -1,5 +1,7 @@
 package com.cardanonft.api.constants;
 
+import com.cardanonft.api.entity.enums.WhitelistType;
+
 public class CommonConstants {
     public static final String API_URL_BLOCKFROST = "https://cardano-mainnet.blockfrost.io";
     public static final String API_URL_BLOCKFROST_TEST = "https://cardano-testnet.blockfrost.io";
@@ -17,4 +19,6 @@ public class CommonConstants {
     public static final String API_KEY_PINATA = "d9463c032f33d6e1b5d0";
     public static final String API_SECRET_KEY_PINATA = "376ba39fd753c4031e334cc5c9fd2d96ae2ffbd4c41383915b4a413db1b9e526";
     public static final String API_JWT_PINATA = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJjMTlmNjFjMy02MTk3LTRkYmMtYTM2Ny1jYTRkNmFlMmViYTciLCJlbWFpbCI6ImNhcmRhbm9jb21tQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImlkIjoiRlJBMSIsImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxfV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2V9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiJkOTQ2M2MwMzJmMzNkNmUxYjVkMCIsInNjb3BlZEtleVNlY3JldCI6IjM3NmJhMzlmZDc1M2M0MDMxZTMzNGNjNWM5ZmQyZDk2YWUyZmZiZDRjNDEzODM5MTViNGE0MTNkYjFiOWU1MjYiLCJpYXQiOjE2MzgyMzgzMjN9.eQxNc7lDORyt-bTvmI3zS4-txnj1QqB7BslXP9akXa4";
+
+    public static final WhitelistType[] WHITE_LIST_KEY_ROMAIN = {WhitelistType.ROMAIN_1ST,WhitelistType.ROMAIN_2ND};
 }
