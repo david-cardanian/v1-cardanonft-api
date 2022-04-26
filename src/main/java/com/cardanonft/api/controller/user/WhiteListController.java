@@ -55,10 +55,11 @@ public class WhiteListController {
         if(nftWhitelistEntity != null && !StringUtils.isNullOrEmpty(nftWhitelistEntity.getStakeAddress())){
             return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, nftWhitelistEntity);
         }else{
+            BigDecimal totalCount = nftWhitelistCandidateRepository.countAllByTypeAndDeleted(WhitelistType.ROMAIN_2ND,0);
             List<NftWhitelistCandidateEntity> candidateEntityList = nftWhitelistCandidateRepository.findTopByStakeAddressAndTypeAndDeleted(stakeAddress, WhitelistType.ROMAIN_2ND,0);
             BigDecimal luck = BigDecimal.ZERO;
             if(candidateEntityList != null && candidateEntityList.size() > 0){
-                luck = new BigDecimal(3750).multiply(new BigDecimal(100)).divide(new BigDecimal(candidateEntityList.size()),4, RoundingMode.CEILING);
+                luck = new BigDecimal(3750).multiply(new BigDecimal(100)).multiply(new BigDecimal(candidateEntityList.size())).divide(totalCount,4, RoundingMode.CEILING);
             }
             WhitelistVO whitelistVO = new WhitelistVO();
             whitelistVO.setLuck(luck.toString());
