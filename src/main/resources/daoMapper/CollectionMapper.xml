@@ -71,6 +71,7 @@
         ]]>
       ORDER BY rand() limit 1
     </select>
+
     <select id="getRandomAuthAddress" parameterType="AuthAdaRequest" resultType="AuthAdaResponse">
         SELECT address_id address
         FROM cardano_address
