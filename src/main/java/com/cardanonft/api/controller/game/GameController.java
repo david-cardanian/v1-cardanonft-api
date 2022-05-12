@@ -38,4 +38,13 @@ public class GameController {
 
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, matehcCheck);
     }
+
+    @RequestMapping(value = "/context", method = RequestMethod.GET)
+    @ResponseBody
+    public CardanoNftDefaultResponse getUnityContext(@RequestParam("game") String gameName) {
+
+
+
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
+    }
 }
