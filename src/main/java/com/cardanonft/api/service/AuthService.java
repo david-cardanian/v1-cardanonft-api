@@ -3,11 +3,13 @@ package com.cardanonft.api.service;
 import com.cardanonft.api.constants.C;
 import com.cardanonft.api.constants.RETURN_CODE;
 import com.cardanonft.api.dao.AuthDao;
+import com.cardanonft.api.entity.AuthTokenEntity;
 import com.cardanonft.api.entity.PasswordAuthCodeEntity;
 import com.cardanonft.api.entity.UserEntity;
 import com.cardanonft.api.entity.UserRolesEntity;
 import com.cardanonft.api.exception.CustomBadCredentialException;
 import com.cardanonft.api.exception.CustomWrongPasswordException;
+import com.cardanonft.api.repository.AuthTokenRepository;
 import com.cardanonft.api.repository.PasswordAuthCodeRepository;
 import com.cardanonft.api.repository.UserRepository;
 import com.cardanonft.api.repository.UserRolesRepository;
@@ -50,6 +52,8 @@ public class AuthService {
     private AccountUtil accountUtil;
     @Autowired
     private MailService mailService;
+    @Autowired
+    private AuthTokenRepository authTokenRepository;
 
     @Value("${auth.expired_days}")
     private int expired_days;
@@ -57,6 +61,12 @@ public class AuthService {
     /// 계정 정보 가져오기
     public int getUserIdByAccount(String account) throws Exception {
         return authDao.getUserIdByAccount(account);
+    }
+
+    public String getUserIdByToken(String token) {
+        Optional<AuthTokenEntity> auth = authTokenRepository.findById(token);
+
+        return auth.map(AuthTokenEntity::getUserId).orElse(null);
     }
 
     /// 토큰 발급 처리하기
