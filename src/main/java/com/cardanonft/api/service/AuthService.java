@@ -417,6 +417,17 @@ public class AuthService {
                 .build();
 
     }
+
+    public UserEntity findUser(String token) throws Exception {
+        AuthToken authToken = authDao.getAuthToken(token);
+        if(authToken == null) {
+            throw new CustomBadCredentialException(RETURN_CODE.WRONG_CODE);
+        }
+
+        UserEntity userEntity = userRepository.findTopByUserIdAndIsEnabled(authToken.getUser_id(), "1");
+        return userEntity;
+
+    }
     public boolean verifyTokenWithId (String token, String userId) throws Exception {
         AuthToken authToken = authDao.getAuthToken(token);
         if(authToken == null) {

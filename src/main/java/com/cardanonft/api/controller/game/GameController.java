@@ -2,6 +2,7 @@ package com.cardanonft.api.controller.game;
 
 import com.cardanonft.api.constants.RETURN_CODE;
 import com.cardanonft.api.request.VillageListRequest;
+import com.cardanonft.api.request.game.ScoreRequest;
 import com.cardanonft.api.request.game.TestRequest;
 import com.cardanonft.api.response.CardanoNftDefaultResponse;
 import com.cardanonft.api.response.game.GameContextResponse;
@@ -44,6 +45,28 @@ public class GameController {
         System.out.println(nowTimeMills + token);
 
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, matehcCheck);
+    }
+
+    // 점수판
+    @RequestMapping(value = "/score", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse setScore(
+            @RequestHeader(value = "token") String token,
+            @RequestBody ScoreRequest scoreRequest) throws Exception {
+
+        String gameHash = scoreRequest.getScoreData();
+        String nowTimeMills = DateUtil.getNowDateUTC();
+
+        // 게임 데이터 비교
+        boolean matchesCheck = bCryptPasswordEncoder.matches(nowTimeMills + token, gameHash);
+        if(matchesCheck) {
+            // 게임 데이터 정합시
+            gameService.setGameScore(token, scoreRequest.getGameId(), scoreRequest.getScore(),gameHash);
+            return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
+        } else {
+            // 게임 데이터 오류 시
+            return new CardanoNftDefaultResponse(RETURN_CODE.GAME_HASH_MATCH_ERROR);
+        }
     }
 
     @RequestMapping(value = "/context", method = RequestMethod.GET)
