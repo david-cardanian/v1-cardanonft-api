@@ -58,7 +58,8 @@ public class GameController {
         String nowTimeMills = DateUtil.getNowDateUTC();
 
         // 게임 데이터 비교
-        boolean matchesCheck = bCryptPasswordEncoder.matches(nowTimeMills + token, gameHash);
+        //  token + gameId + score
+        boolean matchesCheck = bCryptPasswordEncoder.matches(nowTimeMills + token + scoreRequest.getGameId() + scoreRequest.getScore(), gameHash);
         if(matchesCheck) {
             // 게임 데이터 정합시
             gameService.setGameScore(token, scoreRequest.getGameId(), scoreRequest.getScore(),gameHash);
