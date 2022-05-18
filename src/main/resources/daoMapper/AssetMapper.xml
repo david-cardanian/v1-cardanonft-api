@@ -13,7 +13,7 @@
         , description
         , cn.img_url  imgUrl
         , village_type villageType
-        ,cac.user_id userId
+        , cac.user_id userId
         , exists (select village_nft_id from map_parcel where village_nft_id = cn.nft_id) isDeployed
         FROM cardano_asset ca
         left outer join cardano_nft cn on ca.village_number = cn.param1

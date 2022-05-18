@@ -56,9 +56,6 @@ public class MapController {
         if(StringUtils.isNullOrEmpty(mapSearchRequest.getContinentId())){
             mapSearchRequest.setContinentId("Byron");
         }
-        if(StringUtils.isNullOrEmpty(mapSearchRequest.getVillageId())){
-            mapSearchRequest.setVillageId("Charles");
-        }
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, mapDao.get3DParcelList(mapSearchRequest));
     }
 
