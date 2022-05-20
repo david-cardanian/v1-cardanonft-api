@@ -16,7 +16,7 @@
         , cac.user_id userId
         , exists (select village_nft_id from map_parcel where village_nft_id = cn.nft_id) isDeployed
         FROM cardano_asset ca
-        left outer join cardano_nft cn on ca.village_number = cn.param1
+        left outer join cardano_nft cn on ca.village_number = cn.param1 and ca.village_id = cn.param3
         left outer join cardano_account cac on ca.stake_address = cac.stake_address and cac.is_enabled = '1'
         left outer join village_type vt on vt.village_type_id = cn.village_type_id
         where cac.user_id = #{userId}
@@ -25,11 +25,6 @@
         <if test='continentId != null and continentId != ""'>
             <![CDATA[
             AND ca.continent_id = #{continentId}
-            ]]>
-        </if>
-        <if test='villageId != null and villageId != ""'>
-            <![CDATA[
-            AND ca.village_id = #{villageId}
             ]]>
         </if>
         <choose>

@@ -106,7 +106,8 @@ public class MapController {
             @RequestHeader("token") String token,
             @RequestParam("file") List<MultipartFile> files,
             @RequestParam("userId") String userId,
-            @RequestParam("villageDirection") String villageDirection
+            @RequestParam("villageDirection") String villageDirection,
+            @RequestParam("villageId") String villageId
     ) throws Exception {
         // 토큰으로 user 확인
         authService.verifyTokenWithId(token,userId);
@@ -114,6 +115,7 @@ public class MapController {
         userImageUploadRequest.setFiles(files);
         userImageUploadRequest.setUserId(userId);
         userImageUploadRequest.setVillageDirection(villageDirection);
+        userImageUploadRequest.setVillageId(villageId);
         String url = mapService.setAllImages(userImageUploadRequest);
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS,url);
     }

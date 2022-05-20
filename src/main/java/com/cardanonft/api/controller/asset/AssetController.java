@@ -56,11 +56,8 @@ public class AssetController {
     ) throws Exception {
         // 토큰으로 user 확인
         authService.verifyTokenWithId(token,mapListRequest.getUserId());
-        if(StringUtils.isNullOrEmpty(mapListRequest.getContinentId())){
+        if(StringUtils.isNullOrEmpty(mapListRequest.getContinentId())) {
             mapListRequest.setContinentId("Byron");
-        }
-        if(StringUtils.isNullOrEmpty(mapListRequest.getVillageId())){
-            mapListRequest.setVillageId("Charles");
         }
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, assetDao.getMapList(mapListRequest));
     }

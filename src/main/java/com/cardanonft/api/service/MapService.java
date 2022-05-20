@@ -105,8 +105,14 @@ public class MapService {
     }
 
     public String setAllImages(UserImageUploadRequest userImageUploadRequest) throws Exception {
+        List<MapParcelEntity> mapParcelEntityList = new ArrayList<>();
         // map parcels들을 전부 찾아옴.
-        List<MapParcelEntity> mapParcelEntityList = mapParcelRepository.findAllByUserIdAndIsEnabled(userImageUploadRequest.getUserId(), "1");
+        if(userImageUploadRequest.getVillageId().equals("All")){
+            mapParcelEntityList = mapParcelRepository.findAllByUserIdAndIsEnabled(userImageUploadRequest.getUserId(), "1");
+        } else {
+            mapParcelEntityList = mapParcelRepository.findAllByUserIdAndVillageIdAndIsEnabled(userImageUploadRequest.getUserId(), userImageUploadRequest.getVillageId(),"1");
+        }
+
         if(mapParcelEntityList == null){
             // userId에 매핑되어있는 Map이 존재하지 않을 경우
             throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
