@@ -29,6 +29,10 @@ public class WebgameBuildInfo {
 
     private String codeUrl;
 
+    private int screenWidth;
+
+    private int screenHeight;
+
     private boolean enabled = true;
 
     @Column(updatable = false)

@@ -1,6 +1,7 @@
 package com.cardanonft.api.controller.game;
 
 import com.cardanonft.api.constants.RETURN_CODE;
+import com.cardanonft.api.exception.CustomBadRequestException;
 import com.cardanonft.api.request.VillageListRequest;
 import com.cardanonft.api.request.game.ScoreRequest;
 import com.cardanonft.api.request.game.TestRequest;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin("*")
 @Controller
@@ -55,18 +58,24 @@ public class GameController {
             @RequestBody ScoreRequest scoreRequest) throws Exception {
 
         String gameHash = scoreRequest.getScoreData();
-        String nowTimeMills = DateUtil.getNowDateUTC();
 
         // 게임 데이터 비교
         //  token + gameId + score
-        boolean matchesCheck = bCryptPasswordEncoder.matches(nowTimeMills + token + scoreRequest.getGameId() + scoreRequest.getScore(), gameHash);
-        if(matchesCheck) {
-            // 게임 데이터 정합시
-            gameService.setGameScore(token, scoreRequest.getGameId(), scoreRequest.getScore(),gameHash);
-            return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
-        } else {
-            // 게임 데이터 오류 시
-            return new CardanoNftDefaultResponse(RETURN_CODE.GAME_HASH_MATCH_ERROR);
+        boolean matchesCheck = bCryptPasswordEncoder.matches(scoreRequest.dateTime + token + scoreRequest.getGameId() + scoreRequest.getScore(), gameHash);
+        System.out.println(scoreRequest);
+        try {
+            if (matchesCheck) {
+                // 게임 데이터 정합시
+                System.out.println("pass");
+
+//                gameService.setGameScore(token, scoreRequest.getGameId(), scoreRequest.getScore(), gameHash);
+                return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
+            } else {
+                // 게임 데이터 오류 시
+                return new CardanoNftDefaultResponse(RETURN_CODE.GAME_HASH_MATCH_ERROR);
+            }
+        }catch (Exception e ) {
+            throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
         }
     }
 
@@ -78,5 +87,14 @@ public class GameController {
 
         GameContextResponse gameContextResponse = gameService.getUnityContext(gameName);
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, gameContextResponse);
+    }
+
+    @RequestMapping(value = "/context/list", method = RequestMethod.GET)
+    @ResponseBody
+    public CardanoNftDefaultResponse getUnityContextList() {
+
+        List<GameContextResponse> gameContextResponseList = gameService.getUnityContextList();
+        System.out.println(gameContextResponseList);
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, gameContextResponseList);
     }
 }

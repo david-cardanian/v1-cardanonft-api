@@ -12,5 +12,6 @@ import lombok.Setter;
 public class ScoreRequest {
     public int gameId;
     public String scoreData;
+    public String dateTime;
     public int score;
 }

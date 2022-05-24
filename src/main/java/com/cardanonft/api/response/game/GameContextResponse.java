@@ -14,4 +14,6 @@ public class GameContextResponse {
     private String dataUrl;
     private String frameworkUrl;
     private String codeUrl;
+    private int screenWidth;
+    private int screenHeight;
 }

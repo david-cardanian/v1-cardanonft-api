@@ -10,6 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class GameService {
     private static Logger logger = LoggerFactory.getLogger(GameService.class);
@@ -37,7 +40,25 @@ public class GameService {
                 .dataUrl(webgameBuildInfo.getDataUrl())
                 .loaderUrl(webgameBuildInfo.getLoaderUrl())
                 .frameworkUrl(webgameBuildInfo.getFrameworkUrl())
+                .screenWidth(webgameBuildInfo.getScreenWidth())
+                .screenHeight(webgameBuildInfo.getScreenHeight())
                 .build();
+    }
+
+    // get unity context list
+    public List<GameContextResponse> getUnityContextList() {
+        List<WebgameBuildInfo> webgameBuildInfoList = webgameBuildInfoRepository.findByEnabled(true);
+        return webgameBuildInfoList.stream().map((webgameBuildInfo -> {
+            return GameContextResponse.builder()
+                    .codeUrl(webgameBuildInfo.getCodeUrl())
+                    .dataUrl(webgameBuildInfo.getDataUrl())
+                    .loaderUrl(webgameBuildInfo.getLoaderUrl())
+                    .frameworkUrl(webgameBuildInfo.getFrameworkUrl())
+                    .screenWidth(webgameBuildInfo.getScreenWidth())
+                    .screenHeight(webgameBuildInfo.getScreenHeight())
+                    .build();
+        })).collect(Collectors.toList());
+
     }
 
     public void setGameScore(String token, int gameId, int score, String gameHash) throws Exception {
