@@ -79,6 +79,15 @@ public class GameController {
         }
     }
 
+    @RequestMapping(value = "/score", method = RequestMethod.GET)
+    @ResponseBody
+    public CardanoNftDefaultResponse getScore(
+            @RequestHeader(value = "token", required = false) String token,
+            @RequestParam("game-id") int gameId) {
+        // todo: 게임 스코어 보기.
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
+    }
+
     @RequestMapping(value = "/context", method = RequestMethod.GET)
     @ResponseBody
     public CardanoNftDefaultResponse getUnityContext(
@@ -92,7 +101,6 @@ public class GameController {
     @RequestMapping(value = "/context/list", method = RequestMethod.GET)
     @ResponseBody
     public CardanoNftDefaultResponse getUnityContextList() {
-
         List<GameContextResponse> gameContextResponseList = gameService.getUnityContextList();
         System.out.println(gameContextResponseList);
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, gameContextResponseList);
