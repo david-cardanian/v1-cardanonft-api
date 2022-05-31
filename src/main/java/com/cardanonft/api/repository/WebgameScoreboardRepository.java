@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface WebgameScoreboardRepository extends JpaRepository<WebgameScoreboard, Integer> {
-    List<WebgameScoreboard> findTop7ByGameIdAndEnabledOrderByScoreDesc(int gameId, boolean enabled);
+    List<WebgameScoreboard> findTop7ByGameIdAndEnabledOrderByScoreDescCreatedAtDesc(int gameId, boolean enabled);
 
 }

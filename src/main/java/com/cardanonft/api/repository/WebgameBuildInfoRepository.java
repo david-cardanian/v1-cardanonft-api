@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface WebgameBuildInfoRepository extends JpaRepository<WebgameBuildInfo, Integer> {
     WebgameBuildInfo findByGameNameAndEnabled(String gameName, boolean enabled);
+    WebgameBuildInfo findFirstByIdAndEnabled(int gameId, boolean enabled);
 
     List<WebgameBuildInfo> findByEnabled(boolean enabled);
 

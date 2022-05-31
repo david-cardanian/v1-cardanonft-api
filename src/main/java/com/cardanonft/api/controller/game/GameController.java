@@ -69,7 +69,7 @@ public class GameController {
                 // 게임 데이터 정합시
                 System.out.println("pass");
 
-//                gameService.setGameScore(token, scoreRequest.getGameId(), scoreRequest.getScore(), gameHash);
+                gameService.setGameScore(token, scoreRequest.getGameId(), scoreRequest.getScore(), gameHash);
                 return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
             } else {
                 // 게임 데이터 오류 시
@@ -83,9 +83,9 @@ public class GameController {
     @RequestMapping(value = "/score", method = RequestMethod.GET)
     @ResponseBody
     public CardanoNftDefaultResponse getScore(
-            @RequestParam("game-id") int gameId) throws Exception {
-        List<GameScoreResponse> gameScoreList = gameService.getGameScoreList(gameId);
-        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, gameScoreList);
+            @RequestParam(value = "gameId") int gameId) throws Exception {
+        GameScoreResponse gameScoreResponse = gameService.getGameScoreList(gameId);
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, gameScoreResponse);
     }
 
     @RequestMapping(value = "/context", method = RequestMethod.GET)
