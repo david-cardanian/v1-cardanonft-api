@@ -20,6 +20,7 @@ public class WebgameScoreboard {
     private Integer id;
 
     private String userId;
+    private String nickName;
 
     private Integer gameId;
 

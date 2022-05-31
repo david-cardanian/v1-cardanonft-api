@@ -6,6 +6,7 @@ import com.cardanonft.api.entity.WebgameScoreboard;
 import com.cardanonft.api.repository.WebgameBuildInfoRepository;
 import com.cardanonft.api.repository.WebgameScoreboardRepository;
 import com.cardanonft.api.response.game.GameContextResponse;
+import com.cardanonft.api.response.game.GameScoreResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,7 @@ public class GameService {
         List<WebgameBuildInfo> webgameBuildInfoList = webgameBuildInfoRepository.findByEnabled(true);
         return webgameBuildInfoList.stream().map((webgameBuildInfo -> {
             return GameContextResponse.builder()
+                    .gameId(webgameBuildInfo.getId())
                     .codeUrl(webgameBuildInfo.getCodeUrl())
                     .dataUrl(webgameBuildInfo.getDataUrl())
                     .loaderUrl(webgameBuildInfo.getLoaderUrl())
@@ -71,5 +73,18 @@ public class GameService {
         webgameScoreboard.setGameHash(gameHash);
 
         webgameScoreboardRepository.save(webgameScoreboard);
+    }
+
+    public List<GameScoreResponse> getGameScoreList(int gameId) throws Exception {
+        // 7개 뽑음.
+        List<WebgameScoreboard> webgameScoreboardList =
+                webgameScoreboardRepository.findTop7ByGameIdAndEnabledOrderByScoreDesc(gameId, true);
+        return webgameScoreboardList.stream().map(webgameScoreboard -> {
+            return GameScoreResponse.builder()
+                    .gameId(webgameScoreboard.getId())
+                    .nickName(webgameScoreboard.getNickName())
+                    .score(webgameScoreboard.getScore())
+                    .build();
+        }).collect(Collectors.toList());
     }
 }

@@ -10,6 +10,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class GameContextResponse {
+    private int gameId;
     private String loaderUrl;
     private String dataUrl;
     private String frameworkUrl;

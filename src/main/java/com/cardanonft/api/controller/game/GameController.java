@@ -7,6 +7,7 @@ import com.cardanonft.api.request.game.ScoreRequest;
 import com.cardanonft.api.request.game.TestRequest;
 import com.cardanonft.api.response.CardanoNftDefaultResponse;
 import com.cardanonft.api.response.game.GameContextResponse;
+import com.cardanonft.api.response.game.GameScoreResponse;
 import com.cardanonft.api.service.AuthService;
 import com.cardanonft.api.service.GameService;
 import com.cardanonft.api.util.DateUtil;
@@ -82,10 +83,9 @@ public class GameController {
     @RequestMapping(value = "/score", method = RequestMethod.GET)
     @ResponseBody
     public CardanoNftDefaultResponse getScore(
-            @RequestHeader(value = "token", required = false) String token,
-            @RequestParam("game-id") int gameId) {
-        // todo: 게임 스코어 보기.
-        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
+            @RequestParam("game-id") int gameId) throws Exception {
+        List<GameScoreResponse> gameScoreList = gameService.getGameScoreList(gameId);
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, gameScoreList);
     }
 
     @RequestMapping(value = "/context", method = RequestMethod.GET)
@@ -102,7 +102,6 @@ public class GameController {
     @ResponseBody
     public CardanoNftDefaultResponse getUnityContextList() {
         List<GameContextResponse> gameContextResponseList = gameService.getUnityContextList();
-        System.out.println(gameContextResponseList);
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, gameContextResponseList);
     }
 }
