@@ -80,6 +80,8 @@ public class GameController {
         }
     }
 
+
+
     @RequestMapping(value = "/score", method = RequestMethod.GET)
     @ResponseBody
     public CardanoNftDefaultResponse getScore(
@@ -87,6 +89,7 @@ public class GameController {
         GameScoreResponse gameScoreResponse = gameService.getGameScoreList(gameId);
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, gameScoreResponse);
     }
+
 
     @RequestMapping(value = "/context", method = RequestMethod.GET)
     @ResponseBody

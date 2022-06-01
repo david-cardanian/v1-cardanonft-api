@@ -8,10 +8,13 @@ import com.cardanonft.api.repository.WebgameScoreboardRepository;
 import com.cardanonft.api.response.game.GameContextResponse;
 import com.cardanonft.api.response.game.GameScoreResponse;
 import com.cardanonft.api.vo.game.GameScore;
+import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,6 +76,8 @@ public class GameService {
         webgameScoreboard.setGameId(gameId);
         webgameScoreboard.setGameHash(gameHash);
         webgameScoreboard.setNickName(userEntity.getNickName());
+        webgameScoreboard.setCreatedAt(new Date());
+        webgameScoreboard.setUpdatedAt(new Date());
 
         webgameScoreboardRepository.save(webgameScoreboard);
     }
