@@ -3,6 +3,7 @@ package com.cardanonft.api.controller.game;
 import com.cardanonft.api.constants.RETURN_CODE;
 import com.cardanonft.api.exception.CustomBadRequestException;
 import com.cardanonft.api.request.VillageListRequest;
+import com.cardanonft.api.request.auth.LoginVO;
 import com.cardanonft.api.request.game.ScoreRequest;
 import com.cardanonft.api.request.game.TestRequest;
 import com.cardanonft.api.response.CardanoNftDefaultResponse;
@@ -42,13 +43,22 @@ public class GameController {
             @RequestBody TestRequest testRequest
     ) throws Exception {
 
-        String gameHash = testRequest.getTestStr();
-        String nowTimeMills = DateUtil.getNowDateUTC();
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
+    }
 
-        boolean matehcCheck = bCryptPasswordEncoder.matches(nowTimeMills + token, gameHash);
-        System.out.println(nowTimeMills + token);
+    /**
+     * 게임 로그인은 팀을 정하는 것까지.
+     * @param loginVO
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse GameLogin(
+            @RequestBody LoginVO loginVO
+    ) throws Exception {
 
-        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, matehcCheck);
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
     }
 
     // 점수판

@@ -10,7 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TestRequest {
-    private String testStr;
-    private int testInt;
-    private float testFloat;
+    private String id;
+    private String password;
 }
