@@ -8,10 +8,12 @@ import com.cardanonft.api.request.game.ScoreRequest;
 import com.cardanonft.api.request.game.TestRequest;
 import com.cardanonft.api.response.CardanoNftDefaultResponse;
 import com.cardanonft.api.response.game.GameContextResponse;
+import com.cardanonft.api.response.game.GameLoginResponse;
 import com.cardanonft.api.response.game.GameScoreResponse;
 import com.cardanonft.api.service.AuthService;
 import com.cardanonft.api.service.GameService;
 import com.cardanonft.api.util.DateUtil;
+import com.cardanonft.api.vo.auth.AuthToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -29,16 +32,19 @@ public class GameController {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final GameService gameService;
+    private final AuthService authService;
 
-    public GameController(BCryptPasswordEncoder bCryptPasswordEncoder, GameService gameService) {
+    public GameController(BCryptPasswordEncoder bCryptPasswordEncoder, GameService gameService, AuthService authService) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.gameService = gameService;
+        this.authService = authService;
     }
 
 
     @RequestMapping(value = "/test", method = RequestMethod.POST)
     @ResponseBody
     public CardanoNftDefaultResponse getVillageList(
+
             @RequestHeader(value = "token", required = false) String token,
             @RequestBody TestRequest testRequest
     ) throws Exception {
@@ -55,10 +61,42 @@ public class GameController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public CardanoNftDefaultResponse GameLogin(
+            HttpServletRequest request,
             @RequestBody LoginVO loginVO
     ) throws Exception {
+        logger.debug("login api start");
+        try {
+            logger.info(loginVO.getId());
+            // 2. 토큰을 발급한다.
+            String ip = getIpAddress(request);
+            AuthToken token = authService.issueNAccessToken(
+                    loginVO.getId().trim(),
+                    null,
+                    ip,
+                    loginVO.getOs_type(),
+                    null);
+            authService.login(token, loginVO);
 
-        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
+            // 좀 적은 정보를 전달.
+            return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS,
+                    GameLoginResponse.builder()
+                            .token(token.getToken())
+                            .user_id(token.getUser_id())
+                            .build());
+        }catch (CustomBadRequestException e) {
+            throw e;
+        } catch (Exception e) {
+            logger.error("error", e);
+            return new CardanoNftDefaultResponse(RETURN_CODE.ERROR, e);
+        }
+    }
+
+    private String getIpAddress(HttpServletRequest request) {
+        String ipAddress = request.getHeader("X-FORWARDED-FOR");
+        if (ipAddress == null) {
+            ipAddress = request.getRemoteAddr();
+        }
+        return ipAddress;
     }
 
     // 점수판
