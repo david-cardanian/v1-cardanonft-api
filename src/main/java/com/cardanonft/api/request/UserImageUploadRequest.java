@@ -26,6 +26,8 @@ public class UserImageUploadRequest {
 */
     @ApiModelProperty(required = false,notes = "village_direction")
     private String villageDirection;
+    @ApiModelProperty(required = false,notes = "villageId")
+    private String villageId;
 }
 
 

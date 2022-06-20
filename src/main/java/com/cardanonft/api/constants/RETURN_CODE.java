@@ -76,6 +76,10 @@ public enum RETURN_CODE {
 
 	//예약
 	,ALREADY_FULL_RESERVATION(400, "already_full_reservation")
+
+
+	// 게임 데이터
+	,GAME_HASH_MATCH_ERROR(2000, "game_hash_match_error")
 	;
 
 	private int returnCode;

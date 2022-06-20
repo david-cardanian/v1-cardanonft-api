@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 @Component
 public class DateUtil {
@@ -26,6 +27,15 @@ public class DateUtil {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return sdf.format(today);
 	}
+	public static String getNowDateUTC(){
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		TimeZone utc = TimeZone.getTimeZone("UTC");
+		formatter.setTimeZone(utc);
+		String today = formatter.format(new Date());
+
+		return today;
+	}
+
 	public static String getDateStrFormattedYYYYMMDD(String dateStr){
 		if(StringUtils.isNullOrEmpty(dateStr) || dateStr.length() < 8){
 			return dateStr;
