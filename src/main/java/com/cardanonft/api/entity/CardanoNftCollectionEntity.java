@@ -58,7 +58,7 @@ public class CardanoNftCollectionEntity implements Serializable {
     @Column(name = "is_enabled")
     private String isEnabled = "1";
     @Column(name = "created_at" , insertable = true, updatable = false)
-    private Date createdAt;
+    private String createdAt;
     @Column(name = "updated_at" , insertable = true, updatable = true)
     private Date updatedAt=new Date();
 

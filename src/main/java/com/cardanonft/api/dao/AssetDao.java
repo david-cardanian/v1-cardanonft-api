@@ -17,7 +17,7 @@ public class AssetDao {
 	@Autowired
 	SqlSession sqlSession;
 
-	// map 리스트 조회
+	// village 리스트 조회
 	public List<VillageListResponse> getVillageList(VillageListRequest villageListRequest) throws Exception {
 		return sqlSession.selectList("asset.getVillageList", villageListRequest);
 	}
