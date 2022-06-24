@@ -78,6 +78,7 @@ public class CollectionController {
     ) throws Exception {
         CollectionListVO collectionListVO = new CollectionListVO();
         collectionListVO.setCollectionId(collectionSearchRequest.getCollectionId());
+        collectionListVO.setParam3(collectionSearchRequest.getParam3());
         collectionListVO.setParam4(collectionSearchRequest.getParam4());
         collectionListVO.setParam5(collectionSearchRequest.getParam5());
         collectionListVO.setKeyword(collectionSearchRequest.getKeyword());
