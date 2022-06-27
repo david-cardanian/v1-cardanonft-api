@@ -23,6 +23,8 @@ public class CollectionSearchRequest {
     private int auctionDetailId;
     @ApiModelProperty(required = false,notes = "priority")
     private int priority;
+    @ApiModelProperty(required = false,notes = "param3")
+    private String param3;
     @ApiModelProperty(required = false,notes = "param4")
     private String param4;
     @ApiModelProperty(required = false,notes = "param5")

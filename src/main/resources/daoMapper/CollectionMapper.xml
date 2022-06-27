@@ -19,6 +19,11 @@
             AND a.priority > #{priority}
             ]]>
         </if>
+        <if test="param3 != null and param3 != ''">
+            <![CDATA[
+            AND a.param3 = #{param3}
+            ]]>
+        </if>
         <if test="param4 != null and param4 != ''">
             <![CDATA[
             AND a.param4 = #{param4}
