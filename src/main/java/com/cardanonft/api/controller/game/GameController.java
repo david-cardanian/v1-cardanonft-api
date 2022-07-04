@@ -7,6 +7,7 @@ import com.cardanonft.api.request.auth.LoginVO;
 import com.cardanonft.api.request.game.ScoreRequest;
 import com.cardanonft.api.request.game.TestRequest;
 import com.cardanonft.api.response.CardanoNftDefaultResponse;
+import com.cardanonft.api.response.auth.UserGameProfileResponse;
 import com.cardanonft.api.response.game.GameContextResponse;
 import com.cardanonft.api.response.game.GameLoginResponse;
 import com.cardanonft.api.response.game.GameScoreResponse;
@@ -99,6 +100,25 @@ public class GameController {
         return ipAddress;
     }
 
+    @RequestMapping(value = "/nickBalance", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse getNickTokenBalance(
+            @RequestHeader(value = "token") String token
+    ) throws Exception {
+        try {
+            UserGameProfileResponse userGameProfileResponse = gameService.getUserGameProfile(token);
+            if(userGameProfileResponse != null) {
+                return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, userGameProfileResponse);
+            } else {
+                // 게임 데이터 오류 시
+                return new CardanoNftDefaultResponse(RETURN_CODE.BAD_REQUEST);
+            }
+
+        } catch (Exception e ) {
+            throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
+        }
+    }
+
     // 점수판
     @RequestMapping(value = "/score", method = RequestMethod.POST)
     @ResponseBody
@@ -111,7 +131,6 @@ public class GameController {
         // 게임 데이터 비교
         //  token + gameId + score
         boolean matchesCheck = bCryptPasswordEncoder.matches(scoreRequest.dateTime + token + scoreRequest.getGameId() + scoreRequest.getScore(), gameHash);
-        System.out.println(scoreRequest);
         try {
             if (matchesCheck) {
                 // 게임 데이터 정합시

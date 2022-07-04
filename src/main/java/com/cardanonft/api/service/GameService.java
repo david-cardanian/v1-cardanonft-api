@@ -5,6 +5,7 @@ import com.cardanonft.api.entity.WebgameBuildInfo;
 import com.cardanonft.api.entity.WebgameScoreboard;
 import com.cardanonft.api.repository.WebgameBuildInfoRepository;
 import com.cardanonft.api.repository.WebgameScoreboardRepository;
+import com.cardanonft.api.response.auth.UserGameProfileResponse;
 import com.cardanonft.api.response.game.GameContextResponse;
 import com.cardanonft.api.response.game.GameScoreResponse;
 import com.cardanonft.api.vo.game.GameScore;
@@ -99,5 +100,14 @@ public class GameService {
                 }).collect(Collectors.toList()))
                 .build();
 
+    }
+
+    public UserGameProfileResponse getUserGameProfile(String token) throws Exception {
+        UserEntity userEntity = authService.findUser(token);
+
+        return UserGameProfileResponse.builder()
+                .nickname(userEntity.getNickName())
+                .tokenBalance(userEntity.getTokenBalance())
+                .build();
     }
 }

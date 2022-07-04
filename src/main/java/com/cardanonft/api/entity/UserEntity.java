@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -69,6 +70,9 @@ public class UserEntity {
     @Basic
     @Column(name = "unique_number")
     private Integer uniqueNumber;
+    @Basic
+    @Column(name = "token_balance")
+    private BigDecimal tokenBalance;
     @Basic
     @Column(name = "is_enabled")
     private String isEnabled="1";
