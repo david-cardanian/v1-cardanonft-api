@@ -5,11 +5,13 @@ import com.cardanonft.api.constants.RETURN_CODE;
 import com.cardanonft.api.dao.CollectionDao;
 import com.cardanonft.api.entity.NftWhitelistCandidateEntity;
 import com.cardanonft.api.entity.NftWhitelistEntity;
+import com.cardanonft.api.entity.NftWhitelistSnapshotEntity;
 import com.cardanonft.api.entity.PasswordAuthCodeEntity;
 import com.cardanonft.api.entity.enums.WhitelistType;
 import com.cardanonft.api.exception.CustomBadRequestException;
 import com.cardanonft.api.repository.NftWhitelistCandidateRepository;
 import com.cardanonft.api.repository.NftWhitelistRepository;
+import com.cardanonft.api.repository.NftWhitelistSnapshotRepository;
 import com.cardanonft.api.request.CollectionSearchRequest;
 import com.cardanonft.api.request.PasswordModifyRequest;
 import com.cardanonft.api.request.UserModifyRequest;
@@ -39,6 +41,8 @@ public class WhiteListController {
     @Autowired
     NftWhitelistRepository nftWhitelistRepository;
     @Autowired
+    NftWhitelistSnapshotRepository nftWhitelistSnapshotRepository;
+    @Autowired
     NftWhitelistCandidateRepository nftWhitelistCandidateRepository;
     @Autowired
     CollectionDao collectionDao;
@@ -50,7 +54,7 @@ public class WhiteListController {
     @RequestMapping(value ="/check/{stakeAddress}", method = RequestMethod.POST)
     @ApiOperation(httpMethod = "POST", value = "whiteList 확인")
     @ResponseBody
-    public CardanoNftDefaultResponse checkStakeAddress (@PathVariable("stakeAddress") String stakeAddress) throws Exception {
+    public CardanoNftDefaultResponse WhitelistCheck (@PathVariable("stakeAddress") String stakeAddress) throws Exception {
         NftWhitelistEntity nftWhitelistEntity = nftWhitelistRepository.findTopByStakeAddressAndTypeInAndDeleted(stakeAddress, CommonConstants.WHITE_LIST_KEY_ROMAIN, 0);
         if(nftWhitelistEntity != null && !StringUtils.isNullOrEmpty(nftWhitelistEntity.getStakeAddress())){
             return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, nftWhitelistEntity);
@@ -65,6 +69,13 @@ public class WhiteListController {
             whitelistVO.setLuck(luck.toString());
             return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, whitelistVO);
         }
+    }
+    @RequestMapping(value ="/landWhitelist/{stakeAddress}", method = RequestMethod.POST)
+    @ApiOperation(httpMethod = "POST", value = "whiteList 확인")
+    @ResponseBody
+    public CardanoNftDefaultResponse landWhitelistCheck (@PathVariable("stakeAddress") String stakeAddress) throws Exception {
+        List<NftWhitelistSnapshotEntity> nftWhitelistSnapshotList = nftWhitelistSnapshotRepository.findByStakeAddressAndIsEnabled(stakeAddress, "1");
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, nftWhitelistSnapshotList);
     }
     @RequestMapping(value ="/draw/address", method = RequestMethod.POST)
     @ApiOperation(httpMethod = "POST", value = "whiteList 확인")
