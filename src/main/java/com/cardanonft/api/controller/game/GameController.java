@@ -100,6 +100,12 @@ public class GameController {
         return ipAddress;
     }
 
+    /**
+     * 잔액 확인.
+     * @param token
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/nickBalance", method = RequestMethod.POST)
     @ResponseBody
     public CardanoNftDefaultResponse getNickTokenBalance(
@@ -119,6 +125,19 @@ public class GameController {
         }
     }
 
+    /**
+     * 게임 입장 시 로그 토큰 지불. 10로그 일괄.
+     * @return
+     */
+    @RequestMapping(value = "/insertLogToken", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse insertLogToken(
+            @RequestHeader(value = "token") String token
+    ) throws Exception {
+
+        return new CardanoNftDefaultResponse(RETURN_CODE.BAD_REQUEST);
+    }
+
     // 점수판
     @RequestMapping(value = "/score", method = RequestMethod.POST)
     @ResponseBody
@@ -134,7 +153,6 @@ public class GameController {
         try {
             if (matchesCheck) {
                 // 게임 데이터 정합시
-                System.out.println("pass");
 
                 gameService.setGameScore(token, scoreRequest.getGameId(), scoreRequest.getScore(), gameHash);
                 return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);

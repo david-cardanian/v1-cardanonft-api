@@ -1,8 +1,10 @@
 package com.cardanonft.api.service;
 
+import com.cardanonft.api.constants.RETURN_CODE;
 import com.cardanonft.api.entity.UserEntity;
 import com.cardanonft.api.entity.WebgameBuildInfo;
 import com.cardanonft.api.entity.WebgameScoreboard;
+import com.cardanonft.api.exception.CustomBadRequestException;
 import com.cardanonft.api.repository.WebgameBuildInfoRepository;
 import com.cardanonft.api.repository.WebgameScoreboardRepository;
 import com.cardanonft.api.response.auth.UserGameProfileResponse;
@@ -14,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -109,5 +112,23 @@ public class GameService {
                 .nickname(userEntity.getNickName())
                 .tokenBalance(userEntity.getTokenBalance())
                 .build();
+    }
+
+    /**
+     * 10로그씩 차감.
+     * @param token
+     * @throws Exception
+     */
+    public void insertLogToken(String token) throws Exception {
+        UserEntity userEntity = authService.findUser(token);
+        if(userEntity.getTokenBalance().compareTo(BigDecimal.TEN) < 0) {
+            // Todo: 잔액이 10보다 낮으면 또 리턴이 다름.
+            throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
+        }
+
+        // todo: 10로그 차감하고 기록 남기고. 방에 참가.
+        BigDecimal userTokenBalance = userEntity.getTokenBalance();
+        
+
     }
 }
