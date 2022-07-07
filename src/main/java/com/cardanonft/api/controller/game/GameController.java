@@ -134,7 +134,12 @@ public class GameController {
     public CardanoNftDefaultResponse insertLogToken(
             @RequestHeader(value = "token") String token
     ) throws Exception {
+        try{
 
+        } catch (Exception e ) {
+            throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
+        }
+        gameService.insertLogToken(token);
         return new CardanoNftDefaultResponse(RETURN_CODE.BAD_REQUEST);
     }
 

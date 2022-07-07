@@ -2,9 +2,12 @@ package com.cardanonft.api.service;
 
 import com.cardanonft.api.constants.RETURN_CODE;
 import com.cardanonft.api.entity.UserEntity;
+import com.cardanonft.api.entity.UserTokenHistory;
 import com.cardanonft.api.entity.WebgameBuildInfo;
 import com.cardanonft.api.entity.WebgameScoreboard;
 import com.cardanonft.api.exception.CustomBadRequestException;
+import com.cardanonft.api.repository.UserRepository;
+import com.cardanonft.api.repository.UserTokenHistoryRepository;
 import com.cardanonft.api.repository.WebgameBuildInfoRepository;
 import com.cardanonft.api.repository.WebgameScoreboardRepository;
 import com.cardanonft.api.response.auth.UserGameProfileResponse;
@@ -28,13 +31,19 @@ public class GameService {
 
     private final WebgameBuildInfoRepository webgameBuildInfoRepository;
     private final WebgameScoreboardRepository webgameScoreboardRepository;
+    private final UserRepository userRepository;
+    private final UserTokenHistoryRepository userTokenHistoryRepository;
     private final AuthService authService;
 
     public GameService(WebgameBuildInfoRepository webgameBuildInfoRepository ,
+                       UserRepository userRepository,
+                       UserTokenHistoryRepository userTokenHistoryRepository,
                        WebgameScoreboardRepository webgameScoreboardRepository,
                        AuthService authService) {
         this.webgameBuildInfoRepository = webgameBuildInfoRepository;
         this.webgameScoreboardRepository = webgameScoreboardRepository;
+        this.userTokenHistoryRepository = userTokenHistoryRepository;
+        this.userRepository = userRepository;
         this.authService = authService;
     }
 
@@ -128,7 +137,20 @@ public class GameService {
 
         // todo: 10로그 차감하고 기록 남기고. 방에 참가.
         BigDecimal userTokenBalance = userEntity.getTokenBalance();
-        
+        // 10 로그 차감.
+        BigDecimal afterInsertToken = userTokenBalance.add(BigDecimal.valueOf(10));
+
+        // user 테이블 갱신.
+        userEntity.setTokenBalance(afterInsertToken);
+        userRepository.save(userEntity);
+
+        // user_token_history 테이블에 내역 삽입
+        // todo: 나머지 정보들은 어디에서 어떻게?
+        UserTokenHistory userTokenHistory = new UserTokenHistory();
+        userTokenHistory.setUserId(userEntity.getUserId());
+        userTokenHistory.setBalance(afterInsertToken.longValue());
+
+//        userTokenHistoryRepository.save(userTokenHistory);
 
     }
 }

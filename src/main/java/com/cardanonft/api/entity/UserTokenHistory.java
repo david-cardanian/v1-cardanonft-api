@@ -1,12 +1,19 @@
 package com.cardanonft.api.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 import java.math.BigInteger;
 import java.util.Date;
 
+@Data
+@NoArgsConstructor
+@Entity
+@Builder
+@AllArgsConstructor
 @Table(name = "user_token_history", schema = "cardano", catalog = "")
 public class UserTokenHistory {
     @Id
