@@ -28,8 +28,8 @@ public class CardanoAddressEntity implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "nft_id")
-    private Integer nftId;
+//    @Column(name = "nft_id")
+//    private Integer nftId;
 
     @Column(name = "is_enabled")
     private String isEnabled = "1";

@@ -67,7 +67,7 @@ public enum RETURN_CODE {
 	,ACCOUNT_IS_LOCKED(1318, "auth_is_locked")
 	,NOT_USERNM_EMOJI(1813, "not_usernm_emoji")     //   이름에 특수문자를 쓰실 수 없습니다.
 	,NOT_MACADDR(9001,"not_macaddr")                              //  MAC 주소를 확인하여주십시오
-
+    ,INSUFFICIENT_LOG_TOKEN(1814, "insufficient_log_token")
 	//스케쥴러 추가
 	,CAN_NOT_CHANGE_DAY(1900, "can_not_change_day") //이미 예약이 존재하는 스케줄은 일자,시간을 수정할 수 없습니다. 예약취소 후 수정해주세요.
 	,CAN_NOT_DELETE_MEDICAL_SUBJECT(1901, "can_not_delete_medical_subject") //이미 진료일정이 존재하는 진료과목은 수정할 수 없습니다.

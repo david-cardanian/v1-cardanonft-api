@@ -6,10 +6,7 @@ import com.cardanonft.api.entity.UserTokenHistory;
 import com.cardanonft.api.entity.WebgameBuildInfo;
 import com.cardanonft.api.entity.WebgameScoreboard;
 import com.cardanonft.api.exception.CustomBadRequestException;
-import com.cardanonft.api.repository.UserRepository;
-import com.cardanonft.api.repository.UserTokenHistoryRepository;
-import com.cardanonft.api.repository.WebgameBuildInfoRepository;
-import com.cardanonft.api.repository.WebgameScoreboardRepository;
+import com.cardanonft.api.repository.*;
 import com.cardanonft.api.response.auth.UserGameProfileResponse;
 import com.cardanonft.api.response.game.GameContextResponse;
 import com.cardanonft.api.response.game.GameScoreResponse;
@@ -118,6 +115,7 @@ public class GameService {
         UserEntity userEntity = authService.findUser(token);
 
         return UserGameProfileResponse.builder()
+                .userId(userEntity.getUserId())
                 .nickname(userEntity.getNickName())
                 .tokenBalance(userEntity.getTokenBalance())
                 .build();
@@ -128,11 +126,11 @@ public class GameService {
      * @param token
      * @throws Exception
      */
-    public void insertLogToken(String token) throws Exception {
+    public boolean insertLogToken(String token) throws Exception {
         UserEntity userEntity = authService.findUser(token);
         if(userEntity.getTokenBalance().compareTo(BigDecimal.TEN) < 0) {
             // Todo: 잔액이 10보다 낮으면 또 리턴이 다름.
-            throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
+            return false;
         }
 
         // todo: 10로그 차감하고 기록 남기고. 방에 참가.
@@ -151,6 +149,8 @@ public class GameService {
         userTokenHistory.setBalance(afterInsertToken.longValue());
 
 //        userTokenHistoryRepository.save(userTokenHistory);
+
+        return true;
 
     }
 }

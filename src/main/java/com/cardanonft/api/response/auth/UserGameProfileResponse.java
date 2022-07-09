@@ -14,6 +14,8 @@ import java.math.BigDecimal;
 public class UserGameProfileResponse {
     @ApiModelProperty(notes = "닉네임",required=false)
     private String nickname;
+    @ApiModelProperty(notes = "user_id",required=false)
+    private String userId;
 
     @ApiModelProperty(notes = "tokenBalance",required=false)
     private BigDecimal tokenBalance;

@@ -1,12 +1,17 @@
 package com.cardanonft.api.controller.game;
 
 import com.cardanonft.api.constants.RETURN_CODE;
+import com.cardanonft.api.dao.CollectionDao;
+import com.cardanonft.api.entity.CardanoAddressEntity;
 import com.cardanonft.api.exception.CustomBadRequestException;
+import com.cardanonft.api.repository.CardanoAddressRepository;
 import com.cardanonft.api.request.VillageListRequest;
+import com.cardanonft.api.request.auth.AuthAdaRequest;
 import com.cardanonft.api.request.auth.LoginVO;
 import com.cardanonft.api.request.game.ScoreRequest;
 import com.cardanonft.api.request.game.TestRequest;
 import com.cardanonft.api.response.CardanoNftDefaultResponse;
+import com.cardanonft.api.response.auth.AuthAdaResponse;
 import com.cardanonft.api.response.auth.UserGameProfileResponse;
 import com.cardanonft.api.response.game.GameContextResponse;
 import com.cardanonft.api.response.game.GameLoginResponse;
@@ -34,11 +39,15 @@ public class GameController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final GameService gameService;
     private final AuthService authService;
+    private final CollectionDao collectionDao;
+    private final CardanoAddressRepository cardanoAddressRepository;
 
-    public GameController(BCryptPasswordEncoder bCryptPasswordEncoder, GameService gameService, AuthService authService) {
+    public GameController(BCryptPasswordEncoder bCryptPasswordEncoder, GameService gameService, AuthService authService, CollectionDao collectionDao, CardanoAddressRepository cardanoAddressRepository) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.gameService = gameService;
         this.authService = authService;
+        this.collectionDao = collectionDao;
+        this.cardanoAddressRepository = cardanoAddressRepository;
     }
 
 
@@ -135,12 +144,15 @@ public class GameController {
             @RequestHeader(value = "token") String token
     ) throws Exception {
         try{
-
+            boolean logInsertSuccess = gameService.insertLogToken(token);
+            if(logInsertSuccess) {
+                return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
+            }else{
+                return new CardanoNftDefaultResponse(RETURN_CODE.INSUFFICIENT_LOG_TOKEN);
+            }
         } catch (Exception e ) {
             throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
         }
-        gameService.insertLogToken(token);
-        return new CardanoNftDefaultResponse(RETURN_CODE.BAD_REQUEST);
     }
 
     // 점수판
@@ -189,6 +201,22 @@ public class GameController {
 
         GameContextResponse gameContextResponse = gameService.getUnityContext(gameName);
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, gameContextResponse);
+    }
+
+    @RequestMapping(value = "/token/address", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse getTokenAddress(
+            @RequestHeader(value = "token", required = false) String token
+            ) throws Exception {
+
+        AuthAdaRequest authAdaRequest = new AuthAdaRequest();
+        UserGameProfileResponse userGameProfileResponse = gameService.getUserGameProfile(token);
+        authAdaRequest.setAuthType("2");
+        authAdaRequest.setUserId(userGameProfileResponse.getUserId());
+        CardanoAddressEntity cardanoAddressEntity = cardanoAddressRepository.findRandomOneAddress();
+        AuthAdaResponse authAdaResponse = new AuthAdaResponse();
+        authAdaResponse.setAddress(cardanoAddressEntity.getAddressId());
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, authAdaResponse);
     }
 
     @RequestMapping(value = "/context/list", method = RequestMethod.GET)
