@@ -8,6 +8,7 @@ import com.cardanonft.api.repository.CardanoAddressRepository;
 import com.cardanonft.api.request.VillageListRequest;
 import com.cardanonft.api.request.auth.AuthAdaRequest;
 import com.cardanonft.api.request.auth.LoginVO;
+import com.cardanonft.api.request.game.InsertTokenRequest;
 import com.cardanonft.api.request.game.ScoreRequest;
 import com.cardanonft.api.request.game.TestRequest;
 import com.cardanonft.api.response.CardanoNftDefaultResponse;
@@ -141,10 +142,11 @@ public class GameController {
     @RequestMapping(value = "/insertLogToken", method = RequestMethod.POST)
     @ResponseBody
     public CardanoNftDefaultResponse insertLogToken(
-            @RequestHeader(value = "token") String token
-    ) throws Exception {
+            @RequestHeader(value = "token") String token,
+            @RequestBody InsertTokenRequest insertTokenRequest
+            ) throws Exception {
         try{
-            boolean logInsertSuccess = gameService.insertLogToken(token);
+            boolean logInsertSuccess = gameService.insertLogToken(token, insertTokenRequest.getRoomName());
             if(logInsertSuccess) {
                 return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
             }else{

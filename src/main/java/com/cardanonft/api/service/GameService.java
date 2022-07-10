@@ -15,6 +15,7 @@ import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -126,7 +127,8 @@ public class GameService {
      * @param token
      * @throws Exception
      */
-    public boolean insertLogToken(String token) throws Exception {
+    @Transactional
+    public boolean insertLogToken(String token, String roomName) throws Exception {
         UserEntity userEntity = authService.findUser(token);
         if(userEntity.getTokenBalance().compareTo(BigDecimal.TEN) < 0) {
             // Todo: 잔액이 10보다 낮으면 또 리턴이 다름.
@@ -140,7 +142,7 @@ public class GameService {
 
         // user 테이블 갱신.
         userEntity.setTokenBalance(afterInsertToken);
-        userRepository.save(userEntity);
+//        userRepository.save(userEntity);
 
         // user_token_history 테이블에 내역 삽입
         // todo: 나머지 정보들은 어디에서 어떻게?
@@ -151,6 +153,7 @@ public class GameService {
 //        userTokenHistoryRepository.save(userTokenHistory);
 
         return true;
-
     }
+
+
 }
