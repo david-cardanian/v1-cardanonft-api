@@ -142,18 +142,19 @@ public class GameController {
     @RequestMapping(value = "/insertLogToken", method = RequestMethod.POST)
     @ResponseBody
     public CardanoNftDefaultResponse insertLogToken(
-            @RequestHeader(value = "token") String token,
             @RequestBody InsertTokenRequest insertTokenRequest
             ) throws Exception {
         try{
-            boolean logInsertSuccess = gameService.insertLogToken(token, insertTokenRequest.getRoomName());
+            boolean logInsertSuccess = gameService.insertLogToken(
+                    insertTokenRequest.getRoomName(), insertTokenRequest.getBlueTeam(), insertTokenRequest.getRedTeam()
+            );
             if(logInsertSuccess) {
                 return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
             }else{
                 return new CardanoNftDefaultResponse(RETURN_CODE.INSUFFICIENT_LOG_TOKEN);
             }
         } catch (Exception e ) {
-            throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
+            throw new Exception(e);
         }
     }
 
@@ -165,14 +166,12 @@ public class GameController {
             @RequestBody ScoreRequest scoreRequest) throws Exception {
 
         String gameHash = scoreRequest.getScoreData();
-
         // 게임 데이터 비교
         //  token + gameId + score
         boolean matchesCheck = bCryptPasswordEncoder.matches(scoreRequest.dateTime + token + scoreRequest.getGameId() + scoreRequest.getScore(), gameHash);
         try {
             if (matchesCheck) {
                 // 게임 데이터 정합시
-
                 gameService.setGameScore(token, scoreRequest.getGameId(), scoreRequest.getScore(), gameHash);
                 return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
             } else {
@@ -184,6 +183,13 @@ public class GameController {
         }
     }
 
+    @RequestMapping(value = "/calculate", method = RequestMethod.POST)
+    @ResponseBody
+    public CardanoNftDefaultResponse calculateGameToken (
+
+    ) {
+
+    }
 
 
     @RequestMapping(value = "/score", method = RequestMethod.GET)

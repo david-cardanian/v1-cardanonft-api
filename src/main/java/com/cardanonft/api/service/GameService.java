@@ -1,24 +1,18 @@
 package com.cardanonft.api.service;
 
-import com.cardanonft.api.constants.RETURN_CODE;
-import com.cardanonft.api.entity.UserEntity;
-import com.cardanonft.api.entity.UserTokenHistory;
-import com.cardanonft.api.entity.WebgameBuildInfo;
-import com.cardanonft.api.entity.WebgameScoreboard;
-import com.cardanonft.api.exception.CustomBadRequestException;
+import com.cardanonft.api.entity.*;
 import com.cardanonft.api.repository.*;
 import com.cardanonft.api.response.auth.UserGameProfileResponse;
 import com.cardanonft.api.response.game.GameContextResponse;
 import com.cardanonft.api.response.game.GameScoreResponse;
 import com.cardanonft.api.vo.game.GameScore;
-import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,17 +25,21 @@ public class GameService {
     private final WebgameScoreboardRepository webgameScoreboardRepository;
     private final UserRepository userRepository;
     private final UserTokenHistoryRepository userTokenHistoryRepository;
+    private final UserGameHistoryRepository userGameHistoryRepository;
+
     private final AuthService authService;
 
     public GameService(WebgameBuildInfoRepository webgameBuildInfoRepository ,
                        UserRepository userRepository,
                        UserTokenHistoryRepository userTokenHistoryRepository,
                        WebgameScoreboardRepository webgameScoreboardRepository,
+                       UserGameHistoryRepository userGameHistoryRepository,
                        AuthService authService) {
         this.webgameBuildInfoRepository = webgameBuildInfoRepository;
         this.webgameScoreboardRepository = webgameScoreboardRepository;
         this.userTokenHistoryRepository = userTokenHistoryRepository;
         this.userRepository = userRepository;
+        this.userGameHistoryRepository = userGameHistoryRepository;
         this.authService = authService;
     }
 
@@ -124,33 +122,50 @@ public class GameService {
 
     /**
      * 10로그씩 차감.
-     * @param token
      * @throws Exception
      */
     @Transactional
-    public boolean insertLogToken(String token, String roomName) throws Exception {
-        UserEntity userEntity = authService.findUser(token);
-        if(userEntity.getTokenBalance().compareTo(BigDecimal.TEN) < 0) {
-            // Todo: 잔액이 10보다 낮으면 또 리턴이 다름.
-            return false;
+    public boolean insertLogToken(String roomName, List<String> blueTeam, List<String> redTeam) throws Exception {
+        List<String> tempAllUserList = new ArrayList<>();
+        tempAllUserList.addAll(blueTeam);
+        tempAllUserList.addAll(redTeam);
+        List<UserEntity> userEntityList = userRepository.findAllByUserIdInAndIsEnabled(tempAllUserList, "1");
+
+        // user 검색 시 & 보상도 :: 동시성.
+        // select for update
+        for(UserEntity userEntity : userEntityList) {
+            userRepository.updateUserTokenBalance((userEntity.getTokenBalance().min(BigDecimal.TEN)), userEntity.getUserId());
+            UserTokenHistory userTokenHistory = new UserTokenHistory();
+            userTokenHistory.setUserId(userEntity.getUserId());
+            userTokenHistory.setBalance(10L);
+            userTokenHistory.setType("J"); // 게임 Join.
+            userTokenHistory.setIsEnabled("1");
+            userTokenHistoryRepository.save(userTokenHistory);
         }
 
-        // todo: 10로그 차감하고 기록 남기고. 방에 참가.
-        BigDecimal userTokenBalance = userEntity.getTokenBalance();
-        // 10 로그 차감.
-        BigDecimal afterInsertToken = userTokenBalance.add(BigDecimal.valueOf(10));
+        List<UserGameHistory> userGameHistoryList = new ArrayList<>();
+        for ( String blueTeamUserId : blueTeam) {
+            UserGameHistory blueGameTokenHistory = new UserGameHistory();
+            blueGameTokenHistory.setUserId(blueTeamUserId);
+            blueGameTokenHistory.setTeam("blue");
+            blueGameTokenHistory.setJoinPayed("1");
+            blueGameTokenHistory.setIsEnabled("1");
+            blueGameTokenHistory.setWinEarned("0");
+            blueGameTokenHistory.setRoomName(roomName);
+            userGameHistoryList.add(blueGameTokenHistory);
+        }
+        for (String redTeamUserId : redTeam ) {
+            UserGameHistory redGameTokenHistory = new UserGameHistory();
+            redGameTokenHistory.setUserId(redTeamUserId);
+            redGameTokenHistory.setTeam("red");
+            redGameTokenHistory.setJoinPayed("1");
+            redGameTokenHistory.setIsEnabled("1");
+            redGameTokenHistory.setWinEarned("0");
+            redGameTokenHistory.setRoomName(roomName);
+            userGameHistoryList.add(redGameTokenHistory);
+        }
 
-        // user 테이블 갱신.
-        userEntity.setTokenBalance(afterInsertToken);
-//        userRepository.save(userEntity);
-
-        // user_token_history 테이블에 내역 삽입
-        // todo: 나머지 정보들은 어디에서 어떻게?
-        UserTokenHistory userTokenHistory = new UserTokenHistory();
-        userTokenHistory.setUserId(userEntity.getUserId());
-        userTokenHistory.setBalance(afterInsertToken.longValue());
-
-//        userTokenHistoryRepository.save(userTokenHistory);
+        userGameHistoryRepository.saveAll(userGameHistoryList);
 
         return true;
     }

@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.math.BigInteger;
 import java.util.Date;
 
 @Data
@@ -14,8 +13,8 @@ import java.util.Date;
 @Entity
 @Builder
 @AllArgsConstructor
-@Table(name = "user_token_history", schema = "cardano", catalog = "")
-public class UserTokenHistory {
+@Table(name = "user_game_history", schema = "cardano", catalog = "")
+public class UserGameHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "history_id")
@@ -24,26 +23,17 @@ public class UserTokenHistory {
     @Column(name = "user_id")
     private String userId;
     @Basic
-    @Column(name = "type")
-    private String type;
+    @Column(name = "room_name")
+    private String roomName;
     @Basic
-    @Column(name = "epoch")
-    private Integer epoch;
+    @Column(name = "team")
+    private String team;
     @Basic
-    @Column(name = "distribution_id")
-    private Integer distributionId;
+    @Column(name = "join_payed")
+    private String joinPayed;
     @Basic
-    @Column(name = "transaction_id")
-    private Integer transactionId;
-    @Basic
-    @Column(name = "address_id")
-    private Integer addressId;
-    @Basic
-    @Column(name = "quantity")
-    private Long quantity;
-    @Basic
-    @Column(name = "balance")
-    private Long balance;
+    @Column(name = "win_earned")
+    private String winEarned;
     @Basic
     @Column(name = "is_enabled")
     private String isEnabled="1";
@@ -52,6 +42,4 @@ public class UserTokenHistory {
     private Date createdAt;
     @Column(name = "updated_at", insertable = false, updatable = true)
     private Date updatedAt;
-
-
 }

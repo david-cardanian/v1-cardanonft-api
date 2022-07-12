@@ -8,11 +8,14 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Repository
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
     UserEntity findTopByUserId(String userId);
     UserEntity findTopByUserIdAndIsEnabled(String userId, String isEnabled);
+    List<UserEntity> findAllByUserIdInAndIsEnabled(List<String> userIds, String isEnabled);
 //    UserEntity findTopByMobileAndIsEnabled(String mobile, String isEnabled);
     UserEntity findTopByEmailAndIsEnabled( String email, String isEnabled );
 //    UserEntity findTopByEmail( String email);
@@ -33,6 +36,8 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
 //            , @Param("termsMarketing")String termsMarketing, @Param("termsThird")String termsThird
 //            , @Param("userId")String userId
 //    ) throws Exception;
+
+
     @Transactional
     @Modifying
     @Query(value=" UPDATE user "
@@ -41,4 +46,11 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
     void updateUserPassword(@Param("password") String password
             , @Param("userId") String userId
     );
+
+    @Transactional
+    @Modifying
+    @Query(value=" UPDATE user "
+            + " SET token_balance = :tokenBalance "
+            + " WHERE user_id = :userId and is_enabled = '1'", nativeQuery = true)
+    void updateUserTokenBalance(@Param("tokenBalance") BigDecimal tokenBalance, @Param("userId") String userId);
 }
