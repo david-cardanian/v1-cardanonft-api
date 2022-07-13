@@ -8,6 +8,7 @@ import com.cardanonft.api.repository.CardanoAddressRepository;
 import com.cardanonft.api.request.VillageListRequest;
 import com.cardanonft.api.request.auth.AuthAdaRequest;
 import com.cardanonft.api.request.auth.LoginVO;
+import com.cardanonft.api.request.game.CalculateTokenRequest;
 import com.cardanonft.api.request.game.InsertTokenRequest;
 import com.cardanonft.api.request.game.ScoreRequest;
 import com.cardanonft.api.request.game.TestRequest;
@@ -65,6 +66,7 @@ public class GameController {
 
     /**
      * 게임 로그인은 팀을 정하는 것까지.
+     *
      * @param loginVO
      * @return
      * @throws Exception
@@ -94,7 +96,7 @@ public class GameController {
                             .token(token.getToken())
                             .user_id(token.getUser_id())
                             .build());
-        }catch (CustomBadRequestException e) {
+        } catch (CustomBadRequestException e) {
             throw e;
         } catch (Exception e) {
             logger.error("error", e);
@@ -112,6 +114,7 @@ public class GameController {
 
     /**
      * 잔액 확인.
+     *
      * @param token
      * @return
      * @throws Exception
@@ -123,37 +126,38 @@ public class GameController {
     ) throws Exception {
         try {
             UserGameProfileResponse userGameProfileResponse = gameService.getUserGameProfile(token);
-            if(userGameProfileResponse != null) {
+            if (userGameProfileResponse != null) {
                 return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, userGameProfileResponse);
             } else {
                 // 게임 데이터 오류 시
                 return new CardanoNftDefaultResponse(RETURN_CODE.BAD_REQUEST);
             }
 
-        } catch (Exception e ) {
+        } catch (Exception e) {
             throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
         }
     }
 
     /**
      * 게임 입장 시 로그 토큰 지불. 10로그 일괄.
+     *
      * @return
      */
     @RequestMapping(value = "/insertLogToken", method = RequestMethod.POST)
     @ResponseBody
     public CardanoNftDefaultResponse insertLogToken(
             @RequestBody InsertTokenRequest insertTokenRequest
-            ) throws Exception {
-        try{
+    ) throws Exception {
+        try {
             boolean logInsertSuccess = gameService.insertLogToken(
                     insertTokenRequest.getRoomName(), insertTokenRequest.getBlueTeam(), insertTokenRequest.getRedTeam()
             );
-            if(logInsertSuccess) {
+            if (logInsertSuccess) {
                 return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
-            }else{
+            } else {
                 return new CardanoNftDefaultResponse(RETURN_CODE.INSUFFICIENT_LOG_TOKEN);
             }
-        } catch (Exception e ) {
+        } catch (Exception e) {
             throw new Exception(e);
         }
     }
@@ -178,17 +182,29 @@ public class GameController {
                 // 게임 데이터 오류 시
                 return new CardanoNftDefaultResponse(RETURN_CODE.GAME_HASH_MATCH_ERROR);
             }
-        }catch (Exception e ) {
+        } catch (Exception e) {
             throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
         }
     }
 
     @RequestMapping(value = "/calculate", method = RequestMethod.POST)
     @ResponseBody
-    public CardanoNftDefaultResponse calculateGameToken (
+    public CardanoNftDefaultResponse calculateGameToken(
+            @RequestHeader(value = "token") String token,
+            @RequestBody CalculateTokenRequest calculateTokenRequest) throws Exception {
 
-    ) {
+        try {
+            boolean gameCalculateResult = gameService.calculateGameToken(calculateTokenRequest.getRoomId(), calculateTokenRequest.getTeam());
+            if(gameCalculateResult) {
+                return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
+            } else {
+                return new CardanoNftDefaultResponse(RETURN_CODE.BAD_REQUEST);
+            }
 
+
+        } catch (Exception e) {
+            throw new CustomBadRequestException(RETURN_CODE.BAD_REQUEST);
+        }
     }
 
 
@@ -215,7 +231,7 @@ public class GameController {
     @ResponseBody
     public CardanoNftDefaultResponse getTokenAddress(
             @RequestHeader(value = "token", required = false) String token
-            ) throws Exception {
+    ) throws Exception {
 
         AuthAdaRequest authAdaRequest = new AuthAdaRequest();
         UserGameProfileResponse userGameProfileResponse = gameService.getUserGameProfile(token);

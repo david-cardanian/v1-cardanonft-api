@@ -134,7 +134,7 @@ public class GameService {
         // user 검색 시 & 보상도 :: 동시성.
         // select for update
         for(UserEntity userEntity : userEntityList) {
-            userRepository.updateUserTokenBalance((userEntity.getTokenBalance().min(BigDecimal.TEN)), userEntity.getUserId());
+            userRepository.updateUserTokenBalance((userEntity.getTokenBalance().subtract(BigDecimal.TEN)), userEntity.getUserId());
             UserTokenHistory userTokenHistory = new UserTokenHistory();
             userTokenHistory.setUserId(userEntity.getUserId());
             userTokenHistory.setBalance(10L);
@@ -168,6 +168,47 @@ public class GameService {
         userGameHistoryRepository.saveAll(userGameHistoryList);
 
         return true;
+    }
+
+
+    @Transactional
+    public boolean calculateGameToken (String roomId, String winTeam) {
+        try{
+            BigDecimal totalToken = new BigDecimal(0);
+            double winerCounrt = 0;
+            List<String> winnerGameHistoryList = new ArrayList<>();
+            List<UserGameHistory> userGameHistoryList = userGameHistoryRepository.findAllByRoomNameAndIsEnabled(roomId, "1");
+            for ( UserGameHistory userGameHistory : userGameHistoryList ) {
+                if(userGameHistory.getTeam().equals(winTeam)) {
+                    userGameHistory.setWinEarned("1");
+                    userGameHistory.setWinLose("1");
+                    winnerGameHistoryList.add(userGameHistory.getUserId());
+                    winerCounrt++;
+                } else {
+                    userGameHistory.setWinEarned("0");
+                    userGameHistory.setWinLose("0");
+                }
+                totalToken = totalToken.add(BigDecimal.valueOf(10));
+                userGameHistoryRepository.save(userGameHistory);
+            }
+            List<UserEntity> userEntityList = userRepository.findAllByUserIdInAndIsEnabled(winnerGameHistoryList, "1");
+            // 전체 토큰을 승자 숫자대로 나눔.
+            // 나눠서 수령
+            BigDecimal winTokenPrice = totalToken.divide(BigDecimal.valueOf(winerCounrt));
+            for(UserEntity userEntity : userEntityList) {
+                userRepository.updateUserTokenBalance((userEntity.getTokenBalance().add(winTokenPrice)), userEntity.getUserId());
+                UserTokenHistory userTokenHistory = new UserTokenHistory();
+                userTokenHistory.setUserId(userEntity.getUserId());
+                userTokenHistory.setBalance(winTokenPrice.longValue());
+                userTokenHistory.setType("W"); // 게임 win
+                userTokenHistory.setIsEnabled("1");
+                userTokenHistoryRepository.save(userTokenHistory);
+            }
+            return true;
+        }catch (Exception e) {
+            return false;
+        }
+
     }
 
 

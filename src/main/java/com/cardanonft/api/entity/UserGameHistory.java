@@ -29,6 +29,9 @@ public class UserGameHistory {
     @Column(name = "team")
     private String team;
     @Basic
+    @Column(name = "win_lose")
+    private String winLose;
+    @Basic
     @Column(name = "join_payed")
     private String joinPayed;
     @Basic
