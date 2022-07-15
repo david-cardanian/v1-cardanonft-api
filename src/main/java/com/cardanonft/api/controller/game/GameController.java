@@ -220,7 +220,6 @@ public class GameController {
     @RequestMapping(value = "/context", method = RequestMethod.GET)
     @ResponseBody
     public CardanoNftDefaultResponse getUnityContext(
-            @RequestHeader(value = "token", required = false) String token,
             @RequestParam(value = "game", required = false) String gameName) {
 
         GameContextResponse gameContextResponse = gameService.getUnityContext(gameName);

@@ -188,6 +188,7 @@ public class GameService {
                     userGameHistory.setWinEarned("0");
                     userGameHistory.setWinLose("0");
                 }
+                userGameHistory.setIsEnabled("0");
                 totalToken = totalToken.add(BigDecimal.valueOf(10));
                 userGameHistoryRepository.save(userGameHistory);
             }
