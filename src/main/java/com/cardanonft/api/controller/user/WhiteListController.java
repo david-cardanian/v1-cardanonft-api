@@ -3,12 +3,11 @@ package com.cardanonft.api.controller.user;
 import com.cardanonft.api.constants.CommonConstants;
 import com.cardanonft.api.constants.RETURN_CODE;
 import com.cardanonft.api.dao.CollectionDao;
-import com.cardanonft.api.entity.NftWhitelistCandidateEntity;
-import com.cardanonft.api.entity.NftWhitelistEntity;
-import com.cardanonft.api.entity.NftWhitelistSnapshotEntity;
-import com.cardanonft.api.entity.PasswordAuthCodeEntity;
+import com.cardanonft.api.entity.*;
+import com.cardanonft.api.entity.enums.WhitelistSnapshotType;
 import com.cardanonft.api.entity.enums.WhitelistType;
 import com.cardanonft.api.exception.CustomBadRequestException;
+import com.cardanonft.api.repository.CardanoTranExecRepository;
 import com.cardanonft.api.repository.NftWhitelistCandidateRepository;
 import com.cardanonft.api.repository.NftWhitelistRepository;
 import com.cardanonft.api.repository.NftWhitelistSnapshotRepository;
@@ -32,7 +31,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin("*")
 @Controller
@@ -44,6 +45,8 @@ public class WhiteListController {
     NftWhitelistSnapshotRepository nftWhitelistSnapshotRepository;
     @Autowired
     NftWhitelistCandidateRepository nftWhitelistCandidateRepository;
+    @Autowired
+    CardanoTranExecRepository cardanoTranExecRepository;
     @Autowired
     CollectionDao collectionDao;
     @Autowired
@@ -74,8 +77,25 @@ public class WhiteListController {
     @ApiOperation(httpMethod = "POST", value = "whiteList 확인")
     @ResponseBody
     public CardanoNftDefaultResponse landWhitelistCheck (@PathVariable("stakeAddress") String stakeAddress) throws Exception {
-        List<NftWhitelistSnapshotEntity> nftWhitelistSnapshotList = nftWhitelistSnapshotRepository.findByStakeAddressAndIsEnabled(stakeAddress, "1");
-        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, nftWhitelistSnapshotList);
+//        List<NftWhitelistSnapshotEntity> nftWhitelistSnapshotList = nftWhitelistSnapshotRepository.findByStakeAddressAndIsEnabledAndWhitelistType(stakeAddress, "1", WhitelistSnapshotType.ROMAIN_LAND_1ST);
+        Map returnMap = new HashMap();
+        returnMap.put("first", nftWhitelistSnapshotRepository.findByStakeAddressAndIsEnabledAndWhitelistType(stakeAddress, "1", WhitelistSnapshotType.ROMAIN_LAND_1ST));
+        returnMap.put("second", nftWhitelistSnapshotRepository.findByStakeAddressAndIsEnabledAndWhitelistType(stakeAddress, "1", WhitelistSnapshotType.ROMAIN_LAND_2ND));
+
+        List<CardanoTranExecEntity> firstTranExecEntityList = cardanoTranExecRepository.findAllByToStakeAddressAndCollectionIdAndIsEnabled(stakeAddress, 54, "1");
+        List<CardanoTranExecEntity> secondTranExecEntityList = cardanoTranExecRepository.findAllByToStakeAddressAndCollectionIdAndIsEnabled(stakeAddress, 56, "1");
+        int firstExecMintCount = 0;
+        int secondExecMintCount = 0;
+        for(CardanoTranExecEntity mintTranExec : firstTranExecEntityList){
+            firstExecMintCount += mintTranExec.getMintingCount();
+        }
+        for(CardanoTranExecEntity mintTranExec : secondTranExecEntityList){
+            secondExecMintCount += mintTranExec.getMintingCount();
+        }
+
+        returnMap.put("firstBuy", firstExecMintCount);
+        returnMap.put("secondBuy", secondExecMintCount);
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, returnMap);
     }
     @RequestMapping(value ="/draw/address", method = RequestMethod.POST)
     @ApiOperation(httpMethod = "POST", value = "whiteList 확인")
