@@ -6,47 +6,47 @@
     </appender>
 
     <!-- The actual AwsLogsAppender (asynchronous mode because of maxFlushTimeMillis > 0) -->
-<!--    <appender name="ASYNC_AWS_CW_LOG" class="ca.pjer.logback.AwsLogsAppender">-->
+    <appender name="ASYNC_AWS_CW_LOG" class="ca.pjer.logback.AwsLogsAppender">
 
-<!--        &lt;!&ndash; Send only ERROR and above &ndash;&gt;-->
-<!--        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
-<!--            <level>INFO</level>-->
-<!--        </filter>-->
+        <!-- Send only ERROR and above -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
 
-<!--        &lt;!&ndash; Nice layout pattern &ndash;&gt;-->
-<!--        <layout>-->
-<!--            <pattern>[%date] %highlight([%level]) [%logger{10} %file:%line] %msg%n</pattern>-->
-<!--        </layout>-->
+        <!-- Nice layout pattern -->
+        <layout>
+            <pattern>[%date] %highlight([%level]) [%logger{10} %file:%line] %msg%n</pattern>
+        </layout>
 
-<!--        &lt;!&ndash; Hardcoded Log Group Name &ndash;&gt;-->
-<!--        <logGroupName>/aws/ec2/api/nft</logGroupName>-->
+        <!-- Hardcoded Log Group Name -->
+        <logGroupName>/aws/ec2/api/nft</logGroupName>
 
-<!--        &lt;!&ndash; Log Stream Name UUID Prefix &ndash;&gt;-->
-<!--        <logStreamUuidPrefix>nft-api-</logStreamUuidPrefix>-->
+        <!-- Log Stream Name UUID Prefix -->
+        <logStreamUuidPrefix>nft-api-</logStreamUuidPrefix>
 
-<!--        &lt;!&ndash; AWS Region &ndash;&gt;-->
-<!--        <logRegion>ap-northeast-2</logRegion>-->
+        <!-- AWS Region -->
+        <logRegion>ap-northeast-2</logRegion>
 
-<!--        &lt;!&ndash; Maximum number of events in each batch (50 is the default) &ndash;&gt;-->
-<!--        &lt;!&ndash; will flush when the event queue has 50 elements, even if still in quiet time (see maxFlushTimeMillis) &ndash;&gt;-->
-<!--        <maxBatchLogEvents>50</maxBatchLogEvents>-->
+        <!-- Maximum number of events in each batch (50 is the default) -->
+        <!-- will flush when the event queue has 50 elements, even if still in quiet time (see maxFlushTimeMillis) -->
+        <maxBatchLogEvents>50</maxBatchLogEvents>
 
-<!--        &lt;!&ndash; Maximum quiet time in millisecond (0 is the default) &ndash;&gt;-->
-<!--        &lt;!&ndash; will flush when met, even if the batch size is not met (see maxBatchLogEvents) &ndash;&gt;-->
-<!--        <maxFlushTimeMillis>30000</maxFlushTimeMillis>-->
+        <!-- Maximum quiet time in millisecond (0 is the default) -->
+        <!-- will flush when met, even if the batch size is not met (see maxBatchLogEvents) -->
+        <maxFlushTimeMillis>30000</maxFlushTimeMillis>
 
-<!--        &lt;!&ndash; Maximum block time in millisecond (5000 is the default) &ndash;&gt;-->
-<!--        &lt;!&ndash; when > 0: this is the maximum time the logging thread will wait for the logger, &ndash;&gt;-->
-<!--        &lt;!&ndash; when == 0: the logging thread will never wait for the logger, discarding events while the queue is full &ndash;&gt;-->
-<!--        <maxBlockTimeMillis>5000</maxBlockTimeMillis>-->
+        <!-- Maximum block time in millisecond (5000 is the default) -->
+        <!-- when > 0: this is the maximum time the logging thread will wait for the logger, -->
+        <!-- when == 0: the logging thread will never wait for the logger, discarding events while the queue is full -->
+        <maxBlockTimeMillis>5000</maxBlockTimeMillis>
 
-<!--        &lt;!&ndash; Retention value for log groups, 0 for infinite see &ndash;&gt;-->
-<!--        &lt;!&ndash; https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutRetentionPolicy.html for other &ndash;&gt;-->
-<!--        &lt;!&ndash; possible values &ndash;&gt;-->
+        <!-- Retention value for log groups, 0 for infinite see -->
+        <!-- https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutRetentionPolicy.html for other -->
+        <!-- possible values -->
 
-<!--        <retentionTimeDays>0</retentionTimeDays>-->
+        <retentionTimeDays>0</retentionTimeDays>
 
-<!--    </appender>-->
+    </appender>
 
     <timestamp key="timestamp" datePattern="yyyy-MM-dd-HH-mm-ssSSS"/>
 
@@ -61,7 +61,7 @@
 
     <root level="INFO">
         <appender-ref ref="STDOUT" />
-<!--        <appender-ref ref="ASYNC_AWS_CW_LOG" />-->
+        <appender-ref ref="ASYNC_AWS_CW_LOG" />
     </root>
 
 </configuration>
