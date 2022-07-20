@@ -1,0 +1,1 @@
+web: java -Xms512m -Xmx1g -jar application.jar
