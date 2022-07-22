@@ -38,6 +38,9 @@ public class UserGameHistory {
     @Column(name = "win_earned")
     private String winEarned;
     @Basic
+    @Column(name = "token_earned")
+    private Long tokenEarned;
+    @Basic
     @Column(name = "is_enabled")
     private String isEnabled="1";
     @Basic

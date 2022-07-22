@@ -3,6 +3,7 @@ package com.cardanonft.api.controller.game;
 import com.cardanonft.api.constants.RETURN_CODE;
 import com.cardanonft.api.dao.CollectionDao;
 import com.cardanonft.api.entity.CardanoAddressEntity;
+import com.cardanonft.api.entity.UserGameHistory;
 import com.cardanonft.api.exception.CustomBadRequestException;
 import com.cardanonft.api.repository.CardanoAddressRepository;
 import com.cardanonft.api.request.VillageListRequest;
@@ -17,14 +18,17 @@ import com.cardanonft.api.response.auth.AuthAdaResponse;
 import com.cardanonft.api.response.auth.UserGameProfileResponse;
 import com.cardanonft.api.response.game.GameContextResponse;
 import com.cardanonft.api.response.game.GameLoginResponse;
+import com.cardanonft.api.response.game.GameScoreHistoryResponse;
 import com.cardanonft.api.response.game.GameScoreResponse;
 import com.cardanonft.api.service.AuthService;
 import com.cardanonft.api.service.GameService;
 import com.cardanonft.api.util.DateUtil;
 import com.cardanonft.api.vo.auth.AuthToken;
+import com.cardanonft.api.vo.game.GameHistory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -195,7 +199,7 @@ public class GameController {
 
         try {
             boolean gameCalculateResult = gameService.calculateGameToken(calculateTokenRequest.getRoomId(), calculateTokenRequest.getTeam());
-            if(gameCalculateResult) {
+            if (gameCalculateResult) {
                 return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
             } else {
                 return new CardanoNftDefaultResponse(RETURN_CODE.BAD_REQUEST);
@@ -216,6 +220,14 @@ public class GameController {
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, gameScoreResponse);
     }
 
+    @RequestMapping(value = "/log-score-history", method = RequestMethod.GET)
+    @ResponseBody
+    public CardanoNftDefaultResponse getLogScoreHistory(
+            @RequestHeader(value = "token") String token, @RequestParam(value="page") int page) throws Exception {
+        // todo:
+        GameScoreHistoryResponse gameScoreHistoryResponseList = gameService.getGameScoreWithLogHistory(token, page);
+        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, gameScoreHistoryResponseList);
+    }
 
     @RequestMapping(value = "/context", method = RequestMethod.GET)
     @ResponseBody
@@ -248,4 +260,6 @@ public class GameController {
         List<GameContextResponse> gameContextResponseList = gameService.getUnityContextList();
         return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS, gameContextResponseList);
     }
+
+
 }

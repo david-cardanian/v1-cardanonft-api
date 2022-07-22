@@ -4,17 +4,23 @@ import com.cardanonft.api.entity.*;
 import com.cardanonft.api.repository.*;
 import com.cardanonft.api.response.auth.UserGameProfileResponse;
 import com.cardanonft.api.response.game.GameContextResponse;
+import com.cardanonft.api.response.game.GameScoreHistoryResponse;
 import com.cardanonft.api.response.game.GameScoreResponse;
+import com.cardanonft.api.vo.game.GameHistory;
 import com.cardanonft.api.vo.game.GameScore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -110,6 +116,31 @@ public class GameService {
 
     }
 
+    public GameScoreHistoryResponse getGameScoreWithLogHistory(String token, int page) throws Exception {
+        SimpleDateFormat formatter = new SimpleDateFormat("yy.MM.dd");
+        TimeZone utc = TimeZone.getTimeZone("UTC");
+        formatter.setTimeZone(utc);
+
+        Pageable pageable = PageRequest.of(page-1, 7, Sort.by(Sort.Direction.DESC,"historyId"));
+        UserEntity userEntity = authService.findUser(token);
+        Page<UserGameHistory> userGameHistoryList = userGameHistoryRepository.findByUserIdAndIsEnabled(userEntity.getUserId(), "1", pageable);
+
+        GameScoreHistoryResponse gameScoreHistoryResponse = new GameScoreHistoryResponse();
+
+        gameScoreHistoryResponse.setGameHistories(userGameHistoryList.getContent().stream().map(userGameHistory -> {
+            GameHistory gameHistory = new GameHistory();
+            gameHistory.setWin(Objects.equals(userGameHistory.getWinLose(), "1"));
+            gameHistory.setLogToken(userGameHistory.getTokenEarned());
+            gameHistory.setTeam(userGameHistory.getTeam());
+            gameHistory.setGameDate(formatter.format(userGameHistory.getCreatedAt()));
+            return gameHistory;
+        }).collect(Collectors.toList()));
+        gameScoreHistoryResponse.setCurrentPage(userGameHistoryList.getPageable().getPageNumber());
+        gameScoreHistoryResponse.setTotalPages(userGameHistoryList.getTotalPages());
+        gameScoreHistoryResponse.setTotalCount(userGameHistoryList.getTotalElements());
+        return gameScoreHistoryResponse;
+    }
+
     public UserGameProfileResponse getUserGameProfile(String token) throws Exception {
         UserEntity userEntity = authService.findUser(token);
 
@@ -177,20 +208,27 @@ public class GameService {
             BigDecimal totalToken = new BigDecimal(0);
             double winerCounrt = 0;
             List<String> winnerGameHistoryList = new ArrayList<>();
+            Map<String, UserGameHistory> winnerGameHistoryMap = new HashMap<>();
+
             List<UserGameHistory> userGameHistoryList = userGameHistoryRepository.findAllByRoomNameAndIsEnabled(roomId, "1");
             for ( UserGameHistory userGameHistory : userGameHistoryList ) {
                 if(userGameHistory.getTeam().equals(winTeam)) {
                     userGameHistory.setWinEarned("1");
                     userGameHistory.setWinLose("1");
+                    userGameHistory.setIsEnabled("0");
+                    winnerGameHistoryMap.put(userGameHistory.getUserId(), userGameHistory);
                     winnerGameHistoryList.add(userGameHistory.getUserId());
                     winerCounrt++;
                 } else {
+                    // 먼저 lose부터 업데이트. 10log 차감 기록.
                     userGameHistory.setWinEarned("0");
                     userGameHistory.setWinLose("0");
+                    userGameHistory.setTokenEarned(-10L);
+                    userGameHistory.setIsEnabled("0");
+                    userGameHistoryRepository.save(userGameHistory);
                 }
-                userGameHistory.setIsEnabled("0");
                 totalToken = totalToken.add(BigDecimal.valueOf(10));
-                userGameHistoryRepository.save(userGameHistory);
+
             }
             List<UserEntity> userEntityList = userRepository.findAllByUserIdInAndIsEnabled(winnerGameHistoryList, "1");
             // 전체 토큰을 승자 숫자대로 나눔.
@@ -198,6 +236,11 @@ public class GameService {
             BigDecimal winTokenPrice = totalToken.divide(BigDecimal.valueOf(winerCounrt));
             for(UserEntity userEntity : userEntityList) {
                 userRepository.updateUserTokenBalance((userEntity.getTokenBalance().add(winTokenPrice)), userEntity.getUserId());
+
+                UserGameHistory winnerGameHistory = winnerGameHistoryMap.get(userEntity.getUserId());
+                winnerGameHistory.setTokenEarned(winTokenPrice.longValue());
+                userGameHistoryRepository.save(winnerGameHistory);
+
                 UserTokenHistory userTokenHistory = new UserTokenHistory();
                 userTokenHistory.setUserId(userEntity.getUserId());
                 userTokenHistory.setBalance(winTokenPrice.longValue());
