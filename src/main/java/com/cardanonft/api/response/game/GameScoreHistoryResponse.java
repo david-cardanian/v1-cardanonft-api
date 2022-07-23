@@ -12,6 +12,7 @@ public class GameScoreHistoryResponse {
     private int currentPage;
     private long totalCount;
     private int totalPages;
+    private int pageSize;
 }
 
 

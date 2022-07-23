@@ -121,7 +121,7 @@ public class GameService {
         TimeZone utc = TimeZone.getTimeZone("UTC");
         formatter.setTimeZone(utc);
 
-        Pageable pageable = PageRequest.of(page-1, 7, Sort.by(Sort.Direction.DESC,"historyId"));
+        Pageable pageable = PageRequest.of(page-1, 10, Sort.by(Sort.Direction.DESC,"historyId"));
         UserEntity userEntity = authService.findUser(token);
         Page<UserGameHistory> userGameHistoryList = userGameHistoryRepository.findByUserIdAndIsEnabled(userEntity.getUserId(), "1", pageable);
 
@@ -138,6 +138,7 @@ public class GameService {
         gameScoreHistoryResponse.setCurrentPage(userGameHistoryList.getPageable().getPageNumber());
         gameScoreHistoryResponse.setTotalPages(userGameHistoryList.getTotalPages());
         gameScoreHistoryResponse.setTotalCount(userGameHistoryList.getTotalElements());
+        gameScoreHistoryResponse.setPageSize(10);
         return gameScoreHistoryResponse;
     }
 
