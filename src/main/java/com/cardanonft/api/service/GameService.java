@@ -123,7 +123,7 @@ public class GameService {
 
         Pageable pageable = PageRequest.of(page-1, 10, Sort.by(Sort.Direction.DESC,"historyId"));
         UserEntity userEntity = authService.findUser(token);
-        Page<UserGameHistory> userGameHistoryList = userGameHistoryRepository.findByUserIdAndIsEnabled(userEntity.getUserId(), "1", pageable);
+        Page<UserGameHistory> userGameHistoryList = userGameHistoryRepository.findByUserIdAndIsEnabled(userEntity.getUserId(), "0", pageable);
 
         GameScoreHistoryResponse gameScoreHistoryResponse = new GameScoreHistoryResponse();
 
