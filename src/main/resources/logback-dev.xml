@@ -5,7 +5,7 @@
         </encoder>
     </appender>
 
-    <!-- The actual AwsLogsAppender (asynchronous mode because of maxFlushTimeMillis > 0) -->
+     The actual AwsLogsAppender (asynchronous mode because of maxFlushTimeMillis > 0)
     <appender name="ASYNC_AWS_CW_LOG" class="ca.pjer.logback.AwsLogsAppender">
         <file>${APP_LOG_ROOT}/awsCwLog.log</file>
         <!-- Send only ERROR and above -->
