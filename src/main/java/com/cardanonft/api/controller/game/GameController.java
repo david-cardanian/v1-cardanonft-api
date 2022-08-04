@@ -65,7 +65,7 @@ public class GameController {
             @RequestBody TestRequest testRequest
     ) throws Exception {
 
-        return new CardanoNftDefaultResponse(RETURN_CODE.SUCCESS);
+        return new CardanoNftDefaultResponse(RETURN_CODE.EXPIRE_CODE);
     }
 
     /**
