@@ -144,11 +144,11 @@ public class GameService {
 
     public UserGameProfileResponse getUserGameProfile(String token) throws Exception {
         UserEntity userEntity = authService.findUser(token);
-
+        BigDecimal devideDecimal = new BigDecimal(1000000);
         return UserGameProfileResponse.builder()
                 .userId(userEntity.getUserId())
                 .nickname(userEntity.getNickName())
-                .tokenBalance(userEntity.getTokenBalance())
+                .tokenBalance(userEntity.getTokenBalance().divide(devideDecimal))
                 .build();
     }
 
@@ -169,7 +169,7 @@ public class GameService {
             userRepository.updateUserTokenBalance((userEntity.getTokenBalance().subtract(BigDecimal.TEN)), userEntity.getUserId());
             UserTokenHistory userTokenHistory = new UserTokenHistory();
             userTokenHistory.setUserId(userEntity.getUserId());
-            userTokenHistory.setBalance(10L);
+            userTokenHistory.setBalance(10000000L); // 10Log Token 10 * 1000000
             userTokenHistory.setType("J"); // 게임 Join.
             userTokenHistory.setIsEnabled("1");
             userTokenHistoryRepository.save(userTokenHistory);
@@ -224,11 +224,11 @@ public class GameService {
                     // 먼저 lose부터 업데이트. 10log 차감 기록.
                     userGameHistory.setWinEarned("0");
                     userGameHistory.setWinLose("0");
-                    userGameHistory.setTokenEarned(-10L);
+                    userGameHistory.setTokenEarned(-10000000L);
                     userGameHistory.setIsEnabled("0");
                     userGameHistoryRepository.save(userGameHistory);
                 }
-                totalToken = totalToken.add(BigDecimal.valueOf(10));
+                totalToken = totalToken.add(BigDecimal.valueOf(10000000));
 
             }
             List<UserEntity> userEntityList = userRepository.findAllByUserIdInAndIsEnabled(winnerGameHistoryList, "1");
