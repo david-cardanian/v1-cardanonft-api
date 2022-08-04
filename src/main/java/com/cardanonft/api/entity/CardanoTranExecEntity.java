@@ -36,6 +36,9 @@ public class CardanoTranExecEntity implements Serializable {
     @Column(name = "to_address")
     private String toAddress;
 
+    @Column(name = "to_stake_address")
+    private String toStakeAddress;
+
     @Column(name = "amount")
     private Long amount;
 
@@ -53,6 +56,9 @@ public class CardanoTranExecEntity implements Serializable {
 
     @Column(name = "nft_id")
     private String nftId;
+
+    @Column(name = "collection_id")
+    private Integer collectionId;
 
     @Column(name = "slot")
     private String slot;

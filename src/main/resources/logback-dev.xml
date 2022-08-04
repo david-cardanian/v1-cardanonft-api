@@ -5,21 +5,28 @@
         </encoder>
     </appender>
 
-    <!-- The actual AwsLogsAppender (asynchronous mode because of maxFlushTimeMillis > 0) -->
+     The actual AwsLogsAppender (asynchronous mode because of maxFlushTimeMillis > 0)
     <appender name="ASYNC_AWS_CW_LOG" class="ca.pjer.logback.AwsLogsAppender">
-
+        <file>${APP_LOG_ROOT}/awsCwLog.log</file>
         <!-- Send only ERROR and above -->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
         </filter>
-
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>awsCwLog-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- each file should be at most 100MB, keep 60 days worth of history, but at most 20GB -->
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>10</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
         <!-- Nice layout pattern -->
         <layout>
             <pattern>[%date] %highlight([%level]) [%logger{10} %file:%line] %msg%n</pattern>
         </layout>
 
         <!-- Hardcoded Log Group Name -->
-        <logGroupName>/aws/ec2/dev/api/nft</logGroupName>
+        <logGroupName>/aws/ec2/api/nft</logGroupName>
 
         <!-- Log Stream Name UUID Prefix -->
         <logStreamUuidPrefix>nft-api-</logStreamUuidPrefix>
